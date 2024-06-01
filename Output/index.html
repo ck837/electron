@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据导出</title>
+    <link rel="stylesheet" href="./index.css">
+
+</head>
+
+<body>
+    <div id="custom-navbar-container"></div>
+    <div class="content">
+        <div class="main">
+            <h1 class="title">数据导出</h1>
+            <div class="input-with-prefix">
+                <span>数据输出端口：</span>
+                <input type="text" id="port">
+            </div>
+            <button id="start-btn">开始导出</button>
+            <button id="stop-btn">结束导出</button>
+
+            <!-- 输出信息统计 -->
+            <div class="parent">
+                <h1>数据导出信息</h1>
+                <div class="export-log">
+                    <h3 style="display: inline;">开始时间: </h3>
+                    <p id="start-time" style="display: inline;"></p>
+                </div>
+                <div class="export-log">
+                    <h3 style="display: inline;">经历时间: </h3>
+                    <p id="duration" style="display: inline;"></p>
+                </div>
+                <div class="export-log">
+                    <h3 style="display: inline;">结束时间: </h3>
+                    <p id="end-time" style="display: inline;"></p>
+                </div>
+                <div class="export-log">
+                    <h3 style="display: inline;">导出数据量:</h3>
+                    <p id="size" style="display: inline;"></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="./index.js"></script>
+    <script src="../nav/index.js"></script>
+    <script>
+        // 创建自定义导航栏元素
+        const customNavbar = document.createElement('custom-navbar');
+
+        // 将自定义导航栏元素添加到容器中
+        document.getElementById('custom-navbar-container').appendChild(customNavbar);
+
+    </script>
+</body>
+
+</html>

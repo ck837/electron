@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <title>Serial Communication</title>
+</head>
+
+<body>
+    <div id="custom-navbar-container"></div>
+
+    
+    <button onclick="sendMsg()">发送</button>
+    <button onclick="serial()">启动串口调试</button>
+
+    <h2>Serial Ports</h2>
+    <table id="serialPortTable">
+        <thead>
+            <tr>
+                <th>Port</th>
+                <th>Manufacturer</th>
+                <th>FriendlyName</th>
+                <th>PnpId</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Serial port data will be inserted here -->
+        </tbody>
+    </table>
+
+    
+
+    <script src="../nav/index.js"></script>
+    
+    <script>
+       // 创建自定义导航栏元素
+       const customNavbar = document.createElement('custom-navbar');
+
+       // 将自定义导航栏元素添加到容器中
+       document.getElementById('custom-navbar-container').appendChild(customNavbar);
+
+   </script>
+    <script src="./index.js"></script>
+    <script type="text/javascript">
+        let writer = null, getData = [], timeOut;
+        async function sendMsg() {
+            //信息 49, 50, 51, 13---123  116,101, 115, 116, 13---test
+            const data = new Uint8Array(toUint8Arr('test1234'))
+            await writer.write(data);
+        }
+        async function serial() {
+            // 浏览器支持serial
+            console.log(navigator);
+            if ('serial' in navigator) {
+                console.log('当前浏览器支持serial')
+                // 提示用户选择一个串口
+                const port = await navigator.serial.requestPort();
+                // 获取用户之前授予网站访问权限的所有串口.
+                // const ports = await navigator.serial.getPorts();
+                //打开串口
+                //baudRate：波特率
+                //dataBits：数据位（7 或 8）
+                //stopBits：停止位（1 或 2）
+                //parity：校验位"none"、"偶even"、"奇odd"
+                //bufferSize：读写缓冲区大小（必须小于 16MB）
+                //flowControl：流量控制模式。"none"、"hardware"
+                await port.open({ baudRate: 115200 })
+                const reader = port.readable.getReader();
+                writer = port.writable.getWriter();
+                try {
+                    while (true) {
+                        const { value, done } = await reader.read();
+                        if (done) {
+                            reader.releaseLock();
+                            break;
+                        }
+                        let arr = Array.from(value);
+                        getData.push(...arr);
+                        if (timeOut) clearTimeout(timeOut);  //不知道为什么返回数据会分批，所以做了防抖
+                        timeOut = setTimeout(() => {
+                            console.log(Uint8ArrayToString(new Uint8Array(getData)));
+                            getData = [];
+                            timeOut = null;
+                        }, 200)
+                    }
+                } catch (error) {
+                    console.error(error)
+                } finally {
+                    reader.releaseLock();
+                    console.log('允许稍后关闭串口。');
+                    await port.close();
+                }
+            } else {
+                console.log('不支持');
+            }
+        }
+        //string转uint8array
+        function toUint8Arr(str) {
+            const buffer = [];
+            for (let i of str) {
+                const _code = i.charCodeAt(0);
+                if (_code < 0x80) {
+                    buffer.push(_code);
+                } else if (_code < 0x800) {
+                    buffer.push(0xc0 + (_code >> 6));
+                    buffer.push(0x80 + (_code & 0x3f));
+                } else if (_code < 0x10000) {
+                    buffer.push(0xe0 + (_code >> 12));
+                    buffer.push(0x80 + (_code >> 6 & 0x3f));
+                    buffer.push(0x80 + (_code & 0x3f));
+                }
+            }
+            return Uint8Array.from(buffer);
+        }
+        //uint8array转String
+        function Uint8ArrayToString(serialData) {
+            var out, i, len, c;
+            var char2, char3;
+            out = "";
+            len = serialData.length;
+            i = 0;
+            while (i < len) {
+                c = serialData[i++];
+                switch (c >> 4) {
+                    case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+                        // 0xxxxxxx
+                        out += String.fromCharCode(c);
+                        break;
+                    case 12: case 13:
+                        // 110x xxxx   10xx xxxx
+                        char2 = serialData[i++];
+                        out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+                        break;
+                    case 14:
+                        // 1110 xxxx  10xx xxxx  10xx xxxx
+                        char2 = serialData[i++];
+                        char3 = serialData[i++];
+                        out += String.fromCharCode(((c & 0x0F) << 12) |
+                            ((char2 & 0x3F) << 6) |
+                            ((char3 & 0x3F) << 0));
+                        break;
+                }
+            }
+            return out;
+        }
+    </script>
+</body>
+
+</html>

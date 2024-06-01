@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Serial数据展示</title>
+    <link rel="stylesheet" href="./index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="custom-navbar-container"></div>
+    <div id="content">
+        <div class="params">
+            <div class="input-with-prefix">
+                <span>帧率：</span>
+                <select id="password"  required>
+                    <option value="" disabled selected hidden>选择数据展示帧率</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="input-with-prefix">
+                <span>最大显示数量：</span>
+                <select id="password"  required>
+                    <option value="" disabled selected hidden>选择数据最大显示数量</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                </select>
+            </div>
+        </div>
+        <div class="chart-container" id="temperature-chart">
+            <h2>温度</h2>
+            <canvas id="chart_tmp"></canvas>
+        </div>
+
+        <div class="chart-container" id="pressure-chart" style="display: none;">
+            <h2>压力</h2>
+            <canvas id="chart_adc"></canvas>
+        </div>
+
+        <div class="chart-container" id="acceleration-chart" style="display: none;">
+            <h2>加速度</h2>
+            <canvas id="chart_acc"></canvas>
+        </div>
+
+        <div class="chart-container" id="magnetic-chart" style="display: none;">
+            <h2>磁力</h2>
+            <canvas id="chart_mag"></canvas>
+        </div>
+        <div class="button-group">
+            <button id="temperature-btn">温度</button>
+            <button id="pressure-btn">压力</button>
+            <button id="acceleration-btn">加速度</button>
+            <button id="magnetic-btn">磁力</button>
+        </div>
+    </div>
+
+
+    <script src="./renderer.js"></script>
+    <script src="../nav/index.js"></script>
+    <script>
+        // 创建自定义导航栏元素
+        const customNavbar = document.createElement('custom-navbar');
+
+        // 将自定义导航栏元素添加到容器中
+        document.getElementById('custom-navbar-container').appendChild(customNavbar);
+
+    </script>
+</body>
+
+</html>

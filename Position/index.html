@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" /> -->
+    <title>Hello from Electron renderer!</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <div id="custom-navbar-container"></div>
+
+    
+    <h1>Hello from Electron renderer!</h1>
+    <div id="canvas-container"></div>
+
+    <script src="../nav/index.js"></script>
+    
+     <script>
+        // 创建自定义导航栏元素
+        const customNavbar = document.createElement('custom-navbar');
+
+        // 将自定义导航栏元素添加到容器中
+        document.getElementById('custom-navbar-container').appendChild(customNavbar);
+
+    </script>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+<script src="./renderer.js"></script>
+
+</html>

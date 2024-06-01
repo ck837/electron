@@ -1,0 +1,86 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+/* ----------------图表 start---------------------------- */
+#content {
+  padding: 3%;
+
+}
+
+.chart-container {
+  width: 90%;
+  height: 80%;
+  margin-left: 5%;
+}
+
+canvas {
+  width: 100%;
+  /* margin-bottom: 10px; */
+}
+/* ----------------图表 end---------------------------- */
+
+
+/* ----------------按钮集合 start---------------------- */
+.button-group{
+  width: 90%;
+  height: 80%;
+  margin-left: 5%;
+  display: flex;
+  justify-content: space-between; /* 让按钮平分容器，并且按钮之间有间隔 */
+  padding: 20px; /* 可以根据需要设置容器的内边距 */
+
+}
+.button-group button{
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  width: 150px; /* 设置按钮宽度 */
+  height: 50px; /* 设置按钮高度 */
+}
+/* ----------------按钮集合 end---------------------- */
+
+
+/* ----------------参数按钮 start--------------------- */
+
+.params{
+  position: absolute;
+  right: 20px;
+}
+.input-with-prefix {
+  position: relative;
+  width: 300px;
+  font-size: 14px;
+}
+.input-with-prefix span {
+  position: absolute;
+  left: 5px;
+  top: 40%;
+  transform: translateY(-50%);
+}
+.input-with-prefix select {
+  margin-left: 100px; /* 留出前缀的空间 */
+  width: 200px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* ----------------参数按钮 end--------------------- */

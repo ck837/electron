@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Serial数据展示</title>
+    <link rel="stylesheet" href="./index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="custom-navbar-container"></div>
+    <div id="content">
+        <div class="chart-container">
+            <h2>温度</h2>
+            <canvas id="chart_tmp"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h2>压力</h2>
+            <canvas id="chart_adc"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h2>加速度</h2>
+            <canvas id="chart_acc"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h2>磁力</h2>
+            <canvas id="chart_mag"></canvas>
+        </div>
+    </div>
+
+    <script src="./renderer.js"></script>
+    <script src="../nav/index.js"></script>
+    <script>
+        // 创建自定义导航栏元素
+        const customNavbar = document.createElement('custom-navbar');
+
+        // 将自定义导航栏元素添加到容器中
+        document.getElementById('custom-navbar-container').appendChild(customNavbar);
+
+    </script>
+</body>
+
+</html>

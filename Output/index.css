@@ -1,0 +1,84 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center;
+  align-items: center; */
+  height: 100vh;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 500px;
+  width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin-top: 40px;
+  width: 500px;
+  text-align: center; /* 设置文本居中 */
+}
+
+.input-with-prefix {
+  position: relative;
+  width: 500px;
+}
+.input-with-prefix span {
+  position: absolute;
+  left: 5px;
+  top: 40%;
+  transform: translateY(-50%);
+}
+.input-with-prefix input {
+  margin-left: 120px; /* 留出前缀的空间 */
+  width: 380px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  width: 200px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-right: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+
+/* ------------------------表格样式 start --------------------------- */
+.export-log {
+  margin-bottom: 20px;
+}
+h3 {
+  margin: 5px 0;
+}
+/* ------------------------表格样式 end --------------------------- */
