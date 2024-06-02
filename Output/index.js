@@ -20,6 +20,9 @@ function createExcel(time) {
 
   // 创建data文件夹，如果不存在
   const dataFolder = path.join(__dirname, "data");
+
+  console.log(dataFolder);
+
   if (!fs.existsSync(dataFolder)) {
     fs.mkdirSync(dataFolder);
   }
@@ -85,7 +88,7 @@ stopBtn.addEventListener("click", () => {
 
   const endTime = new Date();
   const milliseconds = endTime.getMilliseconds();
-  const formattedTime = `${endTime.toLocaleString()}.${milliseconds}`;
+  const formattedTime = `${endTime.toLocaleString()}:${milliseconds}`;
   document.getElementById("end-time").textContent = formattedTime;
 
   document.getElementById("size").textContent = cnt;
@@ -192,7 +195,7 @@ function getData(portValue) {
         //表格填入当前时间
         let time = new Date();
         const milliseconds = time.getMilliseconds();
-        const formattedTime = `${time.toLocaleString()}.${milliseconds}`;
+        const formattedTime = `${time.toLocaleString()}:${milliseconds}`;
 
         test.push(formattedTime);
 
