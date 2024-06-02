@@ -1,18 +1,28 @@
 const { SerialPort } = require("serialport");
 const Clock = require("./clock");
 const XLSX = require("xlsx");
+const fs = require("fs");
+const path = require("path");
 
 // 创建一个 Clock 实例
 const myClock = new Clock();
 var port;
 
-
 //------------------------------------------------excel表格 start------------------------------------------------
 
-var outputData = [["时间","adc_x","adc_y","adc_z","温度"],["年/月/日 时/分/秒.分秒","单位","单位","单位","℃"]];
+var outputData = [
+  ["时间", "adc_x", "adc_y", "adc_z", "温度"],
+  ["年/月/日 时/分/秒:分秒", "单位", "单位", "单位", "℃"],
+];
 
 function createExcel(time) {
   console.log(time);
+
+  // 创建data文件夹，如果不存在
+  const dataFolder = path.join(__dirname, "data");
+  if (!fs.existsSync(dataFolder)) {
+    fs.mkdirSync(dataFolder);
+  }
 
   console.log(outputData);
   //工作表创建处理
@@ -20,11 +30,12 @@ function createExcel(time) {
 
   // 创建一个新的工作表
   var worksheet = XLSX.utils.aoa_to_sheet(outputData);
-
   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
-  // 将工作簿保存为 Excel 文件
-  XLSX.writeFile(workbook, time.replace(/[^a-zA-Z0-9]/g, '_')+"-output.xlsx");
+
+  // 将工作簿保存为 Excel 文件，在data文件夹里面
+  const fileName = path.join(dataFolder, time.replace(/[^a-zA-Z0-9]/g, '_') + "-output.xlsx");
+  XLSX.writeFile(workbook, fileName);
 
   console.log("Excel file created successfully!");
 }
@@ -45,7 +56,7 @@ startBtn.addEventListener("click", () => {
 
   const startTime = new Date();
   const milliseconds = startTime.getMilliseconds();
-  formattedStartTime = `${startTime.toLocaleString()}.${milliseconds}`;
+  formattedStartTime = `${startTime.toLocaleString()}:${milliseconds}`;
   document.getElementById("start-time").textContent = formattedStartTime;
 
   myClock.start();
@@ -133,8 +144,6 @@ function kmp(pattern, str) {
 let cnt = 0;
 // --------------------------------------传感器数据处理 start------------------------------
 function getData(portValue) {
-
-
   port = new SerialPort({
     path: portValue,
     baudRate: 9600,
@@ -178,7 +187,6 @@ function getData(portValue) {
       }
 
       if (srcData.length === count) {
-
         let test = [];
 
         //表格填入当前时间
@@ -186,7 +194,7 @@ function getData(portValue) {
         const milliseconds = time.getMilliseconds();
         const formattedTime = `${time.toLocaleString()}.${milliseconds}`;
 
-        test.push(formattedTime)
+        test.push(formattedTime);
 
         cnt++;
 
@@ -255,11 +263,11 @@ function getData(portValue) {
         console.log("adc_x: " + adc_x);
         test.push(adc_x);
 
-        let adc_y = processADC(adcValue_y)
+        let adc_y = processADC(adcValue_y);
         console.log("adc_y: " + adc_y);
         test.push(adc_y);
 
-        let adc_z = processADC(adcValue_z)
+        let adc_z = processADC(adcValue_z);
         console.log("adc_z: " + adc_z);
         test.push(adc_z);
 
