@@ -36,6 +36,10 @@ body {
   text-align: center; /* 设置文本居中 */
 }
 
+.export-log-title {
+  display: inline;
+}
+
 .input-with-prefix {
   position: relative;
   width: 500px;

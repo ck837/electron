@@ -1,3 +1,9 @@
+/*
+1、excel表头定义
+2、按钮逻辑天机
+3、port数据处理
+ */
+
 const { SerialPort } = require("serialport");
 const Clock = require("./clock");
 const XLSX = require("xlsx");
@@ -19,12 +25,12 @@ function createExcel(time) {
   console.log(time);
 
   // 创建data文件夹，如果不存在
-  const dataFolder = path.join(__dirname, "data");
+  const dataFolder = path.join(__dirname, "..", "..", "..", "data");
 
   console.log(dataFolder);
 
   if (!fs.existsSync(dataFolder)) {
-    fs.mkdirSync(dataFolder);
+    fs.mkdirSync(dataFolder, { recursive: true });
   }
 
   console.log(outputData);
@@ -35,12 +41,16 @@ function createExcel(time) {
   var worksheet = XLSX.utils.aoa_to_sheet(outputData);
   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
-
   // 将工作簿保存为 Excel 文件，在data文件夹里面
   const fileName = path.join(dataFolder, time.replace(/[^a-zA-Z0-9]/g, '_') + "-output.xlsx");
   XLSX.writeFile(workbook, fileName);
 
   console.log("Excel file created successfully!");
+  
+  outputData = [
+    ["时间", "adc_x", "adc_y", "adc_z", "温度"],
+    ["年/月/日 时/分/秒:分秒", "单位", "单位", "单位", "℃"],
+  ];
 }
 
 //------------------------------------------------excel表格 end------------------------------------------------
@@ -337,12 +347,16 @@ function getData(portValue) {
               srcData[i + 2] === parseInt("70", 16)
             ) {
               // temperature 缺少负数的情况
+              // let tmp =
+              //   srcData[i + 3].toString(2).padStart(4, "0") +
+              //   srcData[i + 4].toString(2).padStart(4, "0") +
+              //   srcData[i + 5].toString(2).padStart(4, "0") +
+              //   srcData[i + 6].toString(2).padStart(4, "0");
               let tmp =
-                srcData[i + 3].toString(2).padStart(4, "0") +
-                srcData[i + 4].toString(2).padStart(4, "0") +
-                srcData[i + 5].toString(2).padStart(4, "0") +
-                srcData[i + 6].toString(2).padStart(4, "0");
-
+                (srcData[i + 3] || 0).toString(2).padStart(4, "0") +
+                (srcData[i + 4] || 0).toString(2).padStart(4, "0") +
+                (srcData[i + 5] || 0).toString(2).padStart(4, "0") +
+                (srcData[i + 6] || 0).toString(2).padStart(4, "0");
               console.log(
                 srcData[i + 3].toString() +
                   srcData[i + 4].toString() +
