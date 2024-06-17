@@ -705,22 +705,11 @@ function getData(portValue,rate) {
               srcData[i + 2] === parseInt("70", 16)
             ) {
               // temperature 缺少负数的情况
-              // let tmp =
-              //   srcData[i + 3].toString(2).padStart(4, "0") +
-              //   srcData[i + 4].toString(2).padStart(4, "0") +
-              //   srcData[i + 5].toString(2).padStart(4, "0") +
-              //   srcData[i + 6].toString(2).padStart(4, "0");
               let tmp =
                 (srcData[i + 3] || 0).toString(2).padStart(4, "0") +
                 (srcData[i + 4] || 0).toString(2).padStart(4, "0") +
                 (srcData[i + 5] || 0).toString(2).padStart(4, "0") +
                 (srcData[i + 6] || 0).toString(2).padStart(4, "0");
-              // console.log(
-              //   srcData[i + 3].toString() +
-              //     srcData[i + 4].toString() +
-              //     srcData[i + 5].toString() +
-              //     srcData[i + 6].toString()
-              // );
               tmp = tmp.slice(0, -2);
               if (tmp[0] == 0) {
                 let s1 =

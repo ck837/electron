@@ -1,3 +1,8 @@
+html{
+  width: 100%;
+  height: 100%;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
@@ -20,9 +25,17 @@ td {
 
 /* now */
 /* ----------------侧边栏 start------------------------------------------- */
-.sider-input {
+.sider-all{
   width: 300px;
   height: 100%;
+
+}
+
+.sider-input {
+  margin-top: 10px;
+  margin-left: 2px;
+  font-size: 14px;
+  border: 1px solid black;
 }
 
 .com-input {
@@ -48,23 +61,20 @@ td {
 
 /* ----------------侧边栏 start------------------------------------------- */
 
-
-
 /* ----------------两列布局 start（可重复使用）------------------------------- */
 .display-all {
   width: 100%;
   height: 100%;
+}
+
+.display-main {
+  width: 100%;
   display: flex;
 }
 
-.left-input {
-  width: 300px;
+.right-show {
+  flex: 1;
   height: 100%;
-}
-
-.right-show{
-    flex: 1;
-	height: 100%;
 }
 
 /* ----------------两列布局 end---------------------------- */
@@ -76,7 +86,7 @@ td {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  flex:1;
+  flex: 1;
 }
 
 .chart-container {

@@ -51,7 +51,7 @@ customElements.define('custom-navbar', class CustomNavbar extends HTMLElement {
                 }
             </style>
             <ul class="nav-ul">
-                <li><a href="#port" id="toPort">串口选择</a></li>
+
                 <li>
                     <div class="dropdown"> <a href="#" class="dropbtn">折线图</a>
                         <div class="dropdown-content">
@@ -64,6 +64,7 @@ customElements.define('custom-navbar', class CustomNavbar extends HTMLElement {
                 <li><a href="#about" id="toOutput">数据导出</a></li>
             </ul>
         `;
+        // <li><a href="#port" id="toPort">串口选择</a></li>
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content);
     }
@@ -71,9 +72,9 @@ customElements.define('custom-navbar', class CustomNavbar extends HTMLElement {
     connectedCallback() {
         // JavaScript event listeners can be added here
         const { ipcRenderer } = require('electron');
-        this.shadowRoot.getElementById('toPort').addEventListener('click', () => {
-            ipcRenderer.send('gotoPagePort');
-        });
+        // this.shadowRoot.getElementById('toPort').addEventListener('click', () => {
+        //     ipcRenderer.send('gotoPagePort');
+        // });
         this.shadowRoot.getElementById('toShowAll').addEventListener('click', () => {
             ipcRenderer.send('gotoPageShowAll');
         });
