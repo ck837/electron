@@ -4,7 +4,6 @@
 3、port数据处理
 */
 
-
 // ----------------------侧边栏逻辑处理 start --------------------
 
 const fs = require("fs");
@@ -368,8 +367,6 @@ let data2 = {
   mag_y: 352618390.5,
   mag_z: 251788963.5,
 };
-
-let isData1 = true;
 
 // setInterval(() => {
 //   if (isData1) {
