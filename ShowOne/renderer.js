@@ -1,3 +1,89 @@
+// ----------------------侧边栏逻辑处理 start --------------------
+
+const fs = require("fs");
+const path = require("path");
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Get the elements
+  const comSelect = document.getElementById("com");
+  const numSelect = document.getElementById("num");
+  const typeSelect = document.getElementById("type");
+  const cut0Select = document.getElementById("cut0");
+  const cut1Select = document.getElementById("cut1");
+  const cut2Select = document.getElementById("cut2");
+  const cut3Select = document.getElementById("cut3");
+  const cut4Select = document.getElementById("cut4");
+
+  const cut0Value = document.getElementById("cut0_value");
+  const cut00Value = document.getElementById("cut0_value_0");
+  const cut1Value = document.getElementById("cut1_value");
+  const cut2Value = document.getElementById("cut2_value");
+  const cut3Value = document.getElementById("cut3_value");
+  const cut4Value = document.getElementById("cut4_value");
+
+  // Get the confirm button element
+  const confirmButton = document.getElementById("confirm");
+
+  // Add an event listener to the confirm button
+  confirmButton.addEventListener("click", saveConfiguration);
+
+  //页面加载好，后读取configuration文件进行相关数据的读取，将数据渲染进输入框内
+  function insertData() {
+
+  }
+
+  // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
+  function saveConfiguration() {
+    //修改界面中函数里面的元素
+    cut0Value.textContent = cut0Select.value;
+    cut00Value.textContent = cut0Select.value;
+    cut1Value.textContent = cut1Select.value;
+    cut2Value.textContent = cut2Select.value;
+    cut3Value.textContent = cut3Select.value;
+    cut4Value.textContent = cut4Select.value;
+
+    // Get the selected value
+    const selectedCom = comSelect.value;
+    const selectedType = typeSelect.value;
+    const selectedNum = numSelect.value;
+
+    // Create a JavaScript object with the configuration
+    const configuration = {
+      com: selectedCom,
+      num: selectedNum,
+      type: selectedType,
+      cut0: cut0Select.value,
+      cut1: cut1Select.value,
+      cut2: cut2Select.value,
+      cut3: cut3Select.value,
+      cut4: cut4Select.value,
+    };
+
+    getData("COM"+selectedCom,Number(selectedNum));
+
+    // Convert the object to a JSON string
+    const jsonData = JSON.stringify(configuration, null, 2);
+
+    // Get the path to the current directory
+    const currentDir = process.cwd();
+
+    // Construct the full file path
+    const filePath = path.join(currentDir, "configuration.json");
+
+    // Write the JSON data to the file
+    fs.writeFile(filePath, jsonData, (err) => {
+      if (err) {
+        console.error("Error saving configuration:", err);
+      } else {
+        console.log("Configuration saved to:", filePath);
+      }
+    });
+  }
+});
+
+// ----------------------侧边栏逻辑处理 end --------------------
+
+
 const temperatureBtn = document.getElementById("temperature-btn");
 const pressureBtn = document.getElementById("pressure-btn");
 const accelerationBtn = document.getElementById("acceleration-btn");

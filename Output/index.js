@@ -17,8 +17,8 @@ var port;
 //------------------------------------------------excel表格 start------------------------------------------------
 
 var outputData = [
-  ["时间", "adc_x", "adc_y", "adc_z", "温度"],
-  ["年/月/日 时/分/秒:分秒", "单位", "单位", "单位", "℃"],
+  ["时间", "adc_x", "adc_y", "adc_z", "温度","acc_x", "acc_y", "acc_z", "mag_x", "mag_y", "mag_z"],
+  ["年/月/日 时/分/秒:分秒", "单位", "单位", "单位", "℃","单位", "单位", "单位","单位", "单位", "单位"],
 ];
 
 function createExcel(time) {
@@ -48,8 +48,8 @@ function createExcel(time) {
   console.log("Excel file created successfully!");
   
   outputData = [
-    ["时间", "adc_x", "adc_y", "adc_z", "温度"],
-    ["年/月/日 时/分/秒:分秒", "单位", "单位", "单位", "℃"],
+    ["时间", "adc_x", "adc_y", "adc_z", "温度","acc_x", "acc_y", "acc_z", "mag_x","mag_y","mag_z"],
+    ["年/月/日 时/分/秒:分秒", "单位", "单位", "单位", "℃", "单位", "单位", "单位", "单位", "单位", "单位"],
   ];
 }
 
@@ -60,7 +60,6 @@ function createExcel(time) {
 // 获取开始和结束按钮
 const startBtn = document.getElementById("start-btn");
 const stopBtn = document.getElementById("stop-btn");
-const elapsedTimeDisplay = document.getElementById("elapsed-time");
 
 var formattedStartTime;
 
@@ -283,62 +282,7 @@ function getData(portValue) {
         let adc_z = processADC(adcValue_z);
         console.log("adc_z: " + adc_z);
         test.push(adc_z);
-
-        outputData.push(test);
-
-        //-----------------------------------handle acc events--------------------------------
-
-        // 处理加速度值的函数
-        function processAcceleration(hexArray) {
-          let acc_x_decimal =
-            parseInt(hexArray[0], 16) * Math.pow(16, 3) +
-            parseInt(hexArray[1], 16) * Math.pow(16, 2) +
-            parseInt(hexArray[2], 16) * 16 +
-            parseInt(hexArray[3], 16);
-
-          let acc_x_binary = acc_x_decimal.toString(2).padStart(16, "0");
-
-          let ACC_X;
-          if (acc_x_binary[0] === "0") {
-            ACC_X = 0.061 * acc_x_decimal;
-          } else {
-            let acc_x_binary_tmp = "1";
-            for (let i = 1; i < acc_x_binary.length; i++) {
-              if (acc_x_binary[i] === "0") acc_x_binary_tmp += "1";
-              else acc_x_binary_tmp += "0";
-            }
-            ACC_X = -0.061 * (parseInt(acc_x_binary_tmp.slice(1), 2) + 1);
-          }
-
-          return ACC_X;
-        }
-        let accValue_x = [
-          srcData[28].toString(16),
-          srcData[29].toString(16),
-          srcData[30].toString(16),
-          srcData[31].toString(16),
-        ];
-        let accValue_y = [
-          srcData[32].toString(16),
-          srcData[33].toString(16),
-          srcData[34].toString(16),
-          srcData[35].toString(16),
-        ];
-        let accValue_z = [
-          srcData[36].toString(16),
-          srcData[37].toString(16),
-          srcData[38].toString(16),
-          srcData[39].toString(16),
-        ];
-        // 调用函数并输出结果
-        let result_x = processAcceleration(accValue_x);
-        let result_y = processAcceleration(accValue_y);
-        let result_z = processAcceleration(accValue_z);
-        console.log("acc_x: " + result_x);
-        console.log("acc_y: " + result_y);
-        console.log("acc_z: " + result_z);
-
-        //-----------------------------------handle tmp events--------------------------------
+//-----------------------------------handle tmp events--------------------------------
         // 处理温度Tmp 54 6d 70
         for (let i = 0; i < srcData.length; i++) {
           if (srcData[i] === parseInt("54", 16)) {
@@ -414,6 +358,64 @@ function getData(portValue) {
         }
         //-----------------------------------handle mag events--------------------------------
 
+
+        //-----------------------------------handle acc events--------------------------------
+
+        // 处理加速度值的函数
+        function processAcceleration(hexArray) {
+          let acc_x_decimal =
+            parseInt(hexArray[0], 16) * Math.pow(16, 3) +
+            parseInt(hexArray[1], 16) * Math.pow(16, 2) +
+            parseInt(hexArray[2], 16) * 16 +
+            parseInt(hexArray[3], 16);
+
+          let acc_x_binary = acc_x_decimal.toString(2).padStart(16, "0");
+
+          let ACC_X;
+          if (acc_x_binary[0] === "0") {
+            ACC_X = 0.061 * acc_x_decimal;
+          } else {
+            let acc_x_binary_tmp = "1";
+            for (let i = 1; i < acc_x_binary.length; i++) {
+              if (acc_x_binary[i] === "0") acc_x_binary_tmp += "1";
+              else acc_x_binary_tmp += "0";
+            }
+            ACC_X = -0.061 * (parseInt(acc_x_binary_tmp.slice(1), 2) + 1);
+          }
+
+          return ACC_X;
+        }
+        let accValue_x = [
+          srcData[28].toString(16),
+          srcData[29].toString(16),
+          srcData[30].toString(16),
+          srcData[31].toString(16),
+        ];
+        let accValue_y = [
+          srcData[32].toString(16),
+          srcData[33].toString(16),
+          srcData[34].toString(16),
+          srcData[35].toString(16),
+        ];
+        let accValue_z = [
+          srcData[36].toString(16),
+          srcData[37].toString(16),
+          srcData[38].toString(16),
+          srcData[39].toString(16),
+        ];
+        // 调用函数并输出结果
+        let result_x = processAcceleration(accValue_x);
+        let result_y = processAcceleration(accValue_y);
+        let result_z = processAcceleration(accValue_z);
+        console.log("acc_x: " + result_x);
+        console.log("acc_y: " + result_y);
+        console.log("acc_z: " + result_z);
+        test.push(result_x);
+        test.push(result_y);
+        test.push(result_z);
+
+        
+
         function processMagnetism(hexArray) {
           let mag_decimal =
             parseInt(hexArray[0], 16) * Math.pow(16, 3) +
@@ -459,7 +461,11 @@ function getData(portValue) {
         console.log("mag_x: " + processMagnetism(magValue_x));
         console.log("mag_y: " + processMagnetism(magValue_y));
         console.log("mag_z: " + processMagnetism(magValue_z));
+        test.push( processMagnetism(magValue_x));
+        test.push( processMagnetism(magValue_y));
+        test.push( processMagnetism(magValue_z));
 
+        outputData.push(test);
         // 清空srcData
         srcData = [];
       }

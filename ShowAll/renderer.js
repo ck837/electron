@@ -6,6 +6,7 @@
 
 // ----------------------侧边栏逻辑处理 start --------------------
 
+const { color } = require("chart.js/helpers");
 const fs = require("fs");
 const path = require("path");
 
@@ -34,9 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
   confirmButton.addEventListener("click", saveConfiguration);
 
   //页面加载好，后读取configuration文件进行相关数据的读取，将数据渲染进输入框内
-  function insertData() {
-
-  }
+  function insertData() {}
 
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
@@ -65,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
       cut4: cut4Select.value,
     };
 
-    getData("COM"+selectedCom,Number(selectedNum));
+    getData("COM" + selectedCom, Number(selectedNum));
 
     // Convert the object to a JSON string
     const jsonData = JSON.stringify(configuration, null, 2);
@@ -91,40 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // --------------------------------------传感器数据处理------------------------------
 const { SerialPort } = require("serialport");
-// const tableify = require('tableify')
-
-// async function listSerialPorts() {
-//   await SerialPort.list().then((ports, err) => {
-//     if(err) {
-//       document.getElementById('error').textContent = err.message
-//       return
-//     } else {
-//       document.getElementById('error').textContent = ''
-//     }
-//     console.log('ports', ports);
-
-//     if (ports.length === 0) {
-//       document.getElementById('error').textContent = 'No ports discovered'
-//     }
-
-//     tableHTML = tableify(ports)
-//     document.getElementById('ports').innerHTML = tableHTML
-//   })
-// }
-
-// function listPorts() {
-//   listSerialPorts();
-//   setTimeout(listPorts, 2000);
-// }
-
-// // Set a timeout that will check for new serialPorts every 2 seconds.
-// // This timeout reschedules itself.
-// setTimeout(listPorts, 2000);
-
-// listSerialPorts()
-
-// const { Chart } = await import('chart.js');
-
 // 获取canvas元素
 const canvas1 = document.getElementById("chart_tmp");
 const ctx1 = canvas1.getContext("2d");
@@ -138,6 +103,12 @@ const ctx3 = canvas3.getContext("2d");
 const canvas4 = document.getElementById("chart_mag");
 const ctx4 = canvas4.getContext("2d");
 
+const canvas5 = document.getElementById("chart_calculate");
+const ctx5 = canvas5.getContext("2d");
+
+const canvas6 = document.getElementById("chart_eulerAngles");
+const ctx6 = canvas6.getContext("2d");
+
 const temperatureData = [];
 const adcx = [];
 const adcy = [];
@@ -148,8 +119,51 @@ const accz = [];
 const magx = [];
 const magy = [];
 const magz = [];
+//压力或者环境温度
+const calculatex = [];
+const calculatey = [];
+const calculatez = [];
+//欧拉角
+const EulerAnglesx = [];
+const EulerAnglesy = [];
+const EulerAnglesz = [];
 
 // 创建图表
+// const myChart1 = new Chart(ctx1, {
+//   type: "line",
+//   data: {
+//     labels: [], // x轴坐标标签
+//     datasets: [
+//       {
+//         label: "Temperature",
+//         data: temperatureData, // 温度数据数组
+//         fill: false,
+//         borderColor: "rgb(75, 192, 192)",
+//         tension: 0.1
+//       },
+//     ],
+//   },
+//   options: {
+//     scales: {
+//       x: {
+//         display: true,
+//         title: {
+//           display: true,
+//           text: "Time",
+//           color:"white",
+//         },
+//       },
+//       y: {
+//         display: true,
+//         title: {
+//           display: true,
+//           text: "Temperature (℃)",
+//           color:"white",
+//         },
+//       },
+//     },
+//   },
+// });
 const myChart1 = new Chart(ctx1, {
   type: "line",
   data: {
@@ -160,17 +174,29 @@ const myChart1 = new Chart(ctx1, {
         data: temperatureData, // 温度数据数组
         fill: false,
         borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
+        tension: 0.1
       },
     ],
   },
   options: {
+    plugins: {
+      tooltip: {
+        titleColor: 'white', // 提示框标题颜色
+        bodyColor: 'white', // 提示框内容颜色
+      },
+      legend: {
+        labels: {
+          color: 'white' // 图例文本颜色
+        }
+      }
+    },
     scales: {
       x: {
         display: true,
         title: {
           display: true,
           text: "Time",
+          color: "white",
         },
       },
       y: {
@@ -178,14 +204,13 @@ const myChart1 = new Chart(ctx1, {
         title: {
           display: true,
           text: "Temperature (℃)",
+          color: "white",
         },
-        // min: 0, // 设置y轴的最小值
-        // max: 40, // 设置y轴的最大值
-        // stepSize: 5 // 设置y轴刻度的步长
       },
     },
   },
 });
+
 
 const myChart2 = new Chart(ctx2, {
   type: "line",
@@ -340,7 +365,104 @@ const myChart4 = new Chart(ctx4, {
   },
 });
 
+const myChart5 = new Chart(ctx5, {
+  type: "line",
+  data: {
+    labels: [], // x轴坐标标签
+    datasets: [
+      {
+        label: "x",
+        data: calculatex, // 压力数据数组
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+      {
+        label: "y",
+        data: calculatey, // 压力数据数组
+        fill: false,
+        borderColor: "rgb(255, 99, 132)",
+        tension: 0.1,
+      },
+      {
+        label: "z",
+        data: calculatez, // 压力数据数组
+        fill: false,
+        borderColor: "rgb(54, 162, 235)",
+        tension: 0.1,
+      },
+    ],
+  },
+  options: {
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: "Time",
+        },
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: "xxx",
+        },
+      },
+    },
+  },
+});
+const myChart6 = new Chart(ctx6, {
+  type: "line",
+  data: {
+    labels: [], // x轴坐标标签
+    datasets: [
+      {
+        label: "x",
+        data: EulerAnglesx, // 压力数据数组
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+      {
+        label: "y",
+        data: EulerAnglesy, // 压力数据数组
+        fill: false,
+        borderColor: "rgb(255, 99, 132)",
+        tension: 0.1,
+      },
+      {
+        label: "z",
+        data: EulerAnglesz, // 压力数据数组
+        fill: false,
+        borderColor: "rgb(54, 162, 235)",
+        tension: 0.1,
+      },
+    ],
+  },
+  options: {
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: "Time",
+        },
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: "EulerAngles",
+        },
+      },
+    },
+  },
+});
+
 //---------------------------------test start----------------------------------------------
+
+let isData1 = false;
 
 let data1 = {
   adc_x: 50726402,
@@ -349,7 +471,7 @@ let data1 = {
   acc_x: 2058876.148,
   acc_y: 3094310.522,
   acc_z: 10238162.103,
-  temperature: 24.84375,
+  temperature: 30.84375,
   mag_x: 151883521.5,
   mag_y: 252250000.5,
   mag_z: 251788963.5,
@@ -369,6 +491,8 @@ let data2 = {
 };
 
 // setInterval(() => {
+//   // 调用函数更新数据
+//   updateChartData();
 //   if (isData1) {
 //     temperatureData.push(data1.temperature);
 //     adcx.push(data1.adc_x);
@@ -392,56 +516,66 @@ let data2 = {
 //     magy.push(data2.mag_y);
 //     magz.push(data2.mag_z);
 //   }
-//   // 调用函数更新数据
-//   updateChartData();
-
 //   isData1 = !isData1;
 // }, 500);
 
+//---------------------------------test end----------------------------------------------
+
+var lastTime = "";
 function updateChartData() {
   //------------------------------------chart1 展示-------------------------------------
   // 添加新数据
-  myChart1.data.labels.push(new Date().toLocaleTimeString());
+  let startTime = new Date();
+  let formattedStartTime = `${startTime.toLocaleTimeString()}:${startTime.getMilliseconds()}`;
+
+  myChart1.data.labels.push(formattedStartTime);
   // 其他数据集的添加操作，例如：myChart1.data.datasets[0].data.push(newValue);
 
   // 检查数据点数量是否超过阈值
-  const maxDataPoints1 = 5; // 设置数据点的最大数量
-  if (myChart1.data.labels.length > maxDataPoints1) {
-    // 删除第一个数据节点
-    myChart1.data.labels.shift();
-    // 其他数据集的删除操作，例如：myChart1.data.datasets[0].data.shift();
-  }
+  const maxDataPoint = 20; // 设置数据点的最大数量
 
+  if (myChart1.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
+    myChart1.data.labels.shift();
+
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart1.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
+  }
   // 更新图表
   myChart1.update();
 
   //------------------------------------chart2 展示-------------------------------------
 
-  myChart2.data.labels.push(new Date().toLocaleTimeString());
+  myChart2.data.labels.push(formattedStartTime);
   // 其他数据集的添加操作，例如：myChart1.data.datasets[0].data.push(newValue);
 
-  // 检查数据点数量是否超过阈值
-  const maxDataPoints2 = 20; // 设置数据点的最大数量
-  if (myChart2.data.labels.length > maxDataPoints2) {
-    // 删除第一个数据节点
+  if (myChart2.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
     myChart2.data.labels.shift();
-    // 其他数据集的删除操作，例如：myChart1.data.datasets[0].data.shift();
-  }
 
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart2.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
+  }
   // 更新图表
   myChart2.update();
 
   //------------------------------------chart3 展示-------------------------------------
 
-  myChart3.data.labels.push(new Date().toLocaleTimeString());
+  myChart3.data.labels.push(formattedStartTime);
   // 其他数据集的添加操作，例如：myChart1.data.datasets[0].data.push(newValue);
 
-  // 检查数据点数量是否超过阈值
-  const maxDataPoints3 = 20; // 设置数据点的最大数量
-  if (myChart3.data.labels.length > maxDataPoints3) {
-    // 删除第一个数据节点
+  if (myChart3.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
     myChart3.data.labels.shift();
-    // 其他数据集的删除操作，例如：myChart1.data.datasets[0].data.shift();
+
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart3.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
   }
 
   // 更新图表
@@ -449,19 +583,47 @@ function updateChartData() {
 
   //------------------------------------chart4 展示-------------------------------------
 
-  myChart4.data.labels.push(new Date().toLocaleTimeString());
+  myChart4.data.labels.push(formattedStartTime);
   // 其他数据集的添加操作，例如：myChart1.data.datasets[0].data.push(newValue);
 
-  // 检查数据点数量是否超过阈值
-  const maxDataPoints4 = 20; // 设置数据点的最大数量
-  if (myChart4.data.labels.length > maxDataPoints4) {
-    // 删除第一个数据节点
+  if (myChart4.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
     myChart4.data.labels.shift();
-    // 其他数据集的删除操作，例如：myChart1.data.datasets[0].data.shift();
+
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart4.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
+  }
+  myChart4.update();
+
+  myChart5.data.labels.push(formattedStartTime);
+
+  if (myChart5.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
+    myChart5.data.labels.shift();
+
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart5.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
+  }
+  myChart5.update();
+
+  myChart6.data.labels.push(formattedStartTime);
+
+  if (myChart6.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
+    myChart6.data.labels.shift();
+
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart6.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
   }
 
   // 更新图表
-  myChart4.update();
+  myChart6.update();
 }
 
 //----------------------------------test end----------------------------------------------
@@ -509,7 +671,7 @@ function kmp(pattern, str) {
 
 let cnt = 0;
 // --------------------------------------传感器数据处理 start------------------------------
-function getData(portValue,rate) {
+function getData(portValue, rate) {
   port = new SerialPort({
     path: portValue,
     baudRate: rate,
@@ -553,6 +715,9 @@ function getData(portValue,rate) {
       }
 
       if (srcData.length === count) {
+        //更新图表代码
+        updateChartData();
+
         let test = [];
 
         //表格填入当前时间
@@ -637,6 +802,15 @@ function getData(portValue,rate) {
         console.log("adc_z: " + adc_z);
         adcz.push(adc_z);
 
+        //x
+        if (adc_x < 3.6867) calculatex.push(-130.0802 * adc_x + 525.0134);
+        else calculatex.push(-172.1412 * adc_x + 680.0805);
+        //y
+        if (adc_y < 3.7501) calculatey.push(-134.1534 * adc_y + 542.8508);
+        else calculatey.push(-288.0047 * adc_y + 1119.8062);
+        //z
+        if (adc_z < 3.7582) calculatez.push(-264.4064 * adc_z + 1046.217);
+        else calculatez.push(-711.299 * adc_z + 2725.7298);
 
         //-----------------------------------handle acc events--------------------------------
 
@@ -810,8 +984,108 @@ function getData(portValue,rate) {
         magy.push(mag_result_y);
         magz.push(mag_result_z);
 
-        //更新图表代码
-        updateChartData();
+        //计算欧拉角
+        // 保存先前的滤波数据
+        let prevFilteredAcc = [0, 0, 0];
+        let prevFilteredMag = [0, 0, 0];
+
+        // 指定EMA参数
+        const alpha = 0.2;
+
+        function KGetQuat(ax, ay, az, mx, my, mz) {
+          // 函数：返回符号与y相同的x值
+          function copysign(x, y) {
+            return y < 0 ? -Math.abs(x) : Math.abs(x);
+          }
+
+          // 先前滤波数据为空时初始化
+          if (!prevFilteredAcc) prevFilteredAcc = [ax, ay, az];
+          if (!prevFilteredMag) prevFilteredMag = [mx, my, mz];
+
+          // 对加速度和磁力计数据进行EMA滤波
+          ax = alpha * ax + (1 - alpha) * prevFilteredAcc[0];
+          ay = alpha * ay + (1 - alpha) * prevFilteredAcc[1];
+          az = alpha * az + (1 - alpha) * prevFilteredAcc[2];
+          prevFilteredAcc = [ax, ay, az];
+
+          mx = alpha * mx + (1 - alpha) * prevFilteredMag[0];
+          my = alpha * my + (1 - alpha) * prevFilteredMag[1];
+          mz = alpha * mz + (1 - alpha) * prevFilteredMag[2];
+          prevFilteredMag = [mx, my, mz];
+
+          // 数据归一化
+          const accNorm = Math.sqrt(ax * ax + ay * ay + az * az);
+          ax /= accNorm;
+          ay /= accNorm;
+          az /= accNorm;
+
+          const magNorm = Math.sqrt(mx * mx + my * my + mz * mz);
+          mx /= magNorm;
+          my /= magNorm;
+          mz /= magNorm;
+
+          // 计算改进的四元数
+          const gx = 2 * ax;
+          const gy = 2 * ay;
+          const gz = 2 * (az - 0.5);
+
+          const hx = mx * Math.sqrt(1.0 - az * az) - mz * ay;
+          const hy = my * Math.sqrt(1.0 - az * az) - mz * ax;
+          const hz = mx * ay - my * ax;
+
+          let qw = Math.sqrt(Math.max(0, 1 + gx + hy + hz)) / 2;
+          let qx = Math.sqrt(Math.max(0, 1 + gx - hy - hz)) / 2;
+          let qy = Math.sqrt(Math.max(0, 1 - gx + hy - hz)) / 2;
+          let qz = Math.sqrt(Math.max(0, 1 - gx - hy + hz)) / 2;
+          qx = copysign(qx, gy - hz);
+          qy = copysign(qy, hx - gz);
+          qz = copysign(qz, hx + gy);
+
+          // 四元数归一化
+          const qNorm = Math.sqrt(qw * qw + qx * qx + qy * qy + qz * qz);
+          qw /= qNorm;
+          qx /= qNorm;
+          qy /= qNorm;
+          qz /= qNorm;
+
+          return [qw, qx, qy, qz];
+        }
+
+        function quaternionToEuler(qw, qx, qy, qz) {
+          const ysqr = qy * qy;
+
+          // roll (x-axis rotation)
+          const t0 = 2 * (qw * qx + qy * qz);
+          const t1 = 1 - 2 * (qx * qx + ysqr);
+          const roll = Math.atan2(t0, t1);
+
+          // pitch (y-axis rotation)
+          let t2 = 2 * (qw * qy - qz * qx);
+          t2 = t2 > 1 ? 1 : t2;
+          t2 = t2 < -1 ? -1 : t2;
+          const pitch = Math.asin(t2);
+
+          // yaw (z-axis rotation)
+          const t3 = 2 * (qw * qz + qx * qy);
+          const t4 = 1 - 2 * (ysqr + qz * qz);
+          const yaw = Math.atan2(t3, t4);
+          console.log(roll, pitch, yaw);
+
+          EulerAnglesx.push(roll * (180 / Math.PI));
+          EulerAnglesy.push(pitch * (180 / Math.PI));
+          EulerAnglesz.push(yaw * (180 / Math.PI));
+        }
+        let tmp = KGetQuat(
+          result_x,
+          result_y,
+          result_z,
+          mag_result_x,
+          mag_result_y,
+          mag_result_z
+        );
+        console.log(tmp);
+        quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
+
         // 清空srcData
         srcData = [];
       }

@@ -16,6 +16,65 @@ td {
   border: 1px solid black;
 }
 
+/* now */
+/* ----------------侧边栏 start------------------------------------------- */
+.sider-all{
+  width: 280px;
+  height: 100%;
+
+}
+
+.sider-input {
+  margin-top: 10px;
+  margin-left: 2px;
+  font-size: 14px;
+  /* border: 1px solid black; */
+}
+
+.com-input {
+  width: 100%;
+}
+
+.title {
+  text-align: center;
+}
+
+.com-input-com {
+  width: 300px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.number-input {
+  width: 70px;
+  margin-right: 20px;
+  background: black;
+  color: white;
+  border: 1px solid white;
+}
+
+/* ----------------侧边栏 start------------------------------------------- */
+
+/* ----------------两列布局 start（可重复使用）------------------------------- */
+.display-all {
+  width: 100%;
+  height: 100%;
+}
+
+.display-main {
+  width: 100%;
+  display: flex;
+}
+
+.right-show {
+  flex: 1;
+  height: 100%;
+}
+
+/* ----------------两列布局 end---------------------------- */
+
 /* ----------------图表 start---------------------------- */
 #content {
   padding: 3%;

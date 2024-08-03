@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8" />
     <title>Serial数据展示</title>
@@ -12,7 +11,7 @@
     <!-- -------------------数据展示 start-------------------------------------- -->
     <div class="display-all">
         <div id="custom-navbar-container"></div>
-            <!-- -------------------侧边栏处理 start-------------------------------------- -->
+        <!-- -------------------侧边栏处理 start-------------------------------------- -->
         <div class="display-main">
             <div class="sider-all">
                 <div class="sider-input">
@@ -36,6 +35,9 @@
                                 <option value="13">13</option>
                                 <option value="14">14</option>
                                 <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
                             </select>
                         </div>
                         <div class="com-input-com">
@@ -64,20 +66,81 @@
                             <input type="text" id="cut0" class="number-input" placeholder="输入数字" />
                         </div>
                         <div class="com-input-com">
-                            <p>K1：</p>
+                            <p>X-K1：</p>
                             <input type="text" id="cut1" class="number-input" placeholder="输入数字" />
-                            <p>B1：</p>
+                            <p>X-B1：</p>
                             <input type="text" id="cut2" class="number-input" placeholder="输入数字" />
                         </div>
                         <div class="com-input-com">
-                            <p>K2：</p>
+                            <p>X-K2：</p>
                             <input type="text" id="cut3" class="number-input" placeholder="输入数字" />
-                            <p>B2：</p>
+                            <p>X-B2：</p>
                             <input type="text" id="cut4" class="number-input" placeholder="输入数字" />
+                        </div>
+                        <div class="func-show">
+                            <p class="title">函数参数：</p>
+                            <div class="com-input-com">
+                                <p>当 V <= <p id="cut0_value">xxx</p>, F=<p id="cut1_value">xxx</p> , V+<p  id="cut2_value">xxx</p> </p>
+                            </div>
+                            <div class="com-input-com">
+                                <p>当 V > <p id="cut0_value_0">xxx</p> , F=<p  id="cut3_value">xxx</p> , V+<p  id="cut4_value">xxx</p> </p>
+                            </div>
+                        </div>
+
+                        <div class="com-input-com">
+                            <p>分段点：</p>
+                            <input type="text" id="cut0" class="number-input" placeholder="输入数字" />
+                        </div>
+                        <div class="com-input-com">
+                            <p>Y-K3：</p>
+                            <input type="text" id="cut5" class="number-input" placeholder="输入数字" />
+                            <p>Y-B3：</p>
+                            <input type="text" id="cut6" class="number-input" placeholder="输入数字" />
+                        </div>
+                        <div class="com-input-com">
+                            <p>Y-K4：</p>
+                            <input type="text" id="cut5" class="number-input" placeholder="输入数字" />
+                            <p>Y-B5：</p>
+                            <input type="text" id="cut6" class="number-input" placeholder="输入数字" />
+                        </div>
+                        <div class="func-show">
+                            <p class="title">函数参数：</p>
+                            <div class="com-input-com">
+                                <p>当 V <= <p id="cut0_value">xxx</p>, F=<p id="cut1_value">xxx</p> , V+<p  id="cut2_value">xxx</p> </p>
+                            </div>
+                            <div class="com-input-com">
+                                <p>当 V > <p id="cut0_value_0">xxx</p> , F=<p  id="cut3_value">xxx</p> , V+<p  id="cut4_value">xxx</p> </p>
+                            </div>
+                        </div>
+
+                        <div class="com-input-com">
+                            <p>分段点：</p>
+                            <input type="text" id="cut0" class="number-input" placeholder="输入数字" />
+                        </div>
+                        <div class="com-input-com">
+                            <p>Y-K3：</p>
+                            <input type="text" id="cut5" class="number-input" placeholder="输入数字" />
+                            <p>Y-B3：</p>
+                            <input type="text" id="cut6" class="number-input" placeholder="输入数字" />
+                        </div>
+                        <div class="com-input-com">
+                            <p>Y-K3：</p>
+                            <input type="text" id="cut5" class="number-input" placeholder="输入数字" />
+                            <p>Y-B3：</p>
+                            <input type="text" id="cut6" class="number-input" placeholder="输入数字" />
+                        </div>
+                        <div class="func-show">
+                            <p class="title">函数参数：</p>
+                            <div class="com-input-com">
+                                <p>当 V <= <p id="cut0_value">xxx</p>, F=<p id="cut1_value">xxx</p> , V+<p  id="cut2_value">xxx</p> </p>
+                            </div>
+                            <div class="com-input-com">
+                                <p>当 V > <p id="cut0_value_0">xxx</p> , F=<p  id="cut3_value">xxx</p> , V+<p  id="cut4_value">xxx</p> </p>
+                            </div>
                         </div>
                     </div>
                     <div class="button-push">
-                        <button type="button" id="confirm" class="title">确定</button>
+                        <button type="button" id="confirm" class="title-button">确定</button>
                     </div>
                     <div class="func-show">
                         <p class="title">函数参数：</p>
@@ -90,21 +153,20 @@
                     </div>
                 </div>
             </div>
-           
         <!-- -------------------侧边栏处理 end -------------------------------------- -->
             <div class="right-show">
                 
                 <div id="content">
                     <div class="chart-container">
-                        <h2>温度</h2>
+                        <h2>电路板温度</h2>
                         <canvas id="chart_tmp"></canvas>
                     </div>
     
                     <div class="chart-container">
-                        <h2>压力</h2>
+                        <h2>电压</h2>
                         <canvas id="chart_adc"></canvas>
                     </div>
-    
+                    
                     <div class="chart-container">
                         <h2>加速度</h2>
                         <canvas id="chart_acc"></canvas>
@@ -113,6 +175,16 @@
                     <div class="chart-container">
                         <h2>磁力</h2>
                         <canvas id="chart_mag"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h2>压力/环境温度</h2>
+                        <canvas id="chart_calculate"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h2>欧拉角</h2>
+                        <canvas id="chart_eulerAngles"></canvas>
                     </div>
                 </div>
     
