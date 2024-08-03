@@ -1,40 +1,32 @@
-const { SerialPort } = require("serialport");
 // 创建场景、相机和渲染器
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, 600 / 450, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-
-
-
-// 获取屏幕尺寸
-const screenWidth = window.innerWidth;
-const screenHeight = window.innerHeight;
 
 // 设置渲染器的大小，并将其添加到容器元素中
 const container = document.getElementById('canvas-container');
-// 设置渲染器的大小为全屏
-renderer.setSize(screenWidth, screenHeight);
-renderer.setClearColor('#142233'); // 设置背景颜色为黑色
+renderer.setSize(600, 450);
+renderer.setClearColor(0x000000, 1); // 设置背景颜色为黑色
 container.appendChild(renderer.domElement);
 
 // 创建立方体
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const texturePath = 'imgs/';
 const textures = [
-    new THREE.TextureLoader().load(texturePath + 'right.png'),
-    new THREE.TextureLoader().load(texturePath + 'left.png'),
-    new THREE.TextureLoader().load(texturePath + 'top.png'),
-    new THREE.TextureLoader().load(texturePath + 'bottom.png'),
-    new THREE.TextureLoader().load(texturePath + 'front.png'),
-    new THREE.TextureLoader().load(texturePath + 'back.png')
+  new THREE.TextureLoader().load(texturePath + 'right.png'),
+  new THREE.TextureLoader().load(texturePath + 'left.png'),
+  new THREE.TextureLoader().load(texturePath + 'top.png'),
+  new THREE.TextureLoader().load(texturePath + 'bottom.png'),
+  new THREE.TextureLoader().load(texturePath + 'front.png'),
+  new THREE.TextureLoader().load(texturePath + 'back.png')
 ];
 const materials = [
-    new THREE.MeshBasicMaterial({ map: textures[0] }),
-    new THREE.MeshBasicMaterial({ map: textures[1] }),
-    new THREE.MeshBasicMaterial({ map: textures[2] }),
-    new THREE.MeshBasicMaterial({ map: textures[3] }),
-    new THREE.MeshBasicMaterial({ map: textures[4] }),
-    new THREE.MeshBasicMaterial({ map: textures[5] })
+  new THREE.MeshBasicMaterial({ map: textures[0] }),
+  new THREE.MeshBasicMaterial({ map: textures[1] }),
+  new THREE.MeshBasicMaterial({ map: textures[2] }),
+  new THREE.MeshBasicMaterial({ map: textures[3] }),
+  new THREE.MeshBasicMaterial({ map: textures[4] }),
+  new THREE.MeshBasicMaterial({ map: textures[5] })
 ];
 const cube = new THREE.Mesh(geometry, materials);
 scene.add(cube);
@@ -59,11 +51,29 @@ const color3 = new THREE.Color('green');
 axesHelper.setColors(color1, color2, color3);
 scene.add(axesHelper);
 
+// 创建一个显示压力数据的容器
+const pressureDataContainer = document.createElement('div');
+pressureDataContainer.style.position = 'absolute';
+pressureDataContainer.style.top = '10px';
+pressureDataContainer.style.left = '10px';
+pressureDataContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+pressureDataContainer.style.padding = '10px';
+pressureDataContainer.style.borderRadius = '5px';
+pressureDataContainer.style.color = 'black';
+document.body.appendChild(pressureDataContainer);
+
+// 初始化显示压力数据的内容
+pressureDataContainer.innerHTML = `
+    <div>X: <span id="right-force">0</span> N</div>
+    <div>Y: <span id="left-force">0</span> N</div>
+    <div>Z: <span id="top-force">0</span> N</div>
+`;
+
 // 渲染循环
 function animate() {
-    requestAnimationFrame(animate);
-    controls.update(); // 更新鼠标控制器
-    renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+  controls.update(); // 更新鼠标控制器
+  renderer.render(scene, camera);
 }
 animate();
 
@@ -76,101 +86,106 @@ const alpha = 0.2;
 
 // 函数：计算四元数
 function KGetQuat(ax, ay, az, mx, my, mz) {
-    // 先前滤波数据为空时初始化
-    if (!prevFilteredAcc) prevFilteredAcc = [ax, ay, az];
-    if (!prevFilteredMag) prevFilteredMag = [mx, my, mz];
+  // 先前滤波数据为空时初始化
+  if (!prevFilteredAcc) prevFilteredAcc = [ax, ay, az];
+  if (!prevFilteredMag) prevFilteredMag = [mx, my, mz];
 
-    // 对加速度和磁力计数据进行EMA滤波
-    ax = alpha * ax + (1 - alpha) * prevFilteredAcc[0];
-    ay = alpha * ay + (1 - alpha) * prevFilteredAcc[1];
-    az = alpha * az + (1 - alpha) * prevFilteredAcc[2];
-    prevFilteredAcc = [ax, ay, az];
+  // 对加速度和磁力计数据进行EMA滤波
+  ax = alpha * ax + (1 - alpha) * prevFilteredAcc[0];
+  ay = alpha * ay + (1 - alpha) * prevFilteredAcc[1];
+  az = alpha * az + (1 - alpha) * prevFilteredAcc[2];
+  prevFilteredAcc = [ax, ay, az];
 
-    mx = alpha * mx + (1 - alpha) * prevFilteredMag[0];
-    my = alpha * my + (1 - alpha) * prevFilteredMag[1];
-    mz = alpha * mz + (1 - alpha) * prevFilteredMag[2];
-    prevFilteredMag = [mx, my, mz];
+  mx = alpha * mx + (1 - alpha) * prevFilteredMag[0];
+  my = alpha * my + (1 - alpha) * prevFilteredMag[1];
+  mz = alpha * mz + (1 - alpha) * prevFilteredMag[2];
+  prevFilteredMag = [mx, my, mz];
 
-    // 数据归一化
-    const accNorm = Math.sqrt(ax * ax + ay * ay + az * az);
-    ax /= accNorm;
-    ay /= accNorm;
-    az /= accNorm;
+  // 数据归一化
+  const accNorm = Math.sqrt(ax * ax + ay * ay + az * az);
+  ax /= accNorm;
+  ay /= accNorm;
+  az /= accNorm;
 
-    const magNorm = Math.sqrt(mx * mx + my * my + mz * mz);
-    mx /= magNorm;
-    my /= magNorm;
-    mz /= magNorm;
+  const magNorm = Math.sqrt(mx * mx + my * my + mz * mz);
+  mx /= magNorm;
+  my /= magNorm;
+  mz /= magNorm;
 
-    // 计算改进的四元数
-    const gx = 2 * ax;
-    const gy = 2 * ay;
-    const gz = 2 * (az - 0.5);
+  // 计算改进的四元数
+  const gx = 2 * ax;
+  const gy = 2 * ay;
+  const gz = 2 * (az - 0.5);
 
-    const hx = mx * Math.sqrt(1.0 - az * az) - mz * ay;
-    const hy = my * Math.sqrt(1.0 - az * az) - mz * ax;
-    const hz = mx * ay - my * ax;
+  const hx = mx * Math.sqrt(1.0 - az * az) - mz * ay;
+  const hy = my * Math.sqrt(1.0 - az * az) - mz * ax;
+  const hz = mx * ay - my * ax;
 
-    let qw = Math.sqrt(Math.max(0, 1 + gx + hy + hz)) / 2;
-    let qx = Math.sqrt(Math.max(0, 1 + gx - hy - hz)) / 2;
-    let qy = Math.sqrt(Math.max(0, 1 - gx + hy - hz)) / 2;
-    let qz = Math.sqrt(Math.max(0, 1 - gx - hy + hz)) / 2;
-    qx = copysign(qx, gy - hz);
-    qy = copysign(qy, hx - gz);
-    qz = copysign(qz, hx + gy);
+  let qw = Math.sqrt(Math.max(0, 1 + gx + hy + hz)) / 2;
+  let qx = Math.sqrt(Math.max(0, 1 + gx - hy - hz)) / 2;
+  let qy = Math.sqrt(Math.max(0, 1 - gx + hy - hz)) / 2;
+  let qz = Math.sqrt(Math.max(0, 1 - gx - hy + hz)) / 2;
+  qx = copysign(qx, gy - hz);
+  qy = copysign(qy, hx - gz);
+  qz = copysign(qz, hx + gy);
 
-    // 四元数归一化
-    const qNorm = Math.sqrt(qw * qw + qx * qx + qy * qy + qz * qz);
-    qw /= qNorm;
-    qx /= qNorm;
-    qy /= qNorm;
-    qz /= qNorm;
+  // 四元数归一化
+  const qNorm = Math.sqrt(qw * qw + qx * qx + qy * qy + qz * qz);
+  qw /= qNorm;
+  qx /= qNorm;
+  qy /= qNorm;
+  qz /= qNorm;
 
-    return [qw, qx, qy, qz];
+  return [qw, qx, qy, qz];
 }
 
 // 函数：返回符号与y相同的x值
 function copysign(x, y) {
-    return y < 0 ? -Math.abs(x) : Math.abs(x);
+  return y < 0 ? -Math.abs(x) : Math.abs(x);
 }
 
 // 函数：将四元数转换为欧拉角
 function quaternionToEuler(q) {
-    const [qw, qx, qy, qz] = q;
-    const ysqr = qy * qy;
+  const [qw, qx, qy, qz] = q;
+  const ysqr = qy * qy;
 
-    // roll (x-axis rotation)
-    const t0 = 2 * (qw * qx + qy * qz);
-    const t1 = 1 - 2 * (qx * qx + ysqr);
-    const roll = Math.atan2(t0, t1);
+  // roll (x-axis rotation)
+  const t0 = 2 * (qw * qx + qy * qz);
+  const t1 = 1 - 2 * (qx * qx + ysqr);
+  const roll = Math.atan2(t0, t1);
 
-    // pitch (y-axis rotation)
-    let t2 = 2 * (qw * qy - qz * qx);
-    t2 = t2 > 1 ? 1 : t2;
-    t2 = t2 < -1 ? -1 : t2;
-    const pitch = Math.asin(t2);
+  // pitch (y-axis rotation)
+  let t2 = 2 * (qw * qy - qz * qx);
+  t2 = t2 > 1 ? 1 : t2;
+  t2 = t2 < -1 ? -1 : t2;
+  const pitch = Math.asin(t2);
 
-    // yaw (z-axis rotation)
-    const t3 = 2 * (qw * qz + qx * qy);
-    const t4 = 1 - 2 * (ysqr + qz * qz);
-    const yaw = Math.atan2(t3, t4);
+  // yaw (z-axis rotation)
+  const t3 = 2 * (qw * qz + qx * qy);
+  const t4 = 1 - 2 * (ysqr + qz * qz);
+  const yaw = Math.atan2(t3, t4);
 
-    return [roll, pitch, yaw];
+  return [roll, pitch, yaw];
 }
 
 // 实时更新立方体姿态
-function updateCube(ax, ay, az, mx, my, mz) {
-    const quat = KGetQuat(ax, ay, az, mx, my, mz);
-    const [roll, pitch, yaw] = quaternionToEuler(quat);
-    cube.rotation.x = roll;
-    cube.rotation.y = pitch;
-    cube.rotation.z = yaw;
+function updateCube(ax, ay, az, mx, my, mz, adcx, adcy, adcz) {
+  const quat = KGetQuat(ax, ay, az, mx, my, mz);
+  const [roll, pitch, yaw] = quaternionToEuler(quat);
+  cube.rotation.x = roll;
+  cube.rotation.y = pitch;
+  cube.rotation.z = yaw;
+
+  // 更新显示压力数据的内容
+  document.getElementById('right-force').innerText = (adcx).toFixed(2);
+  document.getElementById('left-force').innerText = (adcy).toFixed(2);
+  document.getElementById('top-force').innerText = (adcz).toFixed(2);
 }
 
 
 // 假设我们每秒钟获得新的加速度和磁场数据
 
-getData("COM17", 9600); 
+getData("COM17", 9600);
 
 
 
@@ -506,7 +521,7 @@ function getData(portValue, rate) {
         console.log("mag_y: " + mag_result_y);
         console.log("mag_z: " + mag_result_z);
 
-        updateCube(result_x, result_y, result_y, mag_result_x, mag_result_x, mag_result_x);
+        updateCube(result_x, result_y, result_y, mag_result_x, mag_result_x, mag_result_x, adc_x, adc_y, adc_z);
         // 清空srcData
         srcData = [];
       }
