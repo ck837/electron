@@ -1,12 +1,20 @@
+// 获取屏幕尺寸
+const screenWidth = window.innerWidth;
+const screenHeight = window.innerHeight;
+
+
+const { SerialPort } = require("serialport");
+
 // 创建场景、相机和渲染器
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, 600 / 450, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, screenWidth / screenHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 // 设置渲染器的大小，并将其添加到容器元素中
 const container = document.getElementById('canvas-container');
-renderer.setSize(600, 450);
-renderer.setClearColor(0x000000, 1); // 设置背景颜色为黑色
+// 设置渲染器的大小为全屏
+renderer.setSize(screenWidth, screenHeight);
+renderer.setClearColor('#142233');
 container.appendChild(renderer.domElement);
 
 // 创建立方体
