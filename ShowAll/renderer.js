@@ -5,12 +5,16 @@
 */
 
 // ----------------------侧边栏逻辑处理 start --------------------
-
-const { color } = require("chart.js/helpers");
 const fs = require("fs");
 const path = require("path");
 
+const type_x = [];
+const type_y = [];
+const type_z = [];
+
 document.addEventListener("DOMContentLoaded", function () {
+  const changeTitle = document.getElementById("changeTitle");
+
   // Get the elements
   const comSelect = document.getElementById("com");
   const numSelect = document.getElementById("num");
@@ -20,13 +24,40 @@ document.addEventListener("DOMContentLoaded", function () {
   const cut2Select = document.getElementById("cut2");
   const cut3Select = document.getElementById("cut3");
   const cut4Select = document.getElementById("cut4");
+  const cut5Select = document.getElementById("cut5");
+  const cut6Select = document.getElementById("cut6");
+  const cut7Select = document.getElementById("cut7");
+  const cut8Select = document.getElementById("cut8");
+  const cut9Select = document.getElementById("cut9");
+  const cut10Select = document.getElementById("cut10");
+  const cut11Select = document.getElementById("cut11");
+  const cut12Select = document.getElementById("cut12");
+  const cut13Select = document.getElementById("cut13");
+  const cut14Select = document.getElementById("cut14");
 
+  // x
   const cut0Value = document.getElementById("cut0_value");
   const cut00Value = document.getElementById("cut0_value_0");
   const cut1Value = document.getElementById("cut1_value");
   const cut2Value = document.getElementById("cut2_value");
   const cut3Value = document.getElementById("cut3_value");
   const cut4Value = document.getElementById("cut4_value");
+
+  // y
+  const cut5Value = document.getElementById("cut5_value");
+  const cut50Value = document.getElementById("cut5_value_0");
+  const cut6Value = document.getElementById("cut6_value");
+  const cut7Value = document.getElementById("cut7_value");
+  const cut8Value = document.getElementById("cut8_value");
+  const cut9Value = document.getElementById("cut9_value");
+
+  // z
+  const cut10Value = document.getElementById("cut10_value");
+  const cut100Value = document.getElementById("cut10_value_0");
+  const cut11Value = document.getElementById("cut11_value");
+  const cut12Value = document.getElementById("cut12_value");
+  const cut13Value = document.getElementById("cut13_value");
+  const cut14Value = document.getElementById("cut14_value");
 
   // Get the confirm button element
   const confirmButton = document.getElementById("confirm");
@@ -40,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
     //修改界面中函数里面的元素
+    // x
     cut0Value.textContent = cut0Select.value;
     cut00Value.textContent = cut0Select.value;
     cut1Value.textContent = cut1Select.value;
@@ -47,10 +79,59 @@ document.addEventListener("DOMContentLoaded", function () {
     cut3Value.textContent = cut3Select.value;
     cut4Value.textContent = cut4Select.value;
 
+    // y
+    cut5Value.textContent = cut5Select.value;
+    cut50Value.textContent = cut5Select.value;
+    cut6Value.textContent = cut6Select.value;
+    cut7Value.textContent = cut7Select.value;
+    cut8Value.textContent = cut8Select.value;
+    cut9Value.textContent = cut9Select.value;
+
+    // z
+    cut10Value.textContent = cut10Select.value;
+    cut100Value.textContent = cut10Select.value;
+    cut11Value.textContent = cut11Select.value;
+    cut12Value.textContent = cut12Select.value;
+    cut13Value.textContent = cut13Select.value;
+    cut14Value.textContent = cut14Select.value;
+
     // Get the selected value
     const selectedCom = comSelect.value;
     const selectedType = typeSelect.value;
     const selectedNum = numSelect.value;
+
+    if (selectedType === "normal") {
+      changeTitle.textContent = "压力";
+    } else {
+      changeTitle.textContent = "环境温度";
+    }
+    type_x.push(
+      ...[
+        parseFloat(cut0Select.value),
+        parseFloat(cut1Select.value),
+        parseFloat(cut2Select.value),
+        parseFloat(cut3Select.value),
+        parseFloat(cut4Select.value),
+      ]
+    );
+    type_y.push(
+      ...[
+        parseFloat(cut5Select.value),
+        parseFloat(cut6Select.value),
+        parseFloat(cut7Select.value),
+        parseFloat(cut8Select.value),
+        parseFloat(cut9Select.value),
+      ]
+    );
+    type_z.push(
+      ...[
+        parseFloat(cut10Select.value),
+        parseFloat(cut11Select.value),
+        parseFloat(cut12Select.value),
+        parseFloat(cut13Select.value),
+        parseFloat(cut14Select.value),
+      ]
+    );
 
     // Create a JavaScript object with the configuration
     const configuration = {
@@ -62,6 +143,16 @@ document.addEventListener("DOMContentLoaded", function () {
       cut2: cut2Select.value,
       cut3: cut3Select.value,
       cut4: cut4Select.value,
+      cut5: cut5Select.value,
+      cut6: cut6Select.value,
+      cut7: cut7Select.value,
+      cut8: cut8Select.value,
+      cut9: cut9Select.value,
+      cut10: cut10Select.value,
+      cut11: cut11Select.value,
+      cut12: cut12Select.value,
+      cut13: cut13Select.value,
+      cut14: cut14Select.value,
     };
 
     getData("COM" + selectedCom, Number(selectedNum));
@@ -128,42 +219,6 @@ const EulerAnglesx = [];
 const EulerAnglesy = [];
 const EulerAnglesz = [];
 
-// 创建图表
-// const myChart1 = new Chart(ctx1, {
-//   type: "line",
-//   data: {
-//     labels: [], // x轴坐标标签
-//     datasets: [
-//       {
-//         label: "Temperature",
-//         data: temperatureData, // 温度数据数组
-//         fill: false,
-//         borderColor: "rgb(75, 192, 192)",
-//         tension: 0.1
-//       },
-//     ],
-//   },
-//   options: {
-//     scales: {
-//       x: {
-//         display: true,
-//         title: {
-//           display: true,
-//           text: "Time",
-//           color:"white",
-//         },
-//       },
-//       y: {
-//         display: true,
-//         title: {
-//           display: true,
-//           text: "Temperature (℃)",
-//           color:"white",
-//         },
-//       },
-//     },
-//   },
-// });
 const myChart1 = new Chart(ctx1, {
   type: "line",
   data: {
@@ -174,29 +229,17 @@ const myChart1 = new Chart(ctx1, {
         data: temperatureData, // 温度数据数组
         fill: false,
         borderColor: "rgb(75, 192, 192)",
-        tension: 0.1
+        tension: 0.1,
       },
     ],
   },
   options: {
-    plugins: {
-      tooltip: {
-        titleColor: 'white', // 提示框标题颜色
-        bodyColor: 'white', // 提示框内容颜色
-      },
-      legend: {
-        labels: {
-          color: 'white' // 图例文本颜色
-        }
-      }
-    },
     scales: {
       x: {
         display: true,
         title: {
           display: true,
           text: "Time",
-          color: "white",
         },
       },
       y: {
@@ -204,13 +247,11 @@ const myChart1 = new Chart(ctx1, {
         title: {
           display: true,
           text: "Temperature (℃)",
-          color: "white",
         },
       },
     },
   },
 });
-
 
 const myChart2 = new Chart(ctx2, {
   type: "line",
@@ -253,7 +294,7 @@ const myChart2 = new Chart(ctx2, {
         display: true,
         title: {
           display: true,
-          text: "Adc",
+          text: "Voltage(V)",
         },
         // min: 0, // 设置y轴的最小值
         // max: 40, // 设置y轴的最大值
@@ -304,7 +345,7 @@ const myChart3 = new Chart(ctx3, {
         display: true,
         title: {
           display: true,
-          text: "Acc",
+          text: "Acceleration(g)",
         },
         // min: 0, // 设置y轴的最小值
         // max: 40, // 设置y轴的最大值
@@ -355,7 +396,7 @@ const myChart4 = new Chart(ctx4, {
         display: true,
         title: {
           display: true,
-          text: "Acc",
+          text: "Magenetic Field Strength (T)",
         },
         // min: 0, // 设置y轴的最小值
         // max: 40, // 设置y轴的最大值
@@ -406,7 +447,7 @@ const myChart5 = new Chart(ctx5, {
         display: true,
         title: {
           display: true,
-          text: "xxx",
+          text: "Force(N)",
         },
       },
     },
@@ -453,103 +494,38 @@ const myChart6 = new Chart(ctx6, {
         display: true,
         title: {
           display: true,
-          text: "EulerAngles",
+          text: "Euler Angles (degree)",
         },
       },
     },
   },
 });
 
-//---------------------------------test start----------------------------------------------
-
-let isData1 = false;
-
-let data1 = {
-  adc_x: 50726402,
-  adc_y: 167838723,
-  adc_z: 101255681,
-  acc_x: 2058876.148,
-  acc_y: 3094310.522,
-  acc_z: 10238162.103,
-  temperature: 30.84375,
-  mag_x: 151883521.5,
-  mag_y: 252250000.5,
-  mag_z: 251788963.5,
-};
-
-let data2 = {
-  adc_x: 252445958,
-  adc_y: 167838222,
-  adc_z: 235866383,
-  acc_x: 2058907.624,
-  acc_y: 15399203.438,
-  acc_z: 10238131.542,
-  temperature: 24.84375,
-  mag_x: 353799574.5,
-  mag_y: 352618390.5,
-  mag_z: 251788963.5,
-};
-
-// setInterval(() => {
-//   // 调用函数更新数据
-//   updateChartData();
-//   if (isData1) {
-//     temperatureData.push(data1.temperature);
-//     adcx.push(data1.adc_x);
-//     adcy.push(data1.adc_y);
-//     adcz.push(data1.adc_z);
-//     accx.push(data1.acc_x);
-//     accy.push(data1.acc_y);
-//     accz.push(data1.acc_z);
-//     magx.push(data1.mag_x);
-//     magy.push(data1.mag_y);
-//     magz.push(data1.mag_z);
-//   } else {
-//     temperatureData.push(data2.temperature);
-//     adcx.push(data2.adc_x);
-//     adcy.push(data2.adc_y);
-//     adcz.push(data2.adc_z);
-//     accx.push(data2.acc_x);
-//     accy.push(data2.acc_y);
-//     accz.push(data2.acc_z);
-//     magx.push(data2.mag_x);
-//     magy.push(data2.mag_y);
-//     magz.push(data2.mag_z);
-//   }
-//   isData1 = !isData1;
-// }, 500);
-
-//---------------------------------test end----------------------------------------------
-
-var lastTime = "";
 function updateChartData() {
   //------------------------------------chart1 展示-------------------------------------
   // 添加新数据
   let startTime = new Date();
   let formattedStartTime = `${startTime.toLocaleTimeString()}:${startTime.getMilliseconds()}`;
-
-  myChart1.data.labels.push(formattedStartTime);
-  // 其他数据集的添加操作，例如：myChart1.data.datasets[0].data.push(newValue);
-
   // 检查数据点数量是否超过阈值
   const maxDataPoint = 20; // 设置数据点的最大数量
 
+  myChart1.data.labels.push(formattedStartTime);
+  // 检查数据点数量是否超过阈值
   if (myChart1.data.labels.length > maxDataPoint + 1) {
     // 删除第一个数据节点的标签
     myChart1.data.labels.shift();
 
-    // 删除每个数据集（datasets）中对应的第一个数据点
-    myChart1.data.datasets.forEach(function (dataset) {
-      dataset.data.shift();
-    });
+    // 删除第一个数据点
+    myChart1.data.datasets[0].data.shift();
+
+    console.log("删除数据一");
+    console.log(myChart1.data.datasets);
   }
-  // 更新图表
   myChart1.update();
 
   //------------------------------------chart2 展示-------------------------------------
 
   myChart2.data.labels.push(formattedStartTime);
-  // 其他数据集的添加操作，例如：myChart1.data.datasets[0].data.push(newValue);
 
   if (myChart2.data.labels.length > maxDataPoint + 1) {
     // 删除第一个数据节点的标签
@@ -738,7 +714,7 @@ function getData(portValue, rate) {
         }
 
         srcData = mergedArray;
-        console.log(srcData);
+        // console.log(srcData);
 
         //-----------------------------------handle adc events--------------------------------
 
@@ -791,26 +767,18 @@ function getData(portValue, rate) {
           srcData[17].toString(16),
         ];
         let adc_x = processADC(adcValue_x);
-        console.log("adc_x: " + adc_x);
+        // console.log("adc_x: " + adc_x);
         adcx.push(adc_x);
 
         let adc_y = processADC(adcValue_y);
-        console.log("adc_y: " + adc_y);
+        // console.log("adc_y: " + adc_y);
         adcy.push(adc_y);
 
         let adc_z = processADC(adcValue_z);
-        console.log("adc_z: " + adc_z);
+        // console.log("adc_z: " + adc_z);
         adcz.push(adc_z);
+        typeCalculate(adc_x,adc_y, adc_z)
 
-        //x
-        if (adc_x < 3.6867) calculatex.push(-130.0802 * adc_x + 525.0134);
-        else calculatex.push(-172.1412 * adc_x + 680.0805);
-        //y
-        if (adc_y < 3.7501) calculatey.push(-134.1534 * adc_y + 542.8508);
-        else calculatey.push(-288.0047 * adc_y + 1119.8062);
-        //z
-        if (adc_z < 3.7582) calculatez.push(-264.4064 * adc_z + 1046.217);
-        else calculatez.push(-711.299 * adc_z + 2725.7298);
 
         //-----------------------------------handle acc events--------------------------------
 
@@ -860,12 +828,13 @@ function getData(portValue, rate) {
         let result_x = processAcceleration(accValue_x);
         let result_y = processAcceleration(accValue_y);
         let result_z = processAcceleration(accValue_z);
-        console.log("acc_x: " + result_x);
-        console.log("acc_y: " + result_y);
-        console.log("acc_z: " + result_z);
-        accx.push(result_x);
-        accy.push(result_y);
-        accz.push(result_z);
+        // console.log("acc_x: " + result_x);
+        // console.log("acc_y: " + result_y);
+        // console.log("acc_z: " + result_z);
+        accx.push(result_x/1000);
+        accy.push(result_y/1000);
+        accz.push(result_z/1000);
+
 
         //-----------------------------------handle tmp events--------------------------------
         // 处理温度Tmp 54 6d 70
@@ -900,8 +869,9 @@ function getData(portValue, rate) {
                     2 * parseInt(tmp[12]) +
                     parseInt(tmp[13]));
                 temperature = s1 + s2;
-                console.log("temperature: ", temperature);
+                // console.log("temperature: ", temperature);
                 temperatureData.push(temperature);
+                console.log(temperatureData);
               } else {
                 for (let i = 1; i < tmp.size(); i++) {
                   if (tmp[i] === "0") tmp[i] = "1";
@@ -926,6 +896,9 @@ function getData(portValue, rate) {
                 temperature = (d1 + d2) * -1;
                 console.log("temperature: ", temperature);
                 temperatureData.push(temperature);
+              }
+              if (temperatureData.length > 21) {
+                temperatureData.splice(0, 1);
               }
             }
           }
@@ -977,9 +950,9 @@ function getData(portValue, rate) {
         let mag_result_x = processMagnetism(magValue_x);
         let mag_result_y = processMagnetism(magValue_y);
         let mag_result_z = processMagnetism(magValue_z);
-        console.log("mag_x: " + mag_result_x);
-        console.log("mag_y: " + mag_result_y);
-        console.log("mag_z: " + mag_result_z);
+        // console.log("mag_x: " + mag_result_x);
+        // console.log("mag_y: " + mag_result_y);
+        // console.log("mag_z: " + mag_result_z);
         magx.push(mag_result_x);
         magy.push(mag_result_y);
         magz.push(mag_result_z);
@@ -1069,7 +1042,7 @@ function getData(portValue, rate) {
           const t3 = 2 * (qw * qz + qx * qy);
           const t4 = 1 - 2 * (ysqr + qz * qz);
           const yaw = Math.atan2(t3, t4);
-          console.log(roll, pitch, yaw);
+          // console.log(roll, pitch, yaw);
 
           EulerAnglesx.push(roll * (180 / Math.PI));
           EulerAnglesy.push(pitch * (180 / Math.PI));
@@ -1083,7 +1056,7 @@ function getData(portValue, rate) {
           mag_result_y,
           mag_result_z
         );
-        console.log(tmp);
+        // console.log(tmp);
         quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
 
         // 清空srcData
@@ -1091,4 +1064,22 @@ function getData(portValue, rate) {
       }
     }
   });
+}
+
+//根据不同类型，选择不同的计算函数
+function typeCalculate(x, y, z) {
+  console.log("当前的adx：",x,y,z);
+  if (x < type_x[0]) 
+    {
+      calculatex.push(type_x[1] * x + type_x[2]);
+      console.log("当前的计算的x值",type_x[0],type_x[1],type_x[2],x)
+    }
+  else{
+    calculatex.push(type_x[3] * x + type_x[4]);
+    console.log("当前的计算的x值",type_x[0],type_x[1],type_x[2],x)
+  }
+  if (y < type_y[0]) calculatey.push(type_y[1] * y + type_y[2]);
+  else calculatey.push(type_y[3] * y + type_y[4]);
+  if (z < type_z[0]) calculatez.push(type_z[1] * z + type_z[2]);
+  else calculatez.push(type_z[3] * z + type_z[4]);
 }

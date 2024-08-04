@@ -90,7 +90,7 @@ let prevFilteredAcc = [0, 0, 0];
 let prevFilteredMag = [0, 0, 0];
 
 // 指定EMA参数
-const alpha = 0.2;
+const alpha = 0.1;//改小
 
 // 函数：计算四元数
 function KGetQuat(ax, ay, az, mx, my, mz) {
