@@ -36,7 +36,7 @@ function createWindow() {
   );
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function () {
@@ -77,15 +77,6 @@ ipcMain.on("gotoPagePort", () => {
   mainWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "Port/index.html"),
-      protocol: "file:",
-      slashes: true,
-    })
-  );
-});
-ipcMain.on("gotoPageShowOne", () => {
-  mainWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "ShowOne/index.html"),
       protocol: "file:",
       slashes: true,
     })

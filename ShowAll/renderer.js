@@ -65,9 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Add an event listener to the confirm button
   confirmButton.addEventListener("click", saveConfiguration);
 
-  //页面加载好，后读取configuration文件进行相关数据的读取，将数据渲染进输入框内
-  function insertData() {}
-
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
     //修改界面中函数里面的元素
@@ -104,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
       changeTitle.textContent = "压力";
     } else {
       changeTitle.textContent = "环境温度";
+      updateChartTitle();
     }
     type_x.push(
       ...[
@@ -228,7 +226,7 @@ const myChart1 = new Chart(ctx1, {
         label: "Temperature",
         data: temperatureData, // 温度数据数组
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
     ],
@@ -262,14 +260,14 @@ const myChart2 = new Chart(ctx2, {
         label: "adc_x",
         data: adcx, // 压力数据数组
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
       {
         label: "adc_y",
         data: adcy, // 压力数据数组
         fill: false,
-        borderColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
@@ -313,14 +311,14 @@ const myChart3 = new Chart(ctx3, {
         label: "acc_x",
         data: accx, // 压力数据数组
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
       {
         label: "acc_y",
         data: accy, // 压力数据数组
         fill: false,
-        borderColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
@@ -364,14 +362,14 @@ const myChart4 = new Chart(ctx4, {
         label: "mag_x",
         data: magx, // 压力数据数组
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
       {
         label: "mag_y",
         data: magy, // 压力数据数组
         fill: false,
-        borderColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
@@ -396,7 +394,7 @@ const myChart4 = new Chart(ctx4, {
         display: true,
         title: {
           display: true,
-          text: "Magenetic Field Strength (T)",
+          text: "Magenetic Field Strength (mGauss)",
         },
         // min: 0, // 设置y轴的最小值
         // max: 40, // 设置y轴的最大值
@@ -447,12 +445,17 @@ const myChart5 = new Chart(ctx5, {
         display: true,
         title: {
           display: true,
-          text: "Force(N)",
+          text: "Force (N)",
         },
       },
     },
   },
 });
+
+function updateChartTitle() {
+  myChart5.options.scales.y.title.text = "Temperature (℃)";
+  myChart5.update();
+}
 const myChart6 = new Chart(ctx6, {
   type: "line",
   data: {
@@ -460,21 +463,21 @@ const myChart6 = new Chart(ctx6, {
     datasets: [
       {
         label: "x",
-        data: EulerAnglesx, // 压力数据数组
-        fill: false,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
-      },
-      {
-        label: "y",
-        data: EulerAnglesy, // 压力数据数组
+        data: EulerAnglesx, 
         fill: false,
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
       {
+        label: "y",
+        data: EulerAnglesy,
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+      {
         label: "z",
-        data: EulerAnglesz, // 压力数据数组
+        data: EulerAnglesz, 
         fill: false,
         borderColor: "rgb(54, 162, 235)",
         tension: 0.1,

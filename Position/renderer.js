@@ -62,7 +62,7 @@ scene.add(axesHelper);
 // 创建一个显示压力数据的容器
 const pressureDataContainer = document.createElement('div');
 pressureDataContainer.style.position = 'absolute';
-pressureDataContainer.style.top = '10px';
+pressureDataContainer.style.top = '100px';
 pressureDataContainer.style.left = '10px';
 pressureDataContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
 pressureDataContainer.style.padding = '10px';
@@ -432,7 +432,7 @@ function getData(portValue, rate) {
                 (srcData[i + 5] || 0).toString(2).padStart(4, "0") +
                 (srcData[i + 6] || 0).toString(2).padStart(4, "0");
               tmp = tmp.slice(0, -2);
-              if (tmp[0] == 0) {
+              if (tmp[0] === 0) {
                 let s1 =
                   parseInt(tmp[1]) * 128 +
                   parseInt(tmp[2]) * 64 +
@@ -452,7 +452,7 @@ function getData(portValue, rate) {
                 temperature = s1 + s2;
                 console.log("temperature: ", temperature);
               } else {
-                for (let i = 1; i < tmp.size(); i++) {
+                for (let i = 1; i < tmp.length; i++) {
                   if (tmp[i] === "0") tmp[i] = "1";
                   else tmp[i] = "0";
                 }
@@ -529,7 +529,7 @@ function getData(portValue, rate) {
         console.log("mag_y: " + mag_result_y);
         console.log("mag_z: " + mag_result_z);
 
-        updateCube(result_x, result_y, result_y, mag_result_x, mag_result_x, mag_result_x, adc_x, adc_y, adc_z);
+        updateCube(result_x, result_y, result_z, mag_result_x, mag_result_y, mag_result_z, adc_x, adc_y, adc_z);
         // 清空srcData
         srcData = [];
       }
