@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <div id="root">
+        <div id="custom-navbar-container"></div>
+        <div id="box">
+            <button onclick="to1()">智能颗粒</button>
+            <button onclick="to2()">压电传感器</button>
+            <button onclick="to3()">光纤传感器</button>
+        </div>
+    </div>
+    <script src="./nav.js"></script>
+    <script>
+        //-----------------------导航元素自定义start------------------------
+        // 创建自定义导航栏元素
+        const customNavbar = document.createElement('custom-navbar');
+        // 将自定义导航栏元素添加到容器中
+        document.getElementById('custom-navbar-container').appendChild(customNavbar);
+        //-----------------------导航元素自定义end------------------------
+    </script>
+    <script>
+        const { ipcRenderer } = require("electron");
+        function to1() {
+            console.log(1111);
+            ipcRenderer.send("gotoPageShowAll");
+            console.log(2222);
+        }
+        function to2() {
+            ipcRenderer.send("gotoPageShowAll");
+        }
+        function to3() {
+            ipcRenderer.send("gotoPageShowAll");
+        }
+    </script>
+</body>
+
+</html>

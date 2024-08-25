@@ -88,7 +88,10 @@ customElements.define(
             <li>
                 <img src="..\\img\\原配色.png" alt="Logo 1" class="logo">
                 <img src="..\\img\\11.png" alt="Logo 2" class="logo">
-                <img src="..\\img\\院徽.png" alt="Logo 2" class="logo">
+                <img src="..\\img\\院徽.png" alt="Logo 3" class="logo">
+            </li>
+            <li>
+                <a href="#" id="toIndex">首页</a>
             </li>
             <li>
                 <a href="#" id="toShowAll">总览图</a>
@@ -97,7 +100,7 @@ customElements.define(
             <li><a href="#about" id="toOutput">颗粒数据导出</a></li>
             <li class="window-buttons">
                 <button id="minimize-btn">-</button>
-                <button id="close-btn">x</button>
+                <button id="close-btn">X</button>
             </li>
         </ul>
         `;
@@ -108,6 +111,11 @@ customElements.define(
     connectedCallback() {
       const { ipcRenderer } = require("electron");
 
+      this.shadowRoot
+        .getElementById("toIndex")
+        .addEventListener("click", () => {
+          ipcRenderer.send("gotoPageIndex");
+        });
       this.shadowRoot
         .getElementById("toShowAll")
         .addEventListener("click", () => {
