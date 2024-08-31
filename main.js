@@ -26,7 +26,9 @@ function createWindow() {
   // and load the index.html of the app.
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "ShowAll/index.html"),
+      // pathname: path.join(__dirname, "ShowAll/index.html"),
+      // todo 加首页处理
+      pathname: path.join(__dirname, "Index/index.html"),
       protocol: "file:",
       slashes: true,
     })
@@ -35,7 +37,7 @@ function createWindow() {
     fs.readFileSync(path.join(__dirname, "style.css"), "utf8")
   );
 
-  // Open the DevTools.
+  // todo Open the DevTools.
   mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
@@ -73,6 +75,15 @@ app.on("activate", function () {
 // process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 // 监听渲染进程发来的页面跳转请求
+ipcMain.on("gotoPageIndex", () => {
+  mainWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "Index/index.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
+});
 ipcMain.on("gotoPagePort", () => {
   mainWindow.loadURL(
     url.format({
