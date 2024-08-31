@@ -1,0 +1,148 @@
+html{
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: white;
+  background-color: #142233;
+  margin: 0;
+  padding: 50px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+/* now */
+/* ----------------侧边栏 start------------------------------------------- */
+.sider-all{
+  width: 280px;
+  height: 100%;
+
+}
+
+.sider-input {
+  margin-top: 10px;
+  margin-left: 2px;
+  font-size: 14px;
+  /* border: 1px solid black; */
+}
+
+.com-input {
+  width: 100%;
+}
+
+.title {
+  text-align: center;
+}
+.title-button{
+  text-align: center;
+}
+.button-push{
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+.com-input-com {
+  width: 300px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.number-input {
+  width: 70px;
+  margin-right: 20px;
+  background: black;
+  color: white;
+  border: 1px solid white;
+}
+
+/* ----------------侧边栏 start------------------------------------------- */
+
+/* ----------------两列布局 start（可重复使用）------------------------------- */
+.display-all {
+  width: 100%;
+  height: 100%;
+}
+
+.display-main {
+  width: 100%;
+  display: flex;
+}
+
+.right-show {
+  flex: 1;
+  height: 100%;
+}
+
+/* ----------------两列布局 end---------------------------- */
+
+/* ----------------平分展示图标 start---------------------------- */
+#content {
+  height: 100%;
+  width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex: 1;
+}
+
+.chart-container {
+  width: 600px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+canvas {
+  width: 100%;
+  /* margin-bottom: 10px; */
+}
+/* ----------------平分展示图标 end---------------------------- */
+
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 150px); /* 3列，每列150px */
+  grid-gap:150px; /* 小表格之间的间隔 */
+}
+
+.table-cell {
+  width: 300px;
+  height: 150px; /* 4行，每行50px，总高200px */
+  color: white; /* 文字颜色 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 8px; /* 圆角效果，可选 */
+}
+
+.table-cell td {
+  border: 1px solid white;
+  padding: 8px;
+  width: 100px;
+}

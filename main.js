@@ -20,7 +20,7 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
     autoHideMenuBar: true,
-    frame: false, //关闭原生导航栏
+    frame: true, //关闭原生导航栏
   });
 
   // and load the index.html of the app.
@@ -36,7 +36,7 @@ function createWindow() {
   );
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function () {
@@ -77,6 +77,15 @@ ipcMain.on("gotoPagePort", () => {
   mainWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "Port/index.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
+});
+ipcMain.on("gotoPageData", () => {
+  mainWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "Data/index.html"),
       protocol: "file:",
       slashes: true,
     })

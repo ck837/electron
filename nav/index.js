@@ -93,6 +93,7 @@ customElements.define(
             <li>
                 <a href="#" id="toShowAll">总览图</a>
             </li>
+            <li><a href="#data" id="toData">实时数据展示</a></li>
             <li><a href="#show" id="toPostion">3D姿态</a></li>
             <li><a href="#about" id="toOutput">颗粒数据导出</a></li>
             <li class="window-buttons">
@@ -112,6 +113,11 @@ customElements.define(
         .getElementById("toShowAll")
         .addEventListener("click", () => {
           ipcRenderer.send("gotoPageShowAll");
+        });
+      this.shadowRoot
+        .getElementById("toData")
+        .addEventListener("click", () => {
+          ipcRenderer.send("gotoPageData");
         });
       this.shadowRoot
         .getElementById("toPostion")

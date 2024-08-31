@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Serial数据展示</title>
+    <link rel="stylesheet" href="./index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- -------------------数据展示 start-------------------------------------- -->
+    <div class="display-all">
+        <div id="custom-navbar-container"></div>
+        <!-- -------------------侧边栏处理 start-------------------------------------- -->
+        <div class="display-main">
+            <div class="sider-all">
+                <div class="sider-input">
+                    <div class="com-input">
+                        <h2 class="title">导出端口：</h2>
+                        <div class="com-input-com">
+                            <label for="com">COM&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                            <select class="number-input" name="COM" id="com">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                            </select>
+                        </div>
+                        <div class="com-input-com">
+                            <label for="num">波特率&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                            <select class="number-input" name="NUM" id="num">
+                                <option value="7200">7200</option>
+                                <option value="9600">9600</option>
+                                <option value="10800">10800</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="type-input">
+                        <h2 class="title">颗粒类型选择：</h2>
+                        <div class="com-input-com">
+                            <label for="type">输出类型&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                            <select class="number-input" name="TYPE" id="type">
+                                <option value="normal">普通型</option>
+                                <option value="special">耐高温型</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="params-input ">
+                        <!-- x -->
+                        <h2 class="title">X轴函数参数配置：</h2>
+                        <div class="com-input-com">
+                            <p>分段点：</p>
+                            <input type="text" id="cut0" class="number-input" placeholder="输入数字" value="3.6867" />
+                        </div>
+                        <div class="com-input-com">
+                            <p>X-K1：</p>
+                            <input type="text" id="cut1" class="number-input" placeholder="输入数字" value="-130.0802" />
+                            <p>X-B1：</p>
+                            <input type="text" id="cut2" class="number-input" placeholder="输入数字" value="525.0134" />
+                        </div>
+                        <div class="com-input-com">
+                            <p>X-K2：</p>
+                            <input type="text" id="cut3" class="number-input" placeholder="输入数字"  value="-172.1412"/>
+                            <p>X-B2：</p>
+                            <input type="text" id="cut4" class="number-input" placeholder="输入数字"  value="680.0805"/>
+                        </div>
+                        <div class="func-show">
+                            <div class="com-input-com">
+                                <p>当 V <= <p id="cut0_value">xxx</p>, F=<p id="cut1_value">xxx</p> , V+<p  id="cut2_value">xxx</p> </p>
+                            </div>
+                            <div class="com-input-com">
+                                <p>当 V > <p id="cut0_value_0">xxx</p> , F=<p  id="cut3_value">xxx</p> , V+<p  id="cut4_value">xxx</p> </p>
+                            </div>
+                        </div>
+                        
+                        <!-- y  -->
+                        <h2 class="title">Y轴函数参数配置：</h2>
+                        <div class="com-input-com">
+                            <p>分段点：</p>
+                            <input type="text" id="cut5" class="number-input" placeholder="输入数字"  value="3.7501"/>
+                        </div>
+                        <div class="com-input-com">
+                            <p>Y-K1：</p>
+                            <input type="text" id="cut6" class="number-input" placeholder="输入数字"   value="-134.1534"/>
+                            <p>Y-B1：</p>
+                            <input type="text" id="cut7" class="number-input" placeholder="输入数字"   value="542.8508"/>
+                        </div>
+                        <div class="com-input-com">
+                            <p>Y-K2：</p>
+                            <input type="text" id="cut8" class="number-input" placeholder="输入数字"  value="-288.0047"/>
+                            <p>Y-B2：</p>
+                            <input type="text" id="cut9" class="number-input" placeholder="输入数字"  value="1119.8062"/>
+                        </div>
+                        <div class="func-show">
+                            <p class="title">函数参数：</p>
+                            <div class="com-input-com">
+                                <p>当 V <= <p id="cut5_value">xxx</p>, F=<p id="cut6_value">xxx</p> , V+<p  id="cut7_value">xxx</p> </p>
+                            </div>
+                            <div class="com-input-com">
+                                <p>当 V > <p id="cut5_value_0">xxx</p> , F=<p  id="cut8_value">xxx</p> , V+<p  id="cut9_value">xxx</p> </p>
+                            </div>
+                        </div>
+
+                        <!-- z -->
+                        <h2 class="title">Z轴函数参数配置：</h2>
+                        <div class="com-input-com">
+                            <p>分段点：</p>
+                            <input type="text" id="cut10" class="number-input" placeholder="输入数字"  value="3.7582"/>
+                        </div>
+                        <div class="com-input-com">
+                            <p>z-K1：</p>
+                            <input type="text" id="cut11" class="number-input" placeholder="输入数字"  value="-264.4064" />
+                            <p>Y-B1：</p>
+                            <input type="text" id="cut12" class="number-input" placeholder="输入数字"  value="1046.2170"/>
+                        </div>
+                        <div class="com-input-com">
+                            <p>Z-K2：</p>
+                            <input type="text" id="cut13" class="number-input" placeholder="输入数字"  value="-711.2990"/>
+                            <p>Z-B2：</p>
+                            <input type="text" id="cut14" class="number-input" placeholder="输入数字"  value="2725.7298"/>
+                        </div>
+                        <div class="func-show">
+                            <p class="title">函数参数：</p>
+                            <div class="com-input-com">
+                                <p>当 V <= <p id="cut10_value">xxx</p>, F=<p id="cut11_value">xxx</p> , V+<p  id="cut12_value">xxx</p> </p>
+                            </div>
+                            <div class="com-input-com">
+                                <p>当 V > <p id="cut10_value_0">xxx</p> , F=<p  id="cut13_value">xxx</p> , V+<p  id="cut14_value">xxx</p> </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-push">
+                        <button type="button" id="confirm" class="title-button">确定</button>
+                    </div>
+                </div>
+            </div>
+        <!-- -------------------侧边栏处理 end -------------------------------------- -->
+            <div class="right-show">
+                <h1>实时数据展示</h1>
+                <div class="table-container">
+                    <div class="table-grid"  id="tableContainer">
+                        <table class="table-cell" id="myTable1" border="1">
+                            <tr><td id="1-cell1">电路板温度/td></tr>
+                            <tr><td id="1-cell2">x</td></tr>
+                        </table>
+                        <table class="table-cell" id="myTable2" border="1">
+                            <tr><td id="2-cell1">电压</td></tr>
+                            <tr><td id="2-cell2">x</td></tr>
+                            <tr><td id="2-cell3">y</td></tr>
+                            <tr><td id="2-cell4">z</td></tr>
+                        </table>
+                        <table class="table-cell" id="myTable3" border="1">
+                            <tr><td id="3-cell1">加速度</td></tr>
+                            <tr><td id="3-cell2">x</td></tr>
+                            <tr><td id="3-cell3">y</td></tr>
+                            <tr><td id="3-cell4">z</td></tr>
+                        </table>
+                        <table class="table-cell" id="myTable4" border="1">
+                            <tr><td id="4-cell1">磁力</td></tr>
+                            <tr><td id="4-cell2">x</td></tr>
+                            <tr><td id="4-cell3">y</td></tr>
+                            <tr><td id="4-cell4">z</td></tr>
+                        </table>
+                        <table class="table-cell" id="myTable5" border="1">
+                            <tr><td id="5-cell1">压力</td></tr>
+                            <tr><td id="5-cell2">x</td></tr>
+                            <tr><td id="5-cell3">y</td></tr>
+                            <tr><td id="5-cell4">z</td></tr>
+                        </table>
+                        <table class="table-cell" id="myTable6" border="1">
+                            <tr><td id="6-cell1">欧拉角</td></tr>
+                            <tr><td id="6-cell2">x</td></tr>
+                            <tr><td id="6-cell3">y</td></tr>
+                            <tr><td id="6-cell4">z</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- -------------------数据展示 end-------------------------------------- -->
+
+    <script src="./renderer.js"></script>
+    <script src="../nav/index.js"></script>
+    <script>
+
+        //-----------------------导航元素自定义start------------------------
+        // 创建自定义导航栏元素
+        const customNavbar = document.createElement('custom-navbar');
+        // 将自定义导航栏元素添加到容器中
+        document.getElementById('custom-navbar-container').appendChild(customNavbar);
+        //-----------------------导航元素自定义end------------------------
+
+        //-----------------------输入框元素自定义start------------------------
+
+        
+
+        //-----------------------输入框元素自定义end------------------------
+
+
+
+        
+    </script>
+</body>
+
+</html>

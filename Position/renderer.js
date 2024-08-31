@@ -85,67 +85,75 @@ function animate() {
 }
 animate();
 
-// 保存先前的滤波数据
-let prevFilteredAcc = [0, 0, 0];
-let prevFilteredMag = [0, 0, 0];
 
-// 指定EMA参数
-const alpha = 0.1;//改小
+
 
 // 函数：计算四元数
-function KGetQuat(ax, ay, az, mx, my, mz) {
-  // 先前滤波数据为空时初始化
-  if (!prevFilteredAcc) prevFilteredAcc = [ax, ay, az];
-  if (!prevFilteredMag) prevFilteredMag = [mx, my, mz];
+function MadgwickQuaternionUpdate(q, ax, ay, az, mx, my, mz, beta) {
+  // 归一化加速度计测量值
+  let norm_a = Math.sqrt(ax * ax, ay * ay, az * az);
+  ax /= norm_a;
+  ay /= norm_a;
+  az /= norm_a;
 
-  // 对加速度和磁力计数据进行EMA滤波
-  ax = alpha * ax + (1 - alpha) * prevFilteredAcc[0];
-  ay = alpha * ay + (1 - alpha) * prevFilteredAcc[1];
-  az = alpha * az + (1 - alpha) * prevFilteredAcc[2];
-  prevFilteredAcc = [ax, ay, az];
+  // 归一化磁力计测量值
+  let norm_m = Math.sqrt(mx * mx + my * my + mz * mz);
+  mx /= norm_m;
+  my /= norm_m;
+  mz /= norm_m;
 
-  mx = alpha * mx + (1 - alpha) * prevFilteredMag[0];
-  my = alpha * my + (1 - alpha) * prevFilteredMag[1];
-  mz = alpha * mz + (1 - alpha) * prevFilteredMag[2];
-  prevFilteredMag = [mx, my, mz];
+  // 辅助变量
+  let q0 = q[0];
+  let q1 = q[1];
+  let q2 = q[2];
+  let q3 = q[3];
 
-  // 数据归一化
-  const accNorm = Math.sqrt(ax * ax + ay * ay + az * az);
-  ax /= accNorm;
-  ay /= accNorm;
-  az /= accNorm;
+  let hx = 2 * mx * (0.5 - q2 * q2 - q3 * q3) + 2 * my * (q1 * q2 - q0 * q3) + 2 * mz * (q1 * q3 + q0 * q2);
+  let hy = 2 * mx * (q1 * q2 + q0 * q3) + 2 * my * (0.5 - q1 * q1 - q3 * q3) + 2 * mz * (q2 * q3 - q0 * q1);
+  let bx = Math.sqrt(hx * hx + hy * hy);
+  let bz = 2 * mx * (q1 * q3 - q0 * q2) + 2 * my * (q2 * q3 + q0 * q1) + 2 * mz * (0.5 - q1 * q1 - q2 * q2);
 
-  const magNorm = Math.sqrt(mx * mx + my * my + mz * mz);
-  mx /= magNorm;
-  my /= magNorm;
-  mz /= magNorm;
+  // 估计的重力方向和磁场方向
+  let vx = 2 * (q1 * q3 - q0 * q2);
+  let vy = 2 * (q0 * q1 + q2 * q3);
+  let vz = q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3;
+  let wx = 2 * bx * (0.5 - q2 * q2 - q3 * q3) + 2 * bz * (q1 * q3 - q0 * q2);
+  let wy = 2 * bx * (q1 * q2 - q0 * q3) + 2 * bz * (q0 * q1 + q2 * q3);
+  let wz = 2 * bx * (q0 * q2 + q1 * q3) + 2 * bz * (0.5 - q1 * q1 - q2 * q2);
 
-  // 计算改进的四元数
-  const gx = 2 * ax;
-  const gy = 2 * ay;
-  const gz = 2 * (az - 0.5);
+  // 误差是估计方向和测量重力方向的叉积
+  let ex = (ay * vz - az * vy) + (my * wz - mz * wy);
+  let ey = (az * vx - ax * vz) + (mz * wx - mx * wz);
+  let ez = (ax * vy - ay * vx) + (mx * wy - my * wx);
 
-  const hx = mx * Math.sqrt(1.0 - az * az) - mz * ay;
-  const hy = my * Math.sqrt(1.0 - az * az) - mz * ax;
-  const hz = mx * ay - my * ax;
+  // 应用反馈项
+  let gx = 2 * ex;
+  let gy = 2 * ey;
+  let gz = 2 * ez;
 
-  let qw = Math.sqrt(Math.max(0, 1 + gx + hy + hz)) / 2;
-  let qx = Math.sqrt(Math.max(0, 1 + gx - hy - hz)) / 2;
-  let qy = Math.sqrt(Math.max(0, 1 - gx + hy - hz)) / 2;
-  let qz = Math.sqrt(Math.max(0, 1 - gx - hy + hz)) / 2;
-  qx = copysign(qx, gy - hz);
-  qy = copysign(qy, hx - gz);
-  qz = copysign(qz, hx + gy);
+  // 四元数微分方程的积分
+  let qDot1 = -q1 * gx - q2 * gy - q3 * gz;
+  let qDot2 = q0 * gx + q2 * gz - q3 * gy;
+  let qDot3 = q0 * gy - q1 * gz + q3 * gx;
+  let qDot4 = q0 * gz + q1 * gy - q2 * gx;
 
-  // 四元数归一化
-  const qNorm = Math.sqrt(qw * qw + qx * qx + qy * qy + qz * qz);
-  qw /= qNorm;
-  qx /= qNorm;
-  qy /= qNorm;
-  qz /= qNorm;
+  // 积分以生成新的四元数
+  q0 += qDot1 * beta;
+  q1 += qDot2 * beta;
+  q2 += qDot3 * beta;
+  q3 += qDot4 * beta;
 
-  return [qw, qx, qy, qz];
+  // 归一化四元数
+  let norm_q = Math.sqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+  q0 /= norm_q;
+  q1 /= norm_q;
+  q2 /= norm_q;
+  q3 /= norm_q;
+
+  // 返回四元数
+  return [q0, q1, q2, q3];
 }
+
 
 // 函数：返回符号与y相同的x值
 function copysign(x, y) {
@@ -178,17 +186,22 @@ function quaternionToEuler(q) {
 
 // 实时更新立方体姿态
 function updateCube(ax, ay, az, mx, my, mz, adcx, adcy, adcz) {
-  const quat = KGetQuat(ax, ay, az, mx, my, mz);
+  let quat = [0, 0, 1, 0];
+  quat = MadgwickQuaternionUpdate(quat, ax, ay, az, mx, my, mz, 0.1);
+
   const [roll, pitch, yaw] = quaternionToEuler(quat);
   cube.rotation.x = roll;
   cube.rotation.y = pitch;
   cube.rotation.z = yaw;
 
+  // cube.quaternion.copy(new THREE.Quaternion(quat[1], quat[2], quat[3], quat[0]));
+  
   // 更新显示压力数据的内容
   document.getElementById('right-force').innerText = (adcx).toFixed(2);
   document.getElementById('left-force').innerText = (adcy).toFixed(2);
   document.getElementById('top-force').innerText = (adcz).toFixed(2);
 }
+
 
 
 // 假设我们每秒钟获得新的加速度和磁场数据
