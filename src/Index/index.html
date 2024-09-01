@@ -29,9 +29,7 @@
     <script>
         const { ipcRenderer } = require("electron");
         function to1() {
-            console.log(1111);
             ipcRenderer.send("gotoPageShowAll");
-            console.log(2222);
         }
         function to2() {
             ipcRenderer.send("gotoPageShowAll");

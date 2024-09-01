@@ -94,9 +94,9 @@ customElements.define(
           </style>
           <ul class="nav-ul">
               <li>
-                  <img src="..\\img\\原配色.png" alt="Logo 1" class="logo">
-                  <img src="..\\img\\11.png" alt="Logo 2" class="logo">
-                  <img src="..\\img\\院徽.png" alt="Logo 2" class="logo">
+                    <img src="..\\img\\东南大学.png" alt="Logo 1" class="logo">
+                    <img src="..\\img\\交通学院.png" alt="Logo 2" class="logo">
+                    <img src="..\\img\\仪科.png" alt="Logo 3" class="logo">
               </li>
               <li class="center">
                   <span>面向道路多场景健康监测的监测系统</span>

@@ -28,7 +28,7 @@ function createWindow() {
     url.format({
       // pathname: path.join(__dirname, "ShowAll/index.html"),
       // todo 加首页处理
-      pathname: path.join(__dirname, "Index/index.html"),
+      pathname: path.join(__dirname, "src/Index/index.html"),
       protocol: "file:",
       slashes: true,
     })
@@ -78,7 +78,7 @@ app.on("activate", function () {
 ipcMain.on("gotoPageIndex", () => {
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "Index/index.html"),
+      pathname: path.join(__dirname, "src/Index/index.html"),
       protocol: "file:",
       slashes: true,
     })
@@ -87,7 +87,7 @@ ipcMain.on("gotoPageIndex", () => {
 ipcMain.on("gotoPagePort", () => {
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "Port/index.html"),
+      pathname: path.join(__dirname, "src/modules/smart-particles/Port/index.html"),
       protocol: "file:",
       slashes: true,
     })
@@ -96,7 +96,7 @@ ipcMain.on("gotoPagePort", () => {
 ipcMain.on("gotoPageData", () => {
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "Data/index.html"),
+      pathname: path.join(__dirname, "src/modules/smart-particles/Data/index.html"),
       protocol: "file:",
       slashes: true,
     })
@@ -105,7 +105,7 @@ ipcMain.on("gotoPageData", () => {
 ipcMain.on("gotoPageShowAll", () => {
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "ShowAll/index.html"),
+      pathname: path.join(__dirname, "src/modules/smart-particles/ShowAll/index.html"),
       protocol: "file:",
       slashes: true,
     })
@@ -114,7 +114,7 @@ ipcMain.on("gotoPageShowAll", () => {
 ipcMain.on("gotoPagePosition", () => {
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "Position/index.html"),
+      pathname: path.join(__dirname, "src/modules/smart-particles/Position/index.html"),
       protocol: "file:",
       slashes: true,
     })
@@ -123,7 +123,7 @@ ipcMain.on("gotoPagePosition", () => {
 ipcMain.on("gotoPageOutput", () => {
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "Output/index.html"),
+      pathname: path.join(__dirname, "src/modules/smart-particles/Output/index.html"),
       protocol: "file:",
       slashes: true,
     })
