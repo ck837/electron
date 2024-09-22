@@ -47,12 +47,15 @@ td {
   text-align: center;
 }
 .title-button{
+  width: 100px;
   text-align: center;
 }
 .button-push{
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-self: center;
+
 }
 
 .com-input-com {
@@ -71,7 +74,11 @@ td {
   border: 1px solid white;
 }
 
-/* ----------------侧边栏 start------------------------------------------- */
+.params-input{
+  width: 100%;
+  margin-top: 30px;
+}
+/* ----------------侧边栏 end------------------------------------------- */
 
 /* ----------------两列布局 start（可重复使用）------------------------------- */
 .display-all {
