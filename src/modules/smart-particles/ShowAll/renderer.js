@@ -13,7 +13,6 @@ const type_y = [];
 const type_z = [];
 
 document.addEventListener("DOMContentLoaded", function () {
-  const changeTitle = document.getElementById("changeTitle");
 
   // Get the elements
   const comSelect = document.getElementById("com");
@@ -36,28 +35,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const cut14Select = document.getElementById("cut14");
 
   // x
-  const cut0Value = document.getElementById("cut0_value");
-  const cut00Value = document.getElementById("cut0_value_0");
-  const cut1Value = document.getElementById("cut1_value");
-  const cut2Value = document.getElementById("cut2_value");
-  const cut3Value = document.getElementById("cut3_value");
-  const cut4Value = document.getElementById("cut4_value");
+  // const cut0Value = document.getElementById("cut0_value");
+  // const cut00Value = document.getElementById("cut0_value_0");
+  // const cut1Value = document.getElementById("cut1_value");
+  // const cut2Value = document.getElementById("cut2_value");
+  // const cut3Value = document.getElementById("cut3_value");
+  // const cut4Value = document.getElementById("cut4_value");
 
-  // y
-  const cut5Value = document.getElementById("cut5_value");
-  const cut50Value = document.getElementById("cut5_value_0");
-  const cut6Value = document.getElementById("cut6_value");
-  const cut7Value = document.getElementById("cut7_value");
-  const cut8Value = document.getElementById("cut8_value");
-  const cut9Value = document.getElementById("cut9_value");
+  // // y
+  // const cut5Value = document.getElementById("cut5_value");
+  // const cut50Value = document.getElementById("cut5_value_0");
+  // const cut6Value = document.getElementById("cut6_value");
+  // const cut7Value = document.getElementById("cut7_value");
+  // const cut8Value = document.getElementById("cut8_value");
+  // const cut9Value = document.getElementById("cut9_value");
 
-  // z
-  const cut10Value = document.getElementById("cut10_value");
-  const cut100Value = document.getElementById("cut10_value_0");
-  const cut11Value = document.getElementById("cut11_value");
-  const cut12Value = document.getElementById("cut12_value");
-  const cut13Value = document.getElementById("cut13_value");
-  const cut14Value = document.getElementById("cut14_value");
+  // // z
+  // const cut10Value = document.getElementById("cut10_value");
+  // const cut100Value = document.getElementById("cut10_value_0");
+  // const cut11Value = document.getElementById("cut11_value");
+  // const cut12Value = document.getElementById("cut12_value");
+  // const cut13Value = document.getElementById("cut13_value");
+  // const cut14Value = document.getElementById("cut14_value");
 
   // Get the confirm button element
   const confirmButton = document.getElementById("confirm");
@@ -68,29 +67,29 @@ document.addEventListener("DOMContentLoaded", function () {
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
     //修改界面中函数里面的元素
-    // x
-    cut0Value.textContent = cut0Select.value;
-    cut00Value.textContent = cut0Select.value;
-    cut1Value.textContent = cut1Select.value;
-    cut2Value.textContent = cut2Select.value;
-    cut3Value.textContent = cut3Select.value;
-    cut4Value.textContent = cut4Select.value;
+    // // x
+    // cut0Value.textContent = cut0Select.value;
+    // cut00Value.textContent = cut0Select.value;
+    // cut1Value.textContent = cut1Select.value;
+    // cut2Value.textContent = cut2Select.value;
+    // cut3Value.textContent = cut3Select.value;
+    // cut4Value.textContent = cut4Select.value;
 
-    // y
-    cut5Value.textContent = cut5Select.value;
-    cut50Value.textContent = cut5Select.value;
-    cut6Value.textContent = cut6Select.value;
-    cut7Value.textContent = cut7Select.value;
-    cut8Value.textContent = cut8Select.value;
-    cut9Value.textContent = cut9Select.value;
+    // // y
+    // cut5Value.textContent = cut5Select.value;
+    // cut50Value.textContent = cut5Select.value;
+    // cut6Value.textContent = cut6Select.value;
+    // cut7Value.textContent = cut7Select.value;
+    // cut8Value.textContent = cut8Select.value;
+    // cut9Value.textContent = cut9Select.value;
 
-    // z
-    cut10Value.textContent = cut10Select.value;
-    cut100Value.textContent = cut10Select.value;
-    cut11Value.textContent = cut11Select.value;
-    cut12Value.textContent = cut12Select.value;
-    cut13Value.textContent = cut13Select.value;
-    cut14Value.textContent = cut14Select.value;
+    // // z
+    // cut10Value.textContent = cut10Select.value;
+    // cut100Value.textContent = cut10Select.value;
+    // cut11Value.textContent = cut11Select.value;
+    // cut12Value.textContent = cut12Select.value;
+    // cut13Value.textContent = cut13Select.value;
+    // cut14Value.textContent = cut14Select.value;
 
     // Get the selected value
     const selectedCom = comSelect.value;
