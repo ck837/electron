@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add an event listener to the confirm button
   confirmButton.addEventListener("click", saveConfiguration);
-
+                                                          
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
     //修改界面中函数里面的元素
@@ -598,6 +598,7 @@ function updateChartData() {
 // 以下为核心数据处理代码
 
 let cnt = 0;
+let lastTmp;
 // --------------------------------------传感器数据处理 start------------------------------
 function getData(portValue, rate) {
   port = new SerialPort({
@@ -739,6 +740,7 @@ function getData(portValue, rate) {
       //-----------------------------------handle tmp events--------------------------------
 
       let tmp_index = srcData.indexOf(112);
+
       // 处理温度Tmp 54 6d 70
       let temp_tmp = (function () {
         let tmp = [
@@ -749,8 +751,15 @@ function getData(portValue, rate) {
           (srcData[tmp_index+5]||0).toString(16),
           (srcData[tmp_index+6]||0).toString(16),
         ];
+
         let result = processHex(tmp);
-        return result;
+        console.log(Math.abs(result - lastTmp),lastTmp)
+        if(!lastTmp || Math.abs(result - lastTmp) < 1){
+          lastTmp = result;
+        }
+        console.log(lastTmp)
+        return lastTmp;
+
       })();
       console.log("当前的温度数据");
       console.log(temp_tmp)

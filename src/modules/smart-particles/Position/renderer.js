@@ -248,13 +248,12 @@ function getData(portValue, rate) {
     if (
       srcData &&
       srcData.join(",").includes(str_tmp) &&
-      srcData.join(",").includes(str_adc) &&
+      srcData.join(",").includes(str_adc) &&                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
       srcData.join(",").includes(str_lsm)
-    ) {
-     
-      // 开始处理数据
-      //更新图表代码
-      updateChartData();
+    ) {                                                                                                                                                                                                          
+                                      
+      // 开始处理数据                                                                                
+      //更新图表代码                                                                                                 
 
       let test = [];
 
@@ -310,11 +309,6 @@ function getData(portValue, rate) {
         return result;
       })();
 
-      adcx.push(temp_adcX);
-      adcy.push(temp_adcY);
-      adcz.push(temp_adcZ);
-      typeCalculate(temp_adcX, temp_adcY, temp_adcZ);
-
       //-----------------------------------handle acc events--------------------------------
 
       let acc_index = srcData.indexOf(109)
@@ -349,9 +343,6 @@ function getData(portValue, rate) {
         let result = processAcceleration(tmp);
         return result;
       })();
-      accx.push(temp_accX / 1000);
-      accy.push(temp_accY / 1000);
-      accz.push(temp_accZ / 1000);
 
       //-----------------------------------handle tmp events--------------------------------
 
@@ -371,7 +362,6 @@ function getData(portValue, rate) {
       })();
       console.log("当前的温度数据");
       console.log(temp_tmp)
-      temperatureData.push(temp_tmp);
       //-----------------------------------handle mag events--------------------------------
 
       let temp_magX = (function () {
@@ -404,10 +394,6 @@ function getData(portValue, rate) {
         let result = processMagnetism(tmp);
         return result;
       })();
-
-      magx.push(temp_magX);
-      magy.push(temp_magY);
-      magz.push(temp_magZ);
 
       //计算欧拉角
       // 保存先前的滤波数据
@@ -494,9 +480,6 @@ function getData(portValue, rate) {
         const t3 = 2 * (qw * qz + qx * qy);
         const t4 = 1 - 2 * (ysqr + qz * qz);
         const yaw = Math.atan2(t3, t4);
-        EulerAnglesx.push(roll * (180 / Math.PI));
-        EulerAnglesy.push(pitch * (180 / Math.PI));
-        EulerAnglesz.push(yaw * (180 / Math.PI));
       }
       let tmp = KGetQuat(
         temp_accX,
@@ -513,18 +496,6 @@ function getData(portValue, rate) {
   }
 }
 
-//根据不同类型，选择不同的计算函数
-function typeCalculate(x, y, z) {
-  if (x < type_x[0]) {
-    calculatex.push(type_x[1] * x + type_x[2]);
-  } else {
-    calculatex.push(type_x[3] * x + type_x[4]);
-  }
-  if (y < type_y[0]) calculatey.push(type_y[1] * y + type_y[2]);
-  else calculatey.push(type_y[3] * y + type_y[4]);
-  if (z < type_z[0]) calculatez.push(type_z[1] * z + type_z[2]);
-  else calculatez.push(type_z[3] * z + type_z[4]);
-}
 
 //name:公共函数的定义部分
 //function:处理温度和加速度数据的函数，处理磁力压力的函数
