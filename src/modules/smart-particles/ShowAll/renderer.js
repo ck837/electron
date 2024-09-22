@@ -97,12 +97,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedType = typeSelect.value;
     const selectedNum = numSelect.value;
 
-    if (selectedType === "normal") {
-      changeTitle.textContent = "压力";
-    } else {
-      changeTitle.textContent = "环境温度";
-      updateChartTitle();
-    }
     type_x.push(
       ...[
         parseFloat(cut0Select.value),
@@ -452,10 +446,6 @@ const myChart5 = new Chart(ctx5, {
   },
 });
 
-function updateChartTitle() {
-  myChart5.options.scales.y.title.text = "Temperature (℃)";
-  myChart5.update();
-}
 const myChart6 = new Chart(ctx6, {
   type: "line",
   data: {
@@ -463,7 +453,7 @@ const myChart6 = new Chart(ctx6, {
     datasets: [
       {
         label: "x",
-        data: EulerAnglesx, 
+        data: EulerAnglesx,
         fill: false,
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
@@ -477,7 +467,7 @@ const myChart6 = new Chart(ctx6, {
       },
       {
         label: "z",
-        data: EulerAnglesz, 
+        data: EulerAnglesz,
         fill: false,
         borderColor: "rgb(54, 162, 235)",
         tension: 0.1,
@@ -607,44 +597,7 @@ function updateChartData() {
 
 //----------------------------------test end----------------------------------------------
 
-// ------------------------以下为port数据处理 start------------------------
 
-function generateNextArr(pattern) {
-  var i = 0;
-  var j = -1;
-  var next = [];
-  next[0] = -1;
-  while (i < pattern.length) {
-    if (j === -1 || pattern[i] === pattern[j]) {
-      i++;
-      j++;
-      next[i] = j;
-    } else {
-      j = next[j];
-    }
-  }
-  return next;
-}
-
-function kmp(pattern, str) {
-  //母串，子串
-  var next = generateNextArr(pattern);
-  var i = 0; // str 指针
-  var j = 0; // pattern指针
-  while (i < str.length && j < pattern.length) {
-    if (str[i] === pattern[j] || j === -1) {
-      i++;
-      j++;
-    } else {
-      j = next[j]; // 右移
-    }
-  }
-  if (j === pattern.length) {
-    return i - j;
-  } else {
-    return -1;
-  }
-}
 
 // 以下为核心数据处理代码
 
@@ -655,434 +608,383 @@ function getData(portValue, rate) {
     path: portValue,
     baudRate: rate,
   });
-
-  let count = 0;
-  let flag = [-1, -1, -1]; //第一个为温度54 6d 70,第二个为41 64 63 adc 压力,第三个为49 73 6d lsm 加速度 磁力
-
-  const str_tmp = "84,109,112"; //54,6d,70
-  const str_adc = "65,100,99"; //41 64 63
-  const str_lsm = "73,115,109"; //49,73,6d
-
   let srcData = [];
-
   port.on("data", function (data) {
-    srcData.push(data);
 
-    //统计一组数据需要多少个buffer
-    if (flag.includes(-1)) {
-      const str = data.join(",");
-
-      if (kmp(str_tmp, str) !== -1) flag[0] = count;
-
-      if (kmp(str_adc, str) !== -1) flag[1] = count;
-
-      if (kmp(str_lsm, str) !== -1) flag[2] = count;
-
-      function isAllNone(arr) {
-        return arr.every(function (element) {
-          return element === -1;
-        });
-      }
-
-      if (!isAllNone(flag)) count++;
-
+    if (data[0] === 65) {
+      handleData();
       srcData = [];
+    }
+    srcData.push(data[0]);
+
+    //一个一个数据流往里塞,从65开始统计，到下一个65结束，同时里面的数据流处理逻辑应该是不变的，这样的话每次都是一个完整的buffer处理
+  });
+
+  const handleData = (srcData) => {
+    const str_tmp = "84,109,112"; //54,6d,70
+    const str_adc = "65,100,99"; //41 64 63
+    const str_lsm = "73,115,109"; //49,73,6d
+
+    //65, 100, 99, 12, 10, 6, 14, 3, 15, 9, 4, 10, 13, 3, 15, 12, 7, 6, 15, 3, 13, ------21
+    //84, 109, 112, 1, 14, 13, 11, 0, 5, ----6
+    //73, 115, 109, 14, 8, 8, 8, 7, 15, 14, 0, 7, 15, 14, 0, 0, 1, 6, 3, 15, 15, 11, 3, 15, 14, 4, 10,  ------27
+    if (
+      !srcData.join(",").includes(str_tmp) &&
+      !srcData.join(",").includes(str_adc) &&
+      !srcData.join(",").includes(str_lsm)
+    ) {
+      return;
     } else {
-      //当获取一次的数据buffer大小后，要将温度所在的buffer处于最前面，这样后续数据处理顺序有保证
-      if (!srcData[0].join(",").includes("84,109,112")) {
-        srcData = [];
+      // 开始处理数据
+      console.log("开始处理数据");
+
+      //更新图表代码
+      updateChartData();
+
+      let test = [];
+
+      //表格填入当前时间
+      let time = new Date();
+      const milliseconds = time.getMilliseconds();
+      const formattedTime = `${time.toLocaleString()}:${milliseconds}`;
+
+      test.push(formattedTime);
+
+      cnt++;
+
+      const mergedArray = [];
+
+      for (const buffer of srcData) {
+        for (const byte of buffer) {
+          mergedArray.push(byte);
+        }
       }
 
-      if (srcData.length === count) {
-        //更新图表代码
-        updateChartData();
+      srcData = mergedArray;
+      // console.log(srcData);
 
-        let test = [];
+      //-----------------------------------handle adc events--------------------------------
 
-        //表格填入当前时间
-        let time = new Date();
-        const milliseconds = time.getMilliseconds();
-        const formattedTime = `${time.toLocaleString()}:${milliseconds}`;
+      // adc_x
 
-        test.push(formattedTime);
-
-        cnt++;
-
-        const mergedArray = [];
-
-        for (const buffer of srcData) {
-          for (const byte of buffer) {
-            mergedArray.push(byte);
-          }
-        }
-
-        srcData = mergedArray;
-        // console.log(srcData);
-
-        //-----------------------------------handle adc events--------------------------------
-
-        // 处理加速度值的函数
-        function processADC(hexArray) {
-          let q1 =
-            Math.pow(16, 5) * parseInt(hexArray[4], 16) +
-            Math.pow(16, 4) * parseInt(hexArray[5], 16) +
-            Math.pow(16, 3) * parseInt(hexArray[2], 16) +
-            Math.pow(16, 2) * parseInt(hexArray[3], 16) +
-            16 * parseInt(hexArray[0], 16) +
-            parseInt(hexArray[1], 16);
-          let AIN1 =
-            q1 *
-            ((2 * 210 * Math.pow(10, -4) * 10 * Math.pow(10, 3)) /
-              Math.pow(2, 24));
-          let r1 = (AIN1 / 210) * Math.pow(10, 3);
-          let F1 = 351.92 / (r1 - 0.9994);
-
-          if (F1 < 0) F1 = -F1;
-
-          return F1;
-        }
-
-        // adc_x
-        let adcValue_x = [
-          srcData[0].toString(16),
-          srcData[1].toString(16),
-          srcData[2].toString(16),
+      //----处理压力
+      let temp_adcX = function () {
+        let tmp = [
           srcData[3].toString(16),
           srcData[4].toString(16),
           srcData[5].toString(16),
-        ];
-        // adc_y
-        let adcValue_y = [
           srcData[6].toString(16),
           srcData[7].toString(16),
           srcData[8].toString(16),
+        ];
+        let result = processHex(tmp);
+        return result;
+      };
+      let temp_adcY = function () {
+        let tmp = [
           srcData[9].toString(16),
           srcData[10].toString(16),
           srcData[11].toString(16),
-        ];
-        // adc_z
-        let adcValue_z = [
           srcData[12].toString(16),
           srcData[13].toString(16),
           srcData[14].toString(16),
+        ];
+        let result = processHex(tmp);
+        return result;
+      };
+      let temp_adcZ = function () {
+        let tmp = [
           srcData[15].toString(16),
           srcData[16].toString(16),
           srcData[17].toString(16),
+          srcData[18].toString(16),
+          srcData[19].toString(16),
+          srcData[20].toString(16),
         ];
-        let adc_x = processADC(adcValue_x);
-        // console.log("adc_x: " + adc_x);
-        adcx.push(adc_x);
+        let result = processHex(tmp);
+        return result;
+      };
 
-        let adc_y = processADC(adcValue_y);
-        // console.log("adc_y: " + adc_y);
-        adcy.push(adc_y);
+      adcx.push(temp_adcX);
+      adcy.push(temp_adcY);
+      adcz.push(temp_adcZ);
+      typeCalculate(temp_adcX, temp_adcY, temp_adcZ);
 
-        let adc_z = processADC(adcValue_z);
-        // console.log("adc_z: " + adc_z);
-        adcz.push(adc_z);
-        typeCalculate(adc_x,adc_y, adc_z)
+      //-----------------------------------handle acc events--------------------------------
 
-
-        //-----------------------------------handle acc events--------------------------------
-
-        // 处理加速度值的函数
-        function processAcceleration(hexArray) {
-          let acc_x_decimal =
-            parseInt(hexArray[0], 16) * Math.pow(16, 3) +
-            parseInt(hexArray[1], 16) * Math.pow(16, 2) +
-            parseInt(hexArray[2], 16) * 16 +
-            parseInt(hexArray[3], 16);
-
-          let acc_x_binary = acc_x_decimal.toString(2).padStart(16, "0");
-
-          let ACC_X;
-          if (acc_x_binary[0] === "0") {
-            ACC_X = 0.061 * acc_x_decimal;
-          } else {
-            let acc_x_binary_tmp = "1";
-            for (let i = 1; i < acc_x_binary.length; i++) {
-              if (acc_x_binary[i] === "0") acc_x_binary_tmp += "1";
-              else acc_x_binary_tmp += "0";
-            }
-            ACC_X = -0.061 * (parseInt(acc_x_binary_tmp.slice(1), 2) + 1);
-          }
-
-          return ACC_X;
-        }
-        let accValue_x = [
-          srcData[28].toString(16),
-          srcData[29].toString(16),
+      // 处理加速度值的函数
+      let temp_accX = function () {
+        let tmp = [
           srcData[30].toString(16),
           srcData[31].toString(16),
-        ];
-        let accValue_y = [
           srcData[32].toString(16),
           srcData[33].toString(16),
+        ];
+        let result = processAcceleration(tmp);
+        return result;
+      };
+      let temp_accY = function () {
+        let tmp = [
           srcData[34].toString(16),
           srcData[35].toString(16),
-        ];
-        let accValue_z = [
           srcData[36].toString(16),
           srcData[37].toString(16),
+        ];
+        let result = processAcceleration(tmp);
+        return result;
+      };
+      let temp_accZ = function () {
+        let tmp = [
           srcData[38].toString(16),
           srcData[39].toString(16),
-        ];
-        // 调用函数并输出结果
-        let result_x = processAcceleration(accValue_x);
-        let result_y = processAcceleration(accValue_y);
-        let result_z = processAcceleration(accValue_z);
-        // console.log("acc_x: " + result_x);
-        // console.log("acc_y: " + result_y);
-        // console.log("acc_z: " + result_z);
-        accx.push(result_x/1000);
-        accy.push(result_y/1000);
-        accz.push(result_z/1000);
-
-
-        //-----------------------------------handle tmp events--------------------------------
-        // 处理温度Tmp 54 6d 70
-        for (let i = 0; i < srcData.length; i++) {
-          if (srcData[i] === parseInt("54", 16)) {
-            if (
-              srcData[i + 1] === parseInt("6d", 16) &&
-              srcData[i + 2] === parseInt("70", 16)
-            ) {
-              // temperature 缺少负数的情况
-              let tmp =
-                (srcData[i + 3] || 0).toString(2).padStart(4, "0") +
-                (srcData[i + 4] || 0).toString(2).padStart(4, "0") +
-                (srcData[i + 5] || 0).toString(2).padStart(4, "0") +
-                (srcData[i + 6] || 0).toString(2).padStart(4, "0");
-              tmp = tmp.slice(0, -2);
-              if (tmp[0] == 0) {
-                let s1 =
-                  parseInt(tmp[1]) * 128 +
-                  parseInt(tmp[2]) * 64 +
-                  parseInt(tmp[3]) * 32 +
-                  parseInt(tmp[4]) * 16 +
-                  parseInt(tmp[5]) * 8 +
-                  parseInt(tmp[6]) * 4 +
-                  parseInt(tmp[7]) * 2 +
-                  parseInt(tmp[8]);
-                let s2 =
-                  0.03125 *
-                  (16 * parseInt(tmp[9]) +
-                    8 * parseInt(tmp[10]) +
-                    4 * parseInt(tmp[11]) +
-                    2 * parseInt(tmp[12]) +
-                    parseInt(tmp[13]));
-                temperature = s1 + s2;
-                // console.log("temperature: ", temperature);
-                temperatureData.push(temperature);
-                console.log(temperatureData);
-              } else {
-                for (let i = 1; i < tmp.size(); i++) {
-                  if (tmp[i] === "0") tmp[i] = "1";
-                  else tmp[i] = "0";
-                }
-                d1 =
-                  tmp[1] * (2 ^ 7) +
-                  tmp[2] * (2 ^ 6) +
-                  tmp[3] * (2 ^ 5) +
-                  tmp[4] * (2 ^ 4) +
-                  tmp[5] * (2 ^ 3) +
-                  tmp[6] * (2 ^ 2) +
-                  tmp[7] * 2 +
-                  tmp[8];
-                d2 =
-                  0.03125 *
-                  (16 * tmp[9] +
-                    8 * tmp[10] +
-                    4 * tmp[11] +
-                    2 * tmp[12] +
-                    tmp[13]);
-                temperature = (d1 + d2) * -1;
-                console.log("temperature: ", temperature);
-                temperatureData.push(temperature);
-              }
-              if (temperatureData.length > 21) {
-                temperatureData.splice(0, 1);
-              }
-            }
-          }
-        }
-        //-----------------------------------handle mag events--------------------------------
-
-        function processMagnetism(hexArray) {
-          let mag_decimal =
-            parseInt(hexArray[0], 16) * Math.pow(16, 3) +
-            parseInt(hexArray[1], 16) * Math.pow(16, 2) +
-            parseInt(hexArray[2], 16) * 16 +
-            parseInt(hexArray[3], 16);
-
-          let mag_binary = mag_decimal.toString(2).padStart(16, "0");
-
-          let Mag;
-          if (mag_binary[0] === "0") {
-            Mag = 1.5 * mag_decimal;
-          } else {
-            let mag_binary_tmp = "1";
-            for (let i = 1; i < mag_binary.length; i++) {
-              if (mag_binary[i] === "0") mag_binary_tmp += "1";
-              else mag_binary_tmp += "0";
-            }
-            Mag = -1.5 * parseInt(parseInt(mag_binary_tmp.slice(1), 2) + 1);
-          }
-          return Mag;
-        }
-
-        // mag
-        let magValue_x = [
           srcData[40].toString(16),
           srcData[41].toString(16),
+        ];
+        let result = processAcceleration(tmp);
+        return result;
+      };
+      accx.push(temp_accX / 1000);
+      accy.push(temp_accY / 1000);
+      accz.push(temp_accZ / 1000);
+
+      //-----------------------------------handle tmp events--------------------------------
+      // 处理温度Tmp 54 6d 70
+      let temp_tmp = function () {
+        let tmp = [
+          srcData[24].toString(16),
+          srcData[25].toString(16),
+          srcData[26].toString(16),
+          srcData[27].toString(16),
+          srcData[28].toString(16),
+          srcData[29].toString(16),
+        ];
+        let result = processHex(tmp);
+        return result;
+      };
+      temperatureData.push(temp_tmp);
+      //-----------------------------------handle mag events--------------------------------
+
+      let temp_magX = function () {
+        let tmp = [
           srcData[42].toString(16),
           srcData[43].toString(16),
-        ];
-        let magValue_y = [
           srcData[44].toString(16),
           srcData[45].toString(16),
+        ];
+        let result = processMagnetism(tmp);
+        return result;
+      };
+      let temp_magY = function () {
+        let tmp = [
           srcData[46].toString(16),
           srcData[47].toString(16),
-        ];
-        let magValue_z = [
           srcData[48].toString(16),
           srcData[49].toString(16),
+        ];
+        let result = processMagnetism(tmp);
+        return result;
+      };
+      let temp_magZ = function () {
+        let tmp = [
           srcData[50].toString(16),
           srcData[51].toString(16),
+          srcData[52].toString(16),
+          srcData[53].toString(16),
         ];
-        let mag_result_x = processMagnetism(magValue_x);
-        let mag_result_y = processMagnetism(magValue_y);
-        let mag_result_z = processMagnetism(magValue_z);
-        // console.log("mag_x: " + mag_result_x);
-        // console.log("mag_y: " + mag_result_y);
-        // console.log("mag_z: " + mag_result_z);
-        magx.push(mag_result_x);
-        magy.push(mag_result_y);
-        magz.push(mag_result_z);
+        let result = processMagnetism(tmp);
+        return result;
+      };
 
-        //计算欧拉角
-        // 保存先前的滤波数据
-        let prevFilteredAcc = [0, 0, 0];
-        let prevFilteredMag = [0, 0, 0];
+      magx.push(temp_magX);
+      magy.push(temp_magY);
+      magz.push(temp_magZ);
 
-        // 指定EMA参数
-        const alpha = 0.2;
+      //计算欧拉角
+      // 保存先前的滤波数据
+      let prevFilteredAcc = [0, 0, 0];
+      let prevFilteredMag = [0, 0, 0];
 
-        function KGetQuat(ax, ay, az, mx, my, mz) {
-          // 函数：返回符号与y相同的x值
-          function copysign(x, y) {
-            return y < 0 ? -Math.abs(x) : Math.abs(x);
-          }
+      // 指定EMA参数
+      const alpha = 0.2;
 
-          // 先前滤波数据为空时初始化
-          if (!prevFilteredAcc) prevFilteredAcc = [ax, ay, az];
-          if (!prevFilteredMag) prevFilteredMag = [mx, my, mz];
-
-          // 对加速度和磁力计数据进行EMA滤波
-          ax = alpha * ax + (1 - alpha) * prevFilteredAcc[0];
-          ay = alpha * ay + (1 - alpha) * prevFilteredAcc[1];
-          az = alpha * az + (1 - alpha) * prevFilteredAcc[2];
-          prevFilteredAcc = [ax, ay, az];
-
-          mx = alpha * mx + (1 - alpha) * prevFilteredMag[0];
-          my = alpha * my + (1 - alpha) * prevFilteredMag[1];
-          mz = alpha * mz + (1 - alpha) * prevFilteredMag[2];
-          prevFilteredMag = [mx, my, mz];
-
-          // 数据归一化
-          const accNorm = Math.sqrt(ax * ax + ay * ay + az * az);
-          ax /= accNorm;
-          ay /= accNorm;
-          az /= accNorm;
-
-          const magNorm = Math.sqrt(mx * mx + my * my + mz * mz);
-          mx /= magNorm;
-          my /= magNorm;
-          mz /= magNorm;
-
-          // 计算改进的四元数
-          const gx = 2 * ax;
-          const gy = 2 * ay;
-          const gz = 2 * (az - 0.5);
-
-          const hx = mx * Math.sqrt(1.0 - az * az) - mz * ay;
-          const hy = my * Math.sqrt(1.0 - az * az) - mz * ax;
-          const hz = mx * ay - my * ax;
-
-          let qw = Math.sqrt(Math.max(0, 1 + gx + hy + hz)) / 2;
-          let qx = Math.sqrt(Math.max(0, 1 + gx - hy - hz)) / 2;
-          let qy = Math.sqrt(Math.max(0, 1 - gx + hy - hz)) / 2;
-          let qz = Math.sqrt(Math.max(0, 1 - gx - hy + hz)) / 2;
-          qx = copysign(qx, gy - hz);
-          qy = copysign(qy, hx - gz);
-          qz = copysign(qz, hx + gy);
-
-          // 四元数归一化
-          const qNorm = Math.sqrt(qw * qw + qx * qx + qy * qy + qz * qz);
-          qw /= qNorm;
-          qx /= qNorm;
-          qy /= qNorm;
-          qz /= qNorm;
-
-          return [qw, qx, qy, qz];
+      function KGetQuat(ax, ay, az, mx, my, mz) {
+        // 函数：返回符号与y相同的x值
+        function copysign(x, y) {
+          return y < 0 ? -Math.abs(x) : Math.abs(x);
         }
 
-        function quaternionToEuler(qw, qx, qy, qz) {
-          const ysqr = qy * qy;
+        // 先前滤波数据为空时初始化
+        if (!prevFilteredAcc) prevFilteredAcc = [ax, ay, az];
+        if (!prevFilteredMag) prevFilteredMag = [mx, my, mz];
 
-          // roll (x-axis rotation)
-          const t0 = 2 * (qw * qx + qy * qz);
-          const t1 = 1 - 2 * (qx * qx + ysqr);
-          const roll = Math.atan2(t0, t1);
+        // 对加速度和磁力计数据进行EMA滤波
+        ax = alpha * ax + (1 - alpha) * prevFilteredAcc[0];
+        ay = alpha * ay + (1 - alpha) * prevFilteredAcc[1];
+        az = alpha * az + (1 - alpha) * prevFilteredAcc[2];
+        prevFilteredAcc = [ax, ay, az];
 
-          // pitch (y-axis rotation)
-          let t2 = 2 * (qw * qy - qz * qx);
-          t2 = t2 > 1 ? 1 : t2;
-          t2 = t2 < -1 ? -1 : t2;
-          const pitch = Math.asin(t2);
+        mx = alpha * mx + (1 - alpha) * prevFilteredMag[0];
+        my = alpha * my + (1 - alpha) * prevFilteredMag[1];
+        mz = alpha * mz + (1 - alpha) * prevFilteredMag[2];
+        prevFilteredMag = [mx, my, mz];
 
-          // yaw (z-axis rotation)
-          const t3 = 2 * (qw * qz + qx * qy);
-          const t4 = 1 - 2 * (ysqr + qz * qz);
-          const yaw = Math.atan2(t3, t4);
-          // console.log(roll, pitch, yaw);
+        // 数据归一化
+        const accNorm = Math.sqrt(ax * ax + ay * ay + az * az);
+        ax /= accNorm;
+        ay /= accNorm;
+        az /= accNorm;
 
-          EulerAnglesx.push(roll * (180 / Math.PI));
-          EulerAnglesy.push(pitch * (180 / Math.PI));
-          EulerAnglesz.push(yaw * (180 / Math.PI));
-        }
-        let tmp = KGetQuat(
-          result_x,
-          result_y,
-          result_z,
-          mag_result_x,
-          mag_result_y,
-          mag_result_z
-        );
-        // console.log(tmp);
-        quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
+        const magNorm = Math.sqrt(mx * mx + my * my + mz * mz);
+        mx /= magNorm;
+        my /= magNorm;
+        mz /= magNorm;
 
-        // 清空srcData
-        srcData = [];
+        // 计算改进的四元数
+        const gx = 2 * ax;
+        const gy = 2 * ay;
+        const gz = 2 * (az - 0.5);
+
+        const hx = mx * Math.sqrt(1.0 - az * az) - mz * ay;
+        const hy = my * Math.sqrt(1.0 - az * az) - mz * ax;
+        const hz = mx * ay - my * ax;
+
+        let qw = Math.sqrt(Math.max(0, 1 + gx + hy + hz)) / 2;
+        let qx = Math.sqrt(Math.max(0, 1 + gx - hy - hz)) / 2;
+        let qy = Math.sqrt(Math.max(0, 1 - gx + hy - hz)) / 2;
+        let qz = Math.sqrt(Math.max(0, 1 - gx - hy + hz)) / 2;
+        qx = copysign(qx, gy - hz);
+        qy = copysign(qy, hx - gz);
+        qz = copysign(qz, hx + gy);
+
+        // 四元数归一化
+        const qNorm = Math.sqrt(qw * qw + qx * qx + qy * qy + qz * qz);
+        qw /= qNorm;
+        qx /= qNorm;
+        qy /= qNorm;
+        qz /= qNorm;
+
+        return [qw, qx, qy, qz];
       }
+
+      function quaternionToEuler(qw, qx, qy, qz) {
+        const ysqr = qy * qy;
+
+        // roll (x-axis rotation)
+        const t0 = 2 * (qw * qx + qy * qz);
+        const t1 = 1 - 2 * (qx * qx + ysqr);
+        const roll = Math.atan2(t0, t1);
+
+        // pitch (y-axis rotation)
+        let t2 = 2 * (qw * qy - qz * qx);
+        t2 = t2 > 1 ? 1 : t2;
+        t2 = t2 < -1 ? -1 : t2;
+        const pitch = Math.asin(t2);
+
+        // yaw (z-axis rotation)
+        const t3 = 2 * (qw * qz + qx * qy);
+        const t4 = 1 - 2 * (ysqr + qz * qz);
+        const yaw = Math.atan2(t3, t4);
+        // console.log(roll, pitch, yaw);
+
+        EulerAnglesx.push(roll * (180 / Math.PI));
+        EulerAnglesy.push(pitch * (180 / Math.PI));
+        EulerAnglesz.push(yaw * (180 / Math.PI));
+      }
+      let tmp = KGetQuat(
+        temp_accX,
+        temp_accY,
+        temp_accZ,
+        temp_magX,
+        temp_magY,
+        temp_magZ
+      );
+      quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
     }
-  });
+  }
 }
 
 //根据不同类型，选择不同的计算函数
 function typeCalculate(x, y, z) {
-  console.log("当前的adx：",x,y,z);
-  if (x < type_x[0]) 
-    {
-      calculatex.push(type_x[1] * x + type_x[2]);
-      console.log("当前的计算的x值",type_x[0],type_x[1],type_x[2],x)
-    }
-  else{
+  console.log("当前的adx：", x, y, z);
+  if (x < type_x[0]) {
+    calculatex.push(type_x[1] * x + type_x[2]);
+    console.log("当前的计算的x值", type_x[0], type_x[1], type_x[2], x);
+  } else {
     calculatex.push(type_x[3] * x + type_x[4]);
-    console.log("当前的计算的x值",type_x[0],type_x[1],type_x[2],x)
+    console.log("当前的计算的x值", type_x[0], type_x[1], type_x[2], x);
   }
   if (y < type_y[0]) calculatey.push(type_y[1] * y + type_y[2]);
   else calculatey.push(type_y[3] * y + type_y[4]);
   if (z < type_z[0]) calculatez.push(type_z[1] * z + type_z[2]);
   else calculatez.push(type_z[3] * z + type_z[4]);
+}
+
+//name:公共函数的定义部分
+//function:处理温度和加速度数据的函数，处理磁力压力的函数
+//数据数组，标识符（tmp or adc）
+const  processHex = (hexArray) => {
+  let q1 =
+    Math.pow(16, 5) * parseInt(hexArray[4], 16) +
+    Math.pow(16, 4) * parseInt(hexArray[5], 16) +
+    Math.pow(16, 3) * parseInt(hexArray[2], 16) +
+    Math.pow(16, 2) * parseInt(hexArray[3], 16) +
+    16 * parseInt(hexArray[0], 16) +
+    parseInt(hexArray[1], 16);
+  let AIN1 =
+    q1 *
+    ((2 * 210 * Math.pow(10, -4) * 10 * Math.pow(10, 3)) / Math.pow(2, 24));
+  let r1 = (AIN1 / 210) * Math.pow(10, 3);
+  let F1 = 351.92 / (r1 - 0.9994);
+
+  if (F1 < 0) F1 = -F1;
+
+  return F1;
+}
+
+// 处理加速度值的函数
+const processAcceleration = (hexArray) =>  {
+  let acc_x_decimal =
+    parseInt(hexArray[0], 16) * Math.pow(16, 3) +
+    parseInt(hexArray[1], 16) * Math.pow(16, 2) +
+    parseInt(hexArray[2], 16) * 16 +
+    parseInt(hexArray[3], 16);
+
+  let acc_x_binary = acc_x_decimal.toString(2).padStart(16, "0");
+
+  let ACC_X;
+  if (acc_x_binary[0] === "0") {
+    ACC_X = 0.061 * acc_x_decimal;
+  } else {
+    let acc_x_binary_tmp = "1";
+    for (let i = 1; i < acc_x_binary.length; i++) {
+      if (acc_x_binary[i] === "0") acc_x_binary_tmp += "1";
+      else acc_x_binary_tmp += "0";
+    }
+    ACC_X = -0.061 * (parseInt(acc_x_binary_tmp.slice(1), 2) + 1);
+  }
+
+  return ACC_X;
+}
+
+const processMagnetism = (hexArray) => {
+  let mag_decimal =
+    parseInt(hexArray[0], 16) * Math.pow(16, 3) +
+    parseInt(hexArray[1], 16) * Math.pow(16, 2) +
+    parseInt(hexArray[2], 16) * 16 +
+    parseInt(hexArray[3], 16);
+
+  let mag_binary = mag_decimal.toString(2).padStart(16, "0");
+
+  let Mag;
+  if (mag_binary[0] === "0") {
+    Mag = 1.5 * mag_decimal;
+  } else {
+    let mag_binary_tmp = "1";
+    for (let i = 1; i < mag_binary.length; i++) {
+      if (mag_binary[i] === "0") mag_binary_tmp += "1";
+      else mag_binary_tmp += "0";
+    }
+    Mag = -1.5 * parseInt(parseInt(mag_binary_tmp.slice(1), 2) + 1);
+  }
+  return Mag;
 }
