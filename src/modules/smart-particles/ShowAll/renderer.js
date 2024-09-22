@@ -510,9 +510,6 @@ function updateChartData() {
 
     // 删除第一个数据点
     myChart1.data.datasets[0].data.shift();
-
-    console.log("删除数据一");
-    console.log(myChart1.data.datasets);
   }
   myChart1.update();
 
@@ -612,15 +609,18 @@ function getData(portValue, rate) {
   port.on("data", function (data) {
 
     if (data[0] === 65) {
+      console.log(data[0]);
+      console.log(srcData);
       handleData();
       srcData = [];
     }
     srcData.push(data[0]);
 
+
     //一个一个数据流往里塞,从65开始统计，到下一个65结束，同时里面的数据流处理逻辑应该是不变的，这样的话每次都是一个完整的buffer处理
   });
 
-  const handleData = (srcData) => {
+  const handleData = () => {
     const str_tmp = "84,109,112"; //54,6d,70
     const str_adc = "65,100,99"; //41 64 63
     const str_lsm = "73,115,109"; //49,73,6d
@@ -628,16 +628,15 @@ function getData(portValue, rate) {
     //65, 100, 99, 12, 10, 6, 14, 3, 15, 9, 4, 10, 13, 3, 15, 12, 7, 6, 15, 3, 13, ------21
     //84, 109, 112, 1, 14, 13, 11, 0, 5, ----6
     //73, 115, 109, 14, 8, 8, 8, 7, 15, 14, 0, 7, 15, 14, 0, 0, 1, 6, 3, 15, 15, 11, 3, 15, 14, 4, 10,  ------27
-    if (
-      !srcData.join(",").includes(str_tmp) &&
-      !srcData.join(",").includes(str_adc) &&
-      !srcData.join(",").includes(str_lsm)
-    ) {
-      return;
-    } else {
-      // 开始处理数据
-      console.log("开始处理数据");
 
+    if (
+      srcData &&
+      srcData.join(",").includes(str_tmp) &&
+      srcData.join(",").includes(str_adc) &&
+      srcData.join(",").includes(str_lsm)
+    ) {
+     
+      // 开始处理数据
       //更新图表代码
       updateChartData();
 
@@ -652,58 +651,47 @@ function getData(portValue, rate) {
 
       cnt++;
 
-      const mergedArray = [];
-
-      for (const buffer of srcData) {
-        for (const byte of buffer) {
-          mergedArray.push(byte);
-        }
-      }
-
-      srcData = mergedArray;
-      // console.log(srcData);
-
       //-----------------------------------handle adc events--------------------------------
 
       // adc_x
 
       //----处理压力
-      let temp_adcX = function () {
+      let temp_adcX = (function () {
         let tmp = [
-          srcData[3].toString(16),
-          srcData[4].toString(16),
-          srcData[5].toString(16),
-          srcData[6].toString(16),
-          srcData[7].toString(16),
-          srcData[8].toString(16),
+          (srcData[3]||0).toString(16),
+          (srcData[4]||0).toString(16),
+          (srcData[5]||0).toString(16),
+          (srcData[6]||0).toString(16),
+          (srcData[7]||0).toString(16),
+          (srcData[8]||0).toString(16),
         ];
         let result = processHex(tmp);
         return result;
-      };
-      let temp_adcY = function () {
+      })();
+      let temp_adcY = (function () {
         let tmp = [
-          srcData[9].toString(16),
-          srcData[10].toString(16),
-          srcData[11].toString(16),
-          srcData[12].toString(16),
-          srcData[13].toString(16),
-          srcData[14].toString(16),
+          (srcData[9]||0).toString(16),
+          (srcData[10]||0).toString(16),
+          (srcData[11]||0).toString(16),
+          (srcData[12]||0).toString(16),
+          (srcData[13]||0).toString(16),
+          (srcData[14]||0).toString(16),
         ];
         let result = processHex(tmp);
         return result;
-      };
-      let temp_adcZ = function () {
+      })();
+      let temp_adcZ = (function () {
         let tmp = [
-          srcData[15].toString(16),
-          srcData[16].toString(16),
-          srcData[17].toString(16),
-          srcData[18].toString(16),
-          srcData[19].toString(16),
-          srcData[20].toString(16),
+          (srcData[15]||0).toString(16),
+          (srcData[16]||0).toString(16),
+          (srcData[17]||0).toString(16),
+          (srcData[18]||0).toString(16),
+          (srcData[19]||0).toString(16),
+          (srcData[20]||0).toString(16),
         ];
         let result = processHex(tmp);
         return result;
-      };
+      })();
 
       adcx.push(temp_adcX);
       adcy.push(temp_adcY);
@@ -713,87 +701,88 @@ function getData(portValue, rate) {
       //-----------------------------------handle acc events--------------------------------
 
       // 处理加速度值的函数
-      let temp_accX = function () {
+      let temp_accX = (function () {
         let tmp = [
-          srcData[30].toString(16),
-          srcData[31].toString(16),
-          srcData[32].toString(16),
-          srcData[33].toString(16),
+          (srcData[30]||0).toString(16),
+          (srcData[31]||0).toString(16),
+          (srcData[32]||0).toString(16),
+          (srcData[33]||0).toString(16),
         ];
         let result = processAcceleration(tmp);
         return result;
-      };
-      let temp_accY = function () {
+      })();
+      let temp_accY = (function () {
         let tmp = [
-          srcData[34].toString(16),
-          srcData[35].toString(16),
-          srcData[36].toString(16),
-          srcData[37].toString(16),
+          (srcData[34]||0).toString(16),
+          (srcData[35]||0).toString(16),
+          (srcData[36]||0).toString(16),
+          (srcData[37]||0).toString(16),
         ];
         let result = processAcceleration(tmp);
         return result;
-      };
-      let temp_accZ = function () {
+      })();
+      let temp_accZ = (function () {
         let tmp = [
-          srcData[38].toString(16),
-          srcData[39].toString(16),
-          srcData[40].toString(16),
-          srcData[41].toString(16),
+          (srcData[38]||0).toString(16),
+          (srcData[39]||0).toString(16),
+          (srcData[41]||0).toString(16),
         ];
         let result = processAcceleration(tmp);
         return result;
-      };
+      })();
       accx.push(temp_accX / 1000);
       accy.push(temp_accY / 1000);
       accz.push(temp_accZ / 1000);
 
       //-----------------------------------handle tmp events--------------------------------
       // 处理温度Tmp 54 6d 70
-      let temp_tmp = function () {
+      let temp_tmp = (function () {
         let tmp = [
-          srcData[24].toString(16),
-          srcData[25].toString(16),
-          srcData[26].toString(16),
-          srcData[27].toString(16),
-          srcData[28].toString(16),
-          srcData[29].toString(16),
+          (srcData[24]||0).toString(16),
+          (srcData[25]||0).toString(16),
+          (srcData[26]||0).toString(16),
+          (srcData[27]||0).toString(16),
+          (srcData[28]||0).toString(16),
+          (srcData[29]||0).toString(16),
         ];
         let result = processHex(tmp);
         return result;
-      };
+      })();
+      console.log("当前的温度数据");
+      console.log(temp_tmp)
       temperatureData.push(temp_tmp);
       //-----------------------------------handle mag events--------------------------------
 
-      let temp_magX = function () {
+      let temp_magX = (function () {
         let tmp = [
-          srcData[42].toString(16),
-          srcData[43].toString(16),
-          srcData[44].toString(16),
-          srcData[45].toString(16),
+          (srcData[42]||0).toString(16),
+          (srcData[43]||0).toString(16),
+          (srcData[44]||0).toString(16),
+          (srcData[45]||0).toString(16),
         ];
         let result = processMagnetism(tmp);
         return result;
-      };
-      let temp_magY = function () {
+      })();
+      let temp_magY = (function () {
         let tmp = [
-          srcData[46].toString(16),
-          srcData[47].toString(16),
-          srcData[48].toString(16),
-          srcData[49].toString(16),
+          (srcData[46]||0).toString(16),
+          (srcData[47]||0).toString(16),
+          (srcData[48]||0).toString(16),
+          (srcData[49]||0).toString(16),
         ];
         let result = processMagnetism(tmp);
         return result;
-      };
-      let temp_magZ = function () {
+      })();
+      let temp_magZ = (function () {
         let tmp = [
-          srcData[50].toString(16),
-          srcData[51].toString(16),
-          srcData[52].toString(16),
-          srcData[53].toString(16),
+          (srcData[50]||0).toString(16),
+          (srcData[51]||0).toString(16),
+          (srcData[52]||0).toString(16),
+          (srcData[53]||0).toString(16),
         ];
         let result = processMagnetism(tmp);
         return result;
-      };
+      })();
 
       magx.push(temp_magX);
       magy.push(temp_magY);
@@ -884,8 +873,6 @@ function getData(portValue, rate) {
         const t3 = 2 * (qw * qz + qx * qy);
         const t4 = 1 - 2 * (ysqr + qz * qz);
         const yaw = Math.atan2(t3, t4);
-        // console.log(roll, pitch, yaw);
-
         EulerAnglesx.push(roll * (180 / Math.PI));
         EulerAnglesy.push(pitch * (180 / Math.PI));
         EulerAnglesz.push(yaw * (180 / Math.PI));
@@ -905,13 +892,10 @@ function getData(portValue, rate) {
 
 //根据不同类型，选择不同的计算函数
 function typeCalculate(x, y, z) {
-  console.log("当前的adx：", x, y, z);
   if (x < type_x[0]) {
     calculatex.push(type_x[1] * x + type_x[2]);
-    console.log("当前的计算的x值", type_x[0], type_x[1], type_x[2], x);
   } else {
     calculatex.push(type_x[3] * x + type_x[4]);
-    console.log("当前的计算的x值", type_x[0], type_x[1], type_x[2], x);
   }
   if (y < type_y[0]) calculatey.push(type_y[1] * y + type_y[2]);
   else calculatey.push(type_y[3] * y + type_y[4]);
