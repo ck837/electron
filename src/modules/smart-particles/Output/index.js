@@ -17,8 +17,20 @@ var port;
 //------------------------------------------------excel表格 start------------------------------------------------
 
 var outputData = [
-  ["时间", "adc_x", "adc_y", "adc_z", "温度","acc_x", "acc_y", "acc_z", "mag_x", "mag_y", "mag_z"],
-  ["年/月/日 时/分/秒:分秒", "单位", "单位", "单位", "℃","单位", "单位", "单位","单位", "单位", "单位"],
+  ["时间", 
+    "压力adc_x", "adc_y", "adc_z", 
+    "加速度acc_x", "acc_y", "acc_z" , 
+    "温度", 
+    "mag_x", "mag_y", "mag_z",
+    "四元数1","四元数2","四元数3","四元数4",
+    "欧拉角1","欧拉角2","欧拉角3"],
+  ["年/月/日 时/分/秒:分秒", 
+    "Voltage(V)", "Voltage(V)", "Voltage(V)",
+    "Acceleration(g)", "Acceleration(g)", "Acceleration(g)",
+    "Voltage(V)",
+    "Magnetic Field Strength (mGauss)", "Magnetic Field Strength (mGauss)", "Magnetic Field Strength (mGauss)",
+    "单位", "单位", "单位", "单位",
+    "Euler Angle(°)", "Euler Angle(°)", "Euler Angle(°)"],
 ];
 
 function createExcel(time) {
@@ -52,7 +64,6 @@ function createExcel(time) {
     ["年/月/日 时/分/秒:分秒", "单位", "单位", "单位", "℃", "单位", "单位", "单位", "单位", "单位", "单位"],
   ];
 }
-
 //------------------------------------------------excel表格 end------------------------------------------------
 
 //----------------------------------按钮逻辑处理 start--------------------------------
@@ -75,7 +86,7 @@ startBtn.addEventListener("click", () => {
   console.log(comInput);
 
   // 生产环境
-  getData(comInput);
+  getData(comInput,9600);
   // 开发环境
   // testData();
 
@@ -110,47 +121,6 @@ stopBtn.addEventListener("click", () => {
 });
 
 //----------------------------------按钮逻辑处理 end--------------------------------
-
-//----------------------------------传感器数据处理str处理函数 start--------------------------------
-function generateNextArr(pattern) {
-  var i = 0;
-  var j = -1;
-  var next = [];
-  next[0] = -1;
-  while (i < pattern.length) {
-    if (j === -1 || pattern[i] === pattern[j]) {
-      i++;
-      j++;
-      next[i] = j;
-    } else {
-      j = next[j];
-    }
-  }
-  return next;
-}
-
-function kmp(pattern, str) {
-  //母串，子串
-  var next = generateNextArr(pattern);
-  var i = 0; // str 指针
-  var j = 0; // pattern指针
-  while (i < str.length && j < pattern.length) {
-    if (str[i] === pattern[j] || j === -1) {
-      i++;
-      j++;
-    } else {
-      j = next[j]; // 右移
-    }
-  }
-  if (j === pattern.length) {
-    return i - j;
-  } else {
-    return -1;
-  }
-}
-
-//----------------------------------传感器数据处理str处理函数 end--------------------------------
-
 
 // 以下为核心数据处理代码
 
@@ -251,7 +221,6 @@ function getData(portValue, rate) {
       test.push(temp_adcX);
       test.push(temp_adcY);
       test.push(temp_adcZ);
-      typeCalculate(temp_adcX, temp_adcY, temp_adcZ);
 
       //-----------------------------------handle acc events--------------------------------
 
@@ -438,9 +407,9 @@ function getData(portValue, rate) {
         const t3 = 2 * (qw * qz + qx * qy);
         const t4 = 1 - 2 * (ysqr + qz * qz);
         const yaw = Math.atan2(t3, t4);
-        EulerAnglesx.push(roll * (180 / Math.PI));
-        EulerAnglesy.push(pitch * (180 / Math.PI));
-        EulerAnglesz.push(yaw * (180 / Math.PI));
+        test.push(roll * (180 / Math.PI));
+        test.push(pitch * (180 / Math.PI));
+        test.push(yaw * (180 / Math.PI));
       }
       let tmp = KGetQuat(
         temp_accX,
@@ -458,19 +427,6 @@ function getData(portValue, rate) {
       outputData.push(test);
     }
   }
-}
-
-//根据不同类型，选择不同的计算函数
-function typeCalculate(x, y, z) {
-  if (x < type_x[0]) {
-    calculatex.push(type_x[1] * x + type_x[2]);
-  } else {
-    calculatex.push(type_x[3] * x + type_x[4]);
-  }
-  if (y < type_y[0]) calculatey.push(type_y[1] * y + type_y[2]);
-  else calculatey.push(type_y[3] * y + type_y[4]);
-  if (z < type_z[0]) calculatez.push(type_z[1] * z + type_z[2]);
-  else calculatez.push(type_z[3] * z + type_z[4]);
 }
 
 //name:公共函数的定义部分
