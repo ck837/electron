@@ -164,7 +164,7 @@ function getData(portValue, rate) {
     ) {
      
       // 开始处理数据
-      let test = [];
+      let test = []; 
 
       //表格填入当前时间
       let time = new Date();
