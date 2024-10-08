@@ -701,34 +701,35 @@ function getData(portValue, rate) {
 
       //-----------------------------------handle acc events--------------------------------
 
-      let acc_index = srcData.indexOf(109)
+      let acc_index = srcData.indexOf(115)
+      console.log("下表数据："+acc_index)
       // 处理加速度值的函数
       let temp_accX = (function () {
         let tmp = [
-          (srcData[acc_index+1]||0).toString(16),
           (srcData[acc_index+2]||0).toString(16),
           (srcData[acc_index+3]||0).toString(16),
           (srcData[acc_index+4]||0).toString(16),
+          (srcData[acc_index+5]||0).toString(16),
         ];
         let result = processAcceleration(tmp);
         return result;
       })();
       let temp_accY = (function () {
         let tmp = [
-          (srcData[acc_index+5]||0).toString(16),
           (srcData[acc_index+6]||0).toString(16),
           (srcData[acc_index+7]||0).toString(16),
           (srcData[acc_index+8]||0).toString(16),
+          (srcData[acc_index+9]||0).toString(16),
         ];
         let result = processAcceleration(tmp);
         return result;
       })();
       let temp_accZ = (function () {
         let tmp = [
-          (srcData[acc_index+9]||0).toString(16),
           (srcData[acc_index+10]||0).toString(16),
           (srcData[acc_index+11]||0).toString(16),
           (srcData[acc_index+12]||0).toString(16),
+          (srcData[acc_index+13]||0).toString(16),
         ];
         let result = processAcceleration(tmp);
         return result;
@@ -768,30 +769,30 @@ function getData(portValue, rate) {
 
       let temp_magX = (function () {
         let tmp = [
-          (srcData[acc_index+13]||0).toString(16),
           (srcData[acc_index+14]||0).toString(16),
           (srcData[acc_index+15]||0).toString(16),
           (srcData[acc_index+16]||0).toString(16),
+          (srcData[acc_index+17]||0).toString(16),
         ];
         let result = processMagnetism(tmp);
         return result;
       })();
       let temp_magY = (function () {
         let tmp = [
-          (srcData[acc_index+17]||0).toString(16),
           (srcData[acc_index+18]||0).toString(16),
           (srcData[acc_index+19]||0).toString(16),
           (srcData[acc_index+20]||0).toString(16),
+          (srcData[acc_index+21]||0).toString(16),
         ];
         let result = processMagnetism(tmp);
         return result;
       })();
       let temp_magZ = (function () {
         let tmp = [
-          (srcData[acc_index+21]||0).toString(16),
           (srcData[acc_index+22]||0).toString(16),
           (srcData[acc_index+23]||0).toString(16),
           (srcData[acc_index+24]||0).toString(16),
+          (srcData[acc_index+25]||0).toString(16),
         ];
         let result = processMagnetism(tmp);
         return result;
