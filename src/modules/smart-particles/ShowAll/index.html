@@ -4,12 +4,20 @@
     <meta charset="UTF-8" />
     <title>Serial数据展示</title>
     <link rel="stylesheet" href="./index.css" />
+    <!-- 引入elementui start -->
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入elementui end -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <!-- -------------------数据展示 start-------------------------------------- -->
-    <div class="display-all">
+    <div id="app" class="display-all">
         <div id="custom-navbar-container"></div>
         <div class="display-main">
             <!-- -------------------侧边栏处理 start-------------------------------------- -->
@@ -18,7 +26,7 @@
                     <div class="com-input">
                         <h2 class="title">导出端口</h2>
                         <div class="com-input-com">
-                            <label for="com">COM&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                            <label for="com">COM&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <select class="number-input" name="COM" id="com">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -39,7 +47,7 @@
                                 <option value="17">17</option>
                                 <option value="18">18</option>
                             </select>
-                            <label for="num">波特率&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                            <label for="num">波特率&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <select class="number-input" name="NUM" id="num">
                                 <option value="7200">7200</option>
                                 <option value="9600">9600</option>
@@ -47,97 +55,104 @@
                             </select>
                         </div>
                     </div>
-                    <div class="type-input">
-                        <h2 class="title">颗粒类型选择</h2>
-                        <div class="com-input-com">
-                            <label for="type">输出类型&nbsp;&nbsp;:&nbsp;&nbsp;</label>
-                            <select class="number-input" name="TYPE" id="type">
-                                <option value="normal">普通型</option>
-                                <option value="special">耐高温型</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="params-input">
                         <!-- x -->
                         <h2 class="title">压力传感器参数配置</h2>
                         <div class="com-input-com">
-                            <p>分段点：</p>
+                            <p>X分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut0" class="number-input" placeholder="输入数字" value="3.6867" />
+                            <el-tooltip placement="top">
+                                <div slot="content">
+                                    当V&lt;=xxx，F=xxx，V+xxx<br/>
+                                    当V&gt;xxx，F=xxx，V+xxx
+                                </div>
+                                <i class="el-icon-warning-outline"></i>
+                            </el-tooltip> 
                         </div>
                         <div class="com-input-com">
-                            <p>X-K1：</p>
+                            <p>X-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut1" class="number-input" placeholder="输入数字" value="-130.0802" />
-                            <p>X-B1：</p>
+                            <p>X-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut2" class="number-input" placeholder="输入数字" value="525.0134" />
                         </div>
                         <div class="com-input-com">
-                            <p>X-K2：</p>
+                            <p>X-K2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut3" class="number-input" placeholder="输入数字"  value="-172.1412"/>
-                            <p>X-B2：</p>
+                            <p>X-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut4" class="number-input" placeholder="输入数字"  value="680.0805"/>
-                        </div>
-                        <!-- <div class="func-show">
-                            <div class="com-input-com">
-                                <p>当 V <= <p id="cut0_value">xxx</p>, F=<p id="cut1_value">xxx</p> , V+<p  id="cut2_value">xxx</p> </p>
-                            </div>
-                            <div class="com-input-com">
-                                <p>当 V > <p id="cut0_value_0">xxx</p> , F=<p  id="cut3_value">xxx</p> , V+<p  id="cut4_value">xxx</p> </p>
-                            </div>
-                        </div> -->
-                        
+                        </div>                       
                         <!-- y  -->
                         <div class="com-input-com">
-                            <p>Y分段点：</p>
+                            <p>Y分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut5" class="number-input" placeholder="输入数字"  value="3.7501"/>
+                            <el-tooltip placement="top">
+                                <div slot="content">
+                                    当V&lt;=xxx，F=xxx，V+xxx<br/>
+                                    当V&gt;xxx，F=xxx，V+xxx
+                                </div>
+                                <i class="el-icon-warning-outline"></i>
+                            </el-tooltip> 
                         </div>
                         <div class="com-input-com">
-                            <p>Y-K1：</p>
+                            <p>Y-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut6" class="number-input" placeholder="输入数字"   value="-134.1534"/>
-                            <p>Y-B1：</p>
+                            <p>Y-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut7" class="number-input" placeholder="输入数字"   value="542.8508"/>
                         </div>
                         <div class="com-input-com">
-                            <p>Y-K2：</p>
+                            <p>Y-K2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut8" class="number-input" placeholder="输入数字"  value="-288.0047"/>
-                            <p>Y-B2：</p>
+                            <p>Y-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut9" class="number-input" placeholder="输入数字"  value="1119.8062"/>
                         </div>
-                        <!-- <div class="func-show">
-                            <p class="title">函数参数：</p>
-                            <div class="com-input-com">
-                                <p>当 V <= <p id="cut5_value">xxx</p>, F=<p id="cut6_value">xxx</p> , V+<p  id="cut7_value">xxx</p> </p>
-                            </div>
-                            <div class="com-input-com">
-                                <p>当 V > <p id="cut5_value_0">xxx</p> , F=<p  id="cut8_value">xxx</p> , V+<p  id="cut9_value">xxx</p> </p>
-                            </div>
-                        </div> -->
-
                         <!-- z -->
                         <div class="com-input-com">
-                            <p>Z分段点：</p>
+                            <p>Z分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut10" class="number-input" placeholder="输入数字"  value="3.7582"/>
+                            <el-tooltip placement="top">
+                                <div slot="content">
+                                    当V&lt;=xxx，F=xxx，V+xxx<br/>
+                                    当V&gt;xxx，F=xxx，V+xxx
+                                </div>
+                                <i class="el-icon-warning-outline"></i>
+                            </el-tooltip> 
                         </div>
                         <div class="com-input-com">
-                            <p>z-K1：</p>
+                            <p>z-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut11" class="number-input" placeholder="输入数字"  value="-264.4064" />
-                            <p>Y-B1：</p>
+                            <p>Y-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut12" class="number-input" placeholder="输入数字"  value="1046.2170"/>
                         </div>
                         <div class="com-input-com">
-                            <p>Z-K2：</p>
+                            <p>Z-K2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut13" class="number-input" placeholder="输入数字"  value="-711.2990"/>
-                            <p>Z-B2：</p>
+                            <p>Z-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut14" class="number-input" placeholder="输入数字"  value="2725.7298"/>
                         </div>
-                        <!-- <div class="func-show">
-                            <p class="title">函数参数：</p>
-                            <div class="com-input-com">
-                                <p>当 V <= <p id="cut10_value">xxx</p>, F=<p id="cut11_value">xxx</p> , V+<p  id="cut12_value">xxx</p> </p>
-                            </div>
-                            <div class="com-input-com">
-                                <p>当 V > <p id="cut10_value_0">xxx</p> , F=<p  id="cut13_value">xxx</p> , V+<p  id="cut14_value">xxx</p> </p>
-                            </div>
-                        </div> -->
+                        <!-- T -->
+                        <div class="com-input-com">
+                            <p>T分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut10" class="number-input" placeholder="输入数字"  value="3.7582"/>
+                            <el-tooltip placement="top">
+                                <div slot="content">
+                                    当V&lt;=xxx，F=xxx，V+xxx<br/>
+                                    当V&gt;xxx，F=xxx，V+xxx
+                                </div>
+                                <i class="el-icon-warning-outline"></i>
+                            </el-tooltip> 
+                        </div>
+                        <div class="com-input-com">
+                            <p>T-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut11" class="number-input" placeholder="输入数字"  value="-264.4064" />
+                            <p>T-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut12" class="number-input" placeholder="输入数字"  value="1046.2170"/>
+                        </div>
+                        <div class="com-input-com">
+                            <p>T-K2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut13" class="number-input" placeholder="输入数字"  value="-711.2990"/>
+                            <p>T-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut14" class="number-input" placeholder="输入数字"  value="2725.7298"/>
+                        </div>
                     </div>
                     <div class="button-push">
                         <button type="button" id="confirm" class="title-button">确定</button>
@@ -185,7 +200,19 @@
     </div>
 
     <!-- -------------------数据展示 end-------------------------------------- -->
-
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return { 
+                    function_text_x: "当V<=xxx，F=xxx，V+xxx",
+                    function_text_y: "当V<=xxx，F=xxx，V+xxx",
+                    function_text_z: "当V<=xxx，F=xxx，V+xxx",
+                    function_text_t: "当V<=xxx，F=xxx，V+xxx",
+                 }
+            }
+        })
+    </script>
     <script src="./renderer.js"></script>
     <script src="../nav/index.js"></script>
     <script>
