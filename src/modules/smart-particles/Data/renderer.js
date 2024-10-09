@@ -687,3 +687,14 @@ function getData(portValue, rate) {
 }
 
 // --------------------------------------传感器数据处理 end------------------------------
+window.addEventListener("beforeunload", function (event) {
+  console.log("beforeunload");
+  // 执行你的清理逻辑
+  port.close(function (err) {
+    if (err) {
+      console.log("Error closing port: ", err.message);
+    } else {
+      console.log("Port closed");
+    }
+  });
+});

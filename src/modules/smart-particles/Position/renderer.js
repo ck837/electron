@@ -1,7 +1,7 @@
 // 获取屏幕尺寸
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
-
+var port;
 
 const { SerialPort } = require("serialport");
 
@@ -432,3 +432,16 @@ function getData(portValue, rate) {
     return Mag;
   };
 }
+
+
+window.addEventListener("beforeunload", function (event) {
+  console.log("beforeunload");
+  // 执行你的清理逻辑
+  port.close(function (err) {
+    if (err) {
+      console.log("Error closing port: ", err.message);
+    } else {
+      console.log("Port closed");
+    }
+  });
+});

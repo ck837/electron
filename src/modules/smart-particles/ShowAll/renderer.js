@@ -8,9 +8,12 @@
 const fs = require("fs");
 const path = require("path");
 
+var port;
+
 const type_x = [];
 const type_y = [];
 const type_z = [];
+
 
 document.addEventListener("DOMContentLoaded", function () {
   // Get the elements
@@ -747,29 +750,7 @@ let lastMAGx;
 let lastMAGy;
 let lastMAGz;
 // --------------------------------------传感器数据处理 start------------------------------
-function throttle(func, limit) {
-  let lastFunc;
-  let lastRan;
 
-  return function(...args) {
-      if (!lastRan) {
-          func.apply(this, args);
-          lastRan = Date.now();
-      } else {
-          clearTimeout(lastFunc);
-          lastFunc = setTimeout(() => {
-              if ((Date.now() - lastRan) >= limit) {
-                  func.apply(this, args);
-                  lastRan = Date.now();
-              }
-          }, limit - (Date.now() - lastRan));
-      }
-  };
-}
-
-const throttledProcessData = throttle(function(data) {
-  updateChartData();
-}, 1000); // 每秒处理一次
 
 function getData(portValue, rate) {
   port = new SerialPort({
@@ -778,14 +759,26 @@ function getData(portValue, rate) {
   });
   let srcData = [];
   port.on("data", function (data) {
-    if (data[0] === 65) {
-      console.log(data[0]);
-      console.log(srcData);
+
+    const index = data.indexOf(65);
+    if (index > 0) {
+      srcData = [65,...srcData, ...data.slice(0, index)];
+      console.log(srcData)
+      console.log(temperatureData);
       handleData();
-      throttledProcessData();
-      srcData = [];
+      updateChartData();
+      srcData = [...data.slice(index, data.length-1)];
+    }else if(index === 0) {
+      srcData = [65,...srcData];
+      console.log(srcData);
+      console.log(temperatureData);
+      handleData();
+      updateChartData();
+      srcData = [...data.slice(index, data.length-1)];
     }
-    srcData.push(data[0]);
+    else{
+      srcData= [...srcData,...data];
+    }
 
     //一个一个数据流往里塞,从65开始统计，到下一个65结束，同时里面的数据流处理逻辑应该是不变的，这样的话每次都是一个完整的buffer处理
   });
@@ -802,7 +795,7 @@ function getData(portValue, rate) {
     if (
       srcData &&
       srcData.join(",").includes(str_tmp) &&
-      srcData.join(",").includes(str_adc) &&
+      // srcData.join(",").includes(str_adc) &&
       srcData.join(",").includes(str_lsm)
     ) {
       // 开始处理数据
@@ -935,6 +928,7 @@ function getData(portValue, rate) {
         console.log(lastTmp);
         return lastTmp;
       })();
+      console.log("温度",temp_tmp);
       temperatureData.push(temp_tmp);
       //-----------------------------------handle mag events--------------------------------
 
@@ -1161,3 +1155,15 @@ function getData(portValue, rate) {
 }
 
 // --------------------------------------传感器数据处理 end------------------------------
+
+window.addEventListener("beforeunload", function (event) {
+  console.log("beforeunload");
+  // 执行你的清理逻辑
+  port.close(function (err) {
+    if (err) {
+      console.log("Error closing port: ", err.message);
+    } else {
+      console.log("Port closed");
+    }
+  });
+});
