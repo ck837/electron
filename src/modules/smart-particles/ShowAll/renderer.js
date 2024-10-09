@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Get the elements
   const comSelect = document.getElementById("com");
   const numSelect = document.getElementById("num");
-  const typeSelect = document.getElementById("type");
   const cut0Select = document.getElementById("cut0");
   const cut1Select = document.getElementById("cut1");
   const cut2Select = document.getElementById("cut2");
@@ -95,7 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Get the selected value
     const selectedCom = comSelect.value;
-    const selectedType = typeSelect.value;
     const selectedNum = numSelect.value;
 
     type_x.push(
@@ -130,7 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const configuration = {
       com: selectedCom,
       num: selectedNum,
-      type: selectedType,
       cut0: cut0Select.value,
       cut1: cut1Select.value,
       cut2: cut2Select.value,
@@ -625,19 +622,19 @@ function updateChartData() {
 
   //------------------------------------chart2 展示-------------------------------------
 
-  // myChart2.data.labels.push(formattedStartTime);
+  myChart2.data.labels.push(formattedStartTime);
 
-  // if (myChart2.data.labels.length > maxDataPoint + 1) {
-  //   // 删除第一个数据节点的标签
-  //   myChart2.data.labels.shift();
+  if (myChart2.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
+    myChart2.data.labels.shift();
 
-  //   // 删除每个数据集（datasets）中对应的第一个数据点
-  //   myChart2.data.datasets.forEach(function (dataset) {
-  //     dataset.data.shift();
-  //   });
-  // }
-  // // 更新图表
-  // myChart2.update();
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart2.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
+  }
+  // 更新图表
+  myChart2.update();
 
   //------------------------------------chart3 展示-------------------------------------
 
@@ -704,36 +701,36 @@ function updateChartData() {
   myChart6.update();
 
   //------------------------------------chart7 展示-------------------------------------
-  // myChart7.data.labels.push(formattedStartTime);
+  myChart7.data.labels.push(formattedStartTime);
 
-  // if (myChart7.data.labels.length > maxDataPoint + 1) {
-  //   // 删除第一个数据节点的标签
-  //   myChart7.data.labels.shift();
+  if (myChart7.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
+    myChart7.data.labels.shift();
 
-  //   // 删除每个数据集（datasets）中对应的第一个数据点
-  //   myChart7.data.datasets.forEach(function (dataset) {
-  //     dataset.data.shift();
-  //   });
-  // }
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart7.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
+  }
 
-  // // 更新图表
-  // myChart7.update();
+  // 更新图表
+  myChart7.update();
 
   //------------------------------------chart8 展示-------------------------------------
-  // myChart8.data.labels.push(formattedStartTime);
+  myChart8.data.labels.push(formattedStartTime);
 
-  // if (myChart8.data.labels.length > maxDataPoint + 1) {
-  //   // 删除第一个数据节点的标签
-  //   myChart8.data.labels.shift();
+  if (myChart8.data.labels.length > maxDataPoint + 1) {
+    // 删除第一个数据节点的标签
+    myChart8.data.labels.shift();
 
-  //   // 删除每个数据集（datasets）中对应的第一个数据点
-  //   myChart8.data.datasets.forEach(function (dataset) {
-  //     dataset.data.shift();
-  //   });
-  // }
+    // 删除每个数据集（datasets）中对应的第一个数据点
+    myChart8.data.datasets.forEach(function (dataset) {
+      dataset.data.shift();
+    });
+  }
 
-  // // 更新图表
-  // myChart8.update();
+  // 更新图表
+  myChart8.update();
 }
 
 //----------------------------------test end----------------------------------------------
@@ -764,14 +761,13 @@ function getData(portValue, rate) {
     if (index > 0) {
       srcData = [65,...srcData, ...data.slice(0, index)];
       console.log(srcData)
-      console.log(temperatureData);
+
       handleData();
       updateChartData();
       srcData = [...data.slice(index, data.length-1)];
     }else if(index === 0) {
       srcData = [65,...srcData];
       console.log(srcData);
-      console.log(temperatureData);
       handleData();
       updateChartData();
       srcData = [...data.slice(index, data.length-1)];
@@ -798,8 +794,6 @@ function getData(portValue, rate) {
       // srcData.join(",").includes(str_adc) &&
       srcData.join(",").includes(str_lsm)
     ) {
-      // 开始处理数据
-      let test = [];
       //-----------------------------------handle adc events--------------------------------
 
       // adc_x
@@ -855,6 +849,10 @@ function getData(portValue, rate) {
       adcx.push(temp_adcX);
       adcy.push(temp_adcY);
       adcz.push(temp_adcZ);
+
+      adcx2.push( temp_adcX >= 1 ? 1*temp_adcX+1 : 1*temp_adcX+1 );
+      adcy2.push( temp_adcY >= 1 ? 1*temp_adcY+1 : 1*temp_adcY+1 );
+      adcz2.push( temp_adcZ >= 1 ? 1*temp_adcZ+1 : 1*temp_adcZ+1 );
 
       //-----------------------------------handle acc events--------------------------------
 
@@ -930,6 +928,8 @@ function getData(portValue, rate) {
       })();
       console.log("温度",temp_tmp);
       temperatureData.push(temp_tmp);
+      temperatureData2.push( temp_tmp >= 1 ? 1*temp_tmp+1 : 1*temp_tmp+1 );
+      
       //-----------------------------------handle mag events--------------------------------
 
       let temp_magX = (function () {
@@ -1061,9 +1061,9 @@ function getData(portValue, rate) {
         const t3 = 2 * (qw * qz + qx * qy);
         const t4 = 1 - 2 * (ysqr + qz * qz);
         const yaw = Math.atan2(t3, t4);
-        test.push(roll * (180 / Math.PI));
-        test.push(pitch * (180 / Math.PI));
-        test.push(yaw * (180 / Math.PI));
+        EulerAnglesx.push(roll * (180 / Math.PI));
+        EulerAnglesy.push(pitch * (180 / Math.PI));
+        EulerAnglesz.push(yaw * (180 / Math.PI));
       }
       let tmp = KGetQuat(
         temp_accX,
@@ -1074,13 +1074,10 @@ function getData(portValue, rate) {
         temp_magZ
       );
       quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
-      test.push(tmp[0]);
-      test.push(tmp[1]);
-      test.push(tmp[2]);
-      test.push(tmp[3]);
-      // outputData.push(test);
-
-
+      four1.push(tmp[0]);
+      four2.push(tmp[1]);
+      four3.push(tmp[2]);
+      four4.push(tmp[3]);
     }
   };
   //name:公共函数的定义部分
@@ -1152,6 +1149,8 @@ function getData(portValue, rate) {
     }
     return Mag;
   };
+  
+
 }
 
 // --------------------------------------传感器数据处理 end------------------------------
