@@ -37,7 +37,7 @@ function createWindow() {
     fs.readFileSync(path.join(__dirname, "style.css"), "utf8")
   );
 
-  // todo Open the DevTools.
+  // todo Open the DevTools.seria
   mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
@@ -130,15 +130,15 @@ ipcMain.on("gotoPageOutput", () => {
   );
 });
 
-ipcMain.on("getSerialPorts", (event) => {
-  SerialPort.list()
-    .then((ports) => {
-      event.reply("serialPorts", ports);
-    })
-    .catch((err) => {
-      console.error("Error listing serial ports:", err);
-    });
-});
+// ipcMain.on("getSerialPorts", (event) => {
+//   SerialPort.list()
+//     .then((ports) => {
+//       event.reply("serialPorts", ports);
+//     })
+//     .catch((err) => {
+//       console.error("Error listing serial ports:", err);
+//     });
+// });
 
 // 监听来自渲染进程的最小化窗口事件
 ipcMain.on("minimizeWindow", () => {

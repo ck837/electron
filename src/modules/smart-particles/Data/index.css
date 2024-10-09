@@ -23,6 +23,14 @@ th,
 td {
   border: 1px solid black;
 }
+tr {
+  height: 25px; /* 设置每行高度 */
+}
+
+td {
+  width: 400px; /* 设置每列宽度 */
+  text-align: center; /* 可选：居中对齐文本 */
+}
 
 /* now */
 /* ----------------侧边栏 start------------------------------------------- */

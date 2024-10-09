@@ -786,9 +786,9 @@ function getData(portValue, rate) {
       adcy.push(temp_adcY);
       adcz.push(temp_adcZ);
 
-      adcx2.push( temp_adcX >= 1 ? 1*temp_adcX+1 : 1*temp_adcX+1 );
-      adcy2.push( temp_adcY >= 1 ? 1*temp_adcY+1 : 1*temp_adcY+1 );
-      adcz2.push( temp_adcZ >= 1 ? 1*temp_adcZ+1 : 1*temp_adcZ+1 );
+      adcx2.push( temp_adcX >= 1 ? 1831.34*temp_adcX-1404.63 : 1831.34*temp_adcX-1404.63 );
+      adcy2.push( temp_adcY >= 1 ? 1831.34*temp_adcY-1404.63 : 1831.34*temp_adcY-1404.63 );
+      adcz2.push( temp_adcZ >= 1 ? 1831.34*temp_adcZ-1404.63 : 1831.34*temp_adcZ-1404.63 );
 
       //-----------------------------------handle acc events--------------------------------
 
@@ -863,7 +863,7 @@ function getData(portValue, rate) {
       })();
       console.log("温度",temp_tmp);
       temperatureData.push(temp_tmp);
-      temperatureData2.push( temp_tmp >= 1 ? 1*temp_tmp+1 : 1*temp_tmp+1 );
+      temperatureData2.push( temp_tmp >= 1 ? 431.8986*temp_tmp-51.41237 : 431.8986*temp_tmp-51.41237< );
       
       //-----------------------------------handle mag events--------------------------------
 
@@ -1084,17 +1084,18 @@ function getData(portValue, rate) {
     }
     return Mag;
   };
-  
 
 }
 
 // --------------------------------------传感器数据处理 end------------------------------
 // 关闭端口的方法
-function closePort() {
+async function closePort() {
   console.log("port: " + port);
   if (port && port.isOpen) {
     console.log('关闭port');
-    port.close();
+    // port.forget();
+    await port.close();
+    port = null;
     console.log('关闭port结束')
   }
   console.log("port: " + port);

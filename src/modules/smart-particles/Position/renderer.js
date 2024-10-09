@@ -5,6 +5,22 @@ var port;
 
 const { SerialPort } = require("serialport");
 
+document.addEventListener("DOMContentLoaded", function () {
+  // Get the elements
+  const comSelect = document.getElementById("com");
+  const numSelect = document.getElementById("num");
+
+  const confirmButton = document.getElementById("confirm");
+  confirmButton.addEventListener("click", confirm);
+  function confirm(){
+    const selectedCom = comSelect.value;
+    const selectedNum = numSelect.value;
+
+    // 假设我们每秒钟获得新的加速度和磁场数据
+    getData("COM"+selectedCom, Number(selectedNum));
+  }
+})
+
 // 创建场景、相机和渲染器
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, screenWidth / screenHeight, 0.1, 1000);
@@ -204,9 +220,7 @@ function updateCube(ax, ay, az, mx, my, mz, adcx, adcy, adcz) {
 
 
 
-// 假设我们每秒钟获得新的加速度和磁场数据
 
-getData("COM16", 9600);
 
 
 // ------------------------以下为port数据处理 start------------------------
