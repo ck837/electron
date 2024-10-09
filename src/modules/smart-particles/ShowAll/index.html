@@ -148,13 +148,21 @@
             <div class="right-show">               
                 <div id="content">
                     <div class="chart-container">
-                        <h2>电路板温度</h2>
+                        <h2>环境温度（电压）</h2>
                         <canvas id="chart_tmp"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h2>电压</h2>
+                        <h2>环境温度</h2>
+                        <canvas id="chart_tmpc"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h2>压力（电压）</h2>
                         <canvas id="chart_adc"></canvas>
                     </div>             
+                    <div class="chart-container">
+                        <h2>压力</h2>
+                        <canvas id="chart_adcc"></canvas>
+                    </div>
                     <div class="chart-container">
                         <h2>加速度</h2>
                         <canvas id="chart_acc"></canvas>
@@ -164,12 +172,12 @@
                         <canvas id="chart_mag"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h2 id="changeTitle">压力</h2>
-                        <canvas id="chart_calculate"></canvas>
-                    </div>
-                    <div class="chart-container">
                         <h2>欧拉角</h2>
                         <canvas id="chart_eulerAngles"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h2>四元数</h2>
+                        <canvas id="chart_four"></canvas>
                     </div>
                 </div>
             </div>
