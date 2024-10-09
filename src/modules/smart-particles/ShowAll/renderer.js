@@ -614,123 +614,58 @@ function updateChartData() {
   if (myChart1.data.labels.length > maxDataPoint + 1) {
     // 删除第一个数据节点的标签
     myChart1.data.labels.shift();
-
-    // 删除第一个数据点
+  }
+  if(myChart1.data.datasets[0].data.length >= maxDataPoint){
     myChart1.data.datasets[0].data.shift();
   }
   myChart1.update();
 
   //------------------------------------chart2 展示-------------------------------------
 
-  myChart2.data.labels.push(formattedStartTime);
+  function deleteData(myChart){
+    myChart.data.labels.push(formattedStartTime);
 
-  if (myChart2.data.labels.length > maxDataPoint + 1) {
-    // 删除第一个数据节点的标签
-    myChart2.data.labels.shift();
+    if (myChart.data.labels.length > maxDataPoint + 1) {
+      // 删除第一个数据节点的标签
+      myChart.data.labels.shift();
+    }
+    if(myChart.data.datasets[0].data.length >= maxDataPoint){
+      // 删除每个数据集（datasets）中对应的第一个数据点
+      myChart.data.datasets.forEach(function (dataset) {
+        dataset.data.shift();
+      });
+    }
 
-    // 删除每个数据集（datasets）中对应的第一个数据点
-    myChart2.data.datasets.forEach(function (dataset) {
-      dataset.data.shift();
-    });
+    myChart.update();
+
   }
-  // 更新图表
-  myChart2.update();
+  deleteData(myChart2)
+  deleteData(myChart3)
+  deleteData(myChart4)
+  deleteData(myChart5)
+  deleteData(myChart6)
+  deleteData(myChart7)
+  deleteData(myChart8)
+
+  // myChart2.data.labels.push(formattedStartTime);
+
+  // if (myChart2.data.labels.length > maxDataPoint + 1) {
+  //   // 删除第一个数据节点的标签
+  //   myChart2.data.labels.shift();
+  // }
+  // if(myChart2.data.datasets[0].data.length >= maxDataPoint){
+  //   // 删除每个数据集（datasets）中对应的第一个数据点
+  //   myChart2.data.datasets.forEach(function (dataset) {
+  //     dataset.data.shift();
+  //   });
+  // }
+  
+  // // 更新图表
+  // myChart2.update();
 
   //------------------------------------chart3 展示-------------------------------------
 
-  myChart3.data.labels.push(formattedStartTime);
-
-  if (myChart3.data.labels.length > maxDataPoint + 1) {
-    // 删除第一个数据节点的标签
-    myChart3.data.labels.shift();
-
-    // 删除每个数据集（datasets）中对应的第一个数据点
-    myChart3.data.datasets.forEach(function (dataset) {
-      dataset.data.shift();
-    });
-  }
-  // 更新图表
-  myChart3.update();
-
-  //------------------------------------chart4 展示-------------------------------------
-
-  myChart4.data.labels.push(formattedStartTime);
-  // 其他数据集的添加操作，例如：myChart1.data.datasets[0].data.push(newValue);
-
-  if (myChart4.data.labels.length > maxDataPoint + 1) {
-    // 删除第一个数据节点的标签
-    myChart4.data.labels.shift();
-
-    // 删除每个数据集（datasets）中对应的第一个数据点
-    myChart4.data.datasets.forEach(function (dataset) {
-      dataset.data.shift();
-    });
-  }
-  myChart4.update();
-
-  //------------------------------------chart5 展示-------------------------------------
-
-  myChart5.data.labels.push(formattedStartTime);
-  // 其他数据集的添加操作，例如：myChart1.data.datasets[0].data.push(newValue);
-
-  if (myChart5.data.labels.length > maxDataPoint + 1) {
-    // 删除第一个数据节点的标签
-    myChart5.data.labels.shift();
-
-    // 删除每个数据集（datasets）中对应的第一个数据点
-    myChart5.data.datasets.forEach(function (dataset) {
-      dataset.data.shift();
-    });
-  }
-  myChart5.update();
-
-  //------------------------------------chart6 展示-------------------------------------
-  myChart6.data.labels.push(formattedStartTime);
-
-  if (myChart6.data.labels.length > maxDataPoint + 1) {
-    // 删除第一个数据节点的标签
-    myChart6.data.labels.shift();
-
-    // 删除每个数据集（datasets）中对应的第一个数据点
-    myChart6.data.datasets.forEach(function (dataset) {
-      dataset.data.shift();
-    });
-  }
-
-  // 更新图表
-  myChart6.update();
-
-  //------------------------------------chart7 展示-------------------------------------
-  myChart7.data.labels.push(formattedStartTime);
-
-  if (myChart7.data.labels.length > maxDataPoint + 1) {
-    // 删除第一个数据节点的标签
-    myChart7.data.labels.shift();
-
-    // 删除每个数据集（datasets）中对应的第一个数据点
-    myChart7.data.datasets.forEach(function (dataset) {
-      dataset.data.shift();
-    });
-  }
-
-  // 更新图表
-  myChart7.update();
-
-  //------------------------------------chart8 展示-------------------------------------
-  myChart8.data.labels.push(formattedStartTime);
-
-  if (myChart8.data.labels.length > maxDataPoint + 1) {
-    // 删除第一个数据节点的标签
-    myChart8.data.labels.shift();
-
-    // 删除每个数据集（datasets）中对应的第一个数据点
-    myChart8.data.datasets.forEach(function (dataset) {
-      dataset.data.shift();
-    });
-  }
-
-  // 更新图表
-  myChart8.update();
+ 
 }
 
 //----------------------------------test end----------------------------------------------
@@ -754,6 +689,7 @@ function getData(portValue, rate) {
     path: portValue,
     baudRate: rate,
   });
+  console.log("port: " + port);
   let srcData = [];
   port.on("data", function (data) {
 
@@ -857,7 +793,6 @@ function getData(portValue, rate) {
       //-----------------------------------handle acc events--------------------------------
 
       let acc_index = srcData.indexOf(115);
-      console.log("下表数据：" + acc_index);
       // 处理加速度值的函数
       let temp_accX = (function () {
         let tmp = [
@@ -1154,15 +1089,20 @@ function getData(portValue, rate) {
 }
 
 // --------------------------------------传感器数据处理 end------------------------------
+// 关闭端口的方法
+function closePort() {
+  console.log("port: " + port);
+  if (port && port.isOpen) {
+    console.log('关闭port');
+    port.close();
+    console.log('关闭port结束')
+  }
+  console.log("port: " + port);
+}
 
-window.addEventListener("beforeunload", function (event) {
-  console.log("beforeunload");
-  // 执行你的清理逻辑
-  port.close(function (err) {
-    if (err) {
-      console.log("Error closing port: ", err.message);
-    } else {
-      console.log("Port closed");
-    }
-  });
-});
+// 在窗口关闭时，确保端口连接被关闭
+window.onbeforeunload = (e) => {
+  console.log('Window is closing, closing port...');
+  closePort(); // 调用关闭端口的方法
+};
+
