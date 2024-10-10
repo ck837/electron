@@ -34,7 +34,7 @@
                                 <option value="4">4</option>
                                 <option value="5">5</option>
                                 <option value="6">6</option>
-                                <option value="7">7</option>
+                                <option value="7" selected>7</option>
                                 <option value="8">8</option>
                                 <option value="9">9</option>
                                 <option value="10">10</option>
@@ -43,7 +43,7 @@
                                 <option value="13">13</option>
                                 <option value="14">14</option>
                                 <option value="15">15</option>
-                                <option value="16" selected>16</option>
+                                <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
                             </select>
@@ -56,8 +56,8 @@
                         </div>
                     </div>
                     <div class="params-input">
-                        <!-- x -->
                         <h2 class="title">压力传感器参数配置</h2>
+                        <!-- x -->
                         <div class="com-input-com">
                             <p>X分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut0" class="number-input" placeholder="输入数字" value="3.6867" v-model="configs_x" />
@@ -80,7 +80,8 @@
                             <input type="text" id="cut3" class="number-input" placeholder="输入数字"  value="-172.1412" v-model="configs_x_k2"/>
                             <p>X-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut4" class="number-input" placeholder="输入数字"  value="680.0805" v-model="configs_x_b2"/>
-                        </div>                       
+                        </div>   
+                        <hr />                    
                         <!-- y  -->
                         <div class="com-input-com">
                             <p>Y分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
@@ -105,6 +106,7 @@
                             <p>Y-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut9" class="number-input" placeholder="输入数字"  value="1119.8062" v-model="configs_y_b2" />
                         </div>
+                        <hr />
                         <!-- z -->
                         <div class="com-input-com">
                             <p>Z分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
@@ -118,9 +120,9 @@
                             </el-tooltip> 
                         </div>
                         <div class="com-input-com">
-                            <p>z-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Z-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut11" class="number-input" placeholder="输入数字"  value="-264.4064" v-model="configs_z_k1" />
-                            <p>Y-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Z-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut12" class="number-input" placeholder="输入数字"  value="1046.2170" v-model="configs_z_b1" />
                         </div>
                         <div class="com-input-com">
@@ -129,6 +131,7 @@
                             <p>Z-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut14" class="number-input" placeholder="输入数字"  value="2725.7298" v-model="configs_z_b2" />
                         </div>
+                        <h2 class="title">温度传感器参数配置</h2>
                         <!-- T -->
                         <div class="com-input-com">
                             <p>T分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
@@ -206,25 +209,25 @@
             data() {
                 return { 
                     configs_x: 1,
-                    configs_x_k1: 431.8986,
-                    configs_x_k2: -51.41237,
-                    configs_x_b1: 431.8986,
-                    configs_x_b2: -51.41237,
+                    configs_x_k1: 1831.34,
+                    configs_x_k2: 1831.34,
+                    configs_x_b1: -1404.63,
+                    configs_x_b2: -1404.63,
                     configs_y: 1,
                     configs_y_k1: 1831.34,
-                    configs_y_k2: -1404.63,
-                    configs_y_b1: 1831.34,
+                    configs_y_k2: 1831.34,
+                    configs_y_b1: -1404.63,
                     configs_y_b2: -1404.63,
                     configs_z: 1,
                     configs_z_k1: 1831.34,
-                    configs_z_k2: -1404.63,
-                    configs_z_b1: 1831.34,
+                    configs_z_k2: 1831.34,
+                    configs_z_b1: -1404.63,
                     configs_z_b2: -1404.63,
                     configs_t: 1,
-                    configs_t_k1: 1831.34,
-                    configs_t_k2: -1404.63,
-                    configs_t_b1: 1831.34,
-                    configs_t_b2: -1404.63,
+                    configs_t_k1: 431.8986,
+                    configs_t_k2: 431.8986,
+                    configs_t_b1: -51.41237,
+                    configs_t_b2: -51.41237,
                  }
             }
         })

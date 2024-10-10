@@ -615,21 +615,21 @@ function updateChartData() {
     // 删除第一个数据节点的标签
     myChart1.data.labels.shift();
   }
-  if(myChart1.data.datasets[0].data.length >= maxDataPoint){
+  if (myChart1.data.datasets[0].data.length >= maxDataPoint) {
     myChart1.data.datasets[0].data.shift();
   }
   myChart1.update();
 
   //------------------------------------chart2 展示-------------------------------------
 
-  function deleteData(myChart){
+  function deleteData(myChart) {
     myChart.data.labels.push(formattedStartTime);
 
     if (myChart.data.labels.length > maxDataPoint + 1) {
       // 删除第一个数据节点的标签
       myChart.data.labels.shift();
     }
-    if(myChart.data.datasets[0].data.length >= maxDataPoint){
+    if (myChart.data.datasets[0].data.length >= maxDataPoint) {
       // 删除每个数据集（datasets）中对应的第一个数据点
       myChart.data.datasets.forEach(function (dataset) {
         dataset.data.shift();
@@ -659,13 +659,13 @@ function updateChartData() {
   //     dataset.data.shift();
   //   });
   // }
-  
+
   // // 更新图表
   // myChart2.update();
 
   //------------------------------------chart3 展示-------------------------------------
 
- 
+
 }
 
 //----------------------------------test end----------------------------------------------
@@ -695,21 +695,21 @@ function getData(portValue, rate) {
 
     const index = data.indexOf(65);
     if (index > 0) {
-      srcData = [65,...srcData, ...data.slice(0, index)];
+      srcData = [65, ...srcData, ...data.slice(0, index)];
       console.log(srcData)
 
       handleData();
       updateChartData();
-      srcData = [...data.slice(index, data.length-1)];
-    }else if(index === 0) {
-      srcData = [65,...srcData];
+      srcData = [...data.slice(index, data.length - 1)];
+    } else if (index === 0) {
+      srcData = [65, ...srcData];
       console.log(srcData);
       handleData();
       updateChartData();
-      srcData = [...data.slice(index, data.length-1)];
+      srcData = [...data.slice(index, data.length - 1)];
     }
-    else{
-      srcData= [...srcData,...data];
+    else {
+      srcData = [...srcData, ...data];
     }
 
     //一个一个数据流往里塞,从65开始统计，到下一个65结束，同时里面的数据流处理逻辑应该是不变的，这样的话每次都是一个完整的buffer处理
@@ -786,9 +786,9 @@ function getData(portValue, rate) {
       adcy.push(temp_adcY);
       adcz.push(temp_adcZ);
 
-      adcx2.push( temp_adcX >= 1 ? 1831.34*temp_adcX-1404.63 : 1831.34*temp_adcX-1404.63 );
-      adcy2.push( temp_adcY >= 1 ? 1831.34*temp_adcY-1404.63 : 1831.34*temp_adcY-1404.63 );
-      adcz2.push( temp_adcZ >= 1 ? 1831.34*temp_adcZ-1404.63 : 1831.34*temp_adcZ-1404.63 );
+      adcx2.push(temp_adcX >= 1 ? 1831.34 * temp_adcX - 1404.63 : 1831.34 * temp_adcX - 1404.63);
+      adcy2.push(temp_adcY >= 1 ? 1831.34 * temp_adcY - 1404.63 : 1831.34 * temp_adcY - 1404.63);
+      adcz2.push(temp_adcZ >= 1 ? 1831.34 * temp_adcZ - 1404.63 : 1831.34 * temp_adcZ - 1404.63);
 
       //-----------------------------------handle acc events--------------------------------
 
@@ -861,10 +861,10 @@ function getData(portValue, rate) {
         console.log(lastTmp);
         return lastTmp;
       })();
-      console.log("温度",temp_tmp);
+      console.log("温度", temp_tmp);
       temperatureData.push(temp_tmp);
-      temperatureData2.push( temp_tmp >= 1 ? 431.8986*temp_tmp-51.41237 : 431.8986*temp_tmp-51.41237< );
-      
+      temperatureData2.push(temp_tmp >= 1 ? 431.8986 * temp_tmp - 51.41237 : 431.8986 * temp_tmp - 51.41237);
+
       //-----------------------------------handle mag events--------------------------------
 
       let temp_magX = (function () {
