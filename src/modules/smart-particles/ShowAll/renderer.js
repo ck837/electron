@@ -5,8 +5,6 @@
 */
 
 // ----------------------侧边栏逻辑处理 start --------------------
-const fs = require("fs");
-const path = require("path");
 
 var port;
 
@@ -98,46 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
       ]
     );
 
-    // Create a JavaScript object with the configuration
-    const configuration = {
-      com: selectedCom,
-      num: selectedNum,
-      cut0: cut0Select.value,
-      cut1: cut1Select.value,
-      cut2: cut2Select.value,
-      cut3: cut3Select.value,
-      cut4: cut4Select.value,
-      cut5: cut5Select.value,
-      cut6: cut6Select.value,
-      cut7: cut7Select.value,
-      cut8: cut8Select.value,
-      cut9: cut9Select.value,
-      cut10: cut10Select.value,
-      cut11: cut11Select.value,
-      cut12: cut12Select.value,
-      cut13: cut13Select.value,
-      cut14: cut14Select.value,
-    };
-
-    getData("COM" + selectedCom, Number(selectedNum));
-
-    // Convert the object to a JSON string
-    const jsonData = JSON.stringify(configuration, null, 2);
-
-    // Get the path to the current directory
-    const currentDir = process.cwd();
-
-    // Construct the full file path
-    const filePath = path.join(currentDir, "configuration.json");
-
-    // Write the JSON data to the file
-    fs.writeFile(filePath, jsonData, (err) => {
-      if (err) {
-        console.error("Error saving configuration:", err);
-      } else {
-        console.log("Configuration saved to:", filePath);
-      }
-    });
+    if(!port){
+      getData("COM" + selectedCom, Number(selectedNum));
+    }
   }
 });
 

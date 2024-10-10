@@ -5,9 +5,6 @@
 */
 
 // ----------------------侧边栏逻辑处理 start --------------------
-const fs = require("fs");
-const path = require("path");
-
 const cal_x = [];
 const cal_y = [];
 const cal_z = [];
@@ -16,7 +13,6 @@ const cal_tmp = [];
 var port;
 
 document.addEventListener("DOMContentLoaded", function () {
-
   // Get the elements
   const comSelect = document.getElementById("com");
   const numSelect = document.getElementById("num");
@@ -50,9 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Get the confirm button element
   const confirmButton = document.getElementById("confirm");
+  const closeButton = document.getElementById("close");
 
   // Add an event listener to the confirm button
   confirmButton.addEventListener("click", saveConfiguration);
+  closeButton.addEventListener("click",  () => port.close());
 
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
@@ -96,8 +94,9 @@ document.addEventListener("DOMContentLoaded", function () {
         parseFloat(cut19Select.value),
       ]
     );
-
-    getData("COM" + selectedCom, Number(selectedNum));
+    if(!port){
+      getData("COM" + selectedCom, Number(selectedNum));
+    }
   }
 });
 
@@ -107,37 +106,44 @@ const { SerialPort } = require("serialport");
 function updateTable({
   tmp,
   tmpc,
-  vx,
-  vy,
-  vz,
-  accx,
-  accy,
-  accz,
-  magx,
-  magy,
-  magz,
+
   adcx,
   adcy,
   adcz,
+
+  adcxc,
+  adcyc,
+  adczc,
+
+  accx,
+  accy,
+  accz,
+
+  magx,
+  magy,
+  magz,
+
   oularx,
   oulary,
   oularz,
+
+  q0,
+  q1,
+  q2,
+  q3,
 }) {
   console.log(tmp);
   // Get the table cells by their IDs
   function updateTime() {
     const now = new Date(); // 获取当前时间
     const formattedTime = now.toLocaleTimeString(); // 格式化为当地时间字符串
-    document.getElementById('0-cell2').textContent = formattedTime; // 更新单元格内容
+    document.getElementById("0-cell2").textContent = formattedTime; // 更新单元格内容
   }
   setInterval(updateTime, 1000); // 每秒更新一次
-        updateTime(); // 初始化显示时间
+  updateTime(); // 初始化显示时间
 
   var cell1 = document.getElementById("1-cell2");
-
-  var cell4 = document.getElementById("2-cell2");
-  var cell5 = document.getElementById("2-cell3");
-  var cell6 = document.getElementById("2-cell4");
+  var cell2 = document.getElementById("2-cell2");
 
   var cell7 = document.getElementById("3-cell2");
   var cell8 = document.getElementById("3-cell3");
@@ -155,28 +161,43 @@ function updateTable({
   var cell17 = document.getElementById("6-cell3");
   var cell18 = document.getElementById("6-cell4");
 
+  var cell19 = document.getElementById("7-cell2");
+  var cell20 = document.getElementById("7-cell3");
+  var cell21 = document.getElementById("7-cell4");
+
+  var cell22 = document.getElementById("8-cell2");
+  var cell23 = document.getElementById("8-cell3");
+  var cell24 = document.getElementById("8-cell4");
+  var cell25 = document.getElementById("8-cell5");
+
   // Update the cell contents
-  cell1.textContent = tmpc;
+  cell1.textContent = tmp + "V";
+  cell2.textContent = tmpc + "℃";
 
-  cell4.textContent = vx;
-  cell5.textContent = vy;
-  cell6.textContent = vz;
+  cell7.textContent = "X:" + adcx + "V";
+  cell8.textContent = "Y:" + adcy + "V";
+  cell9.textContent = "Z:" + adcz + "V";
 
-  cell7.textContent = accx;
-  cell8.textContent = accy;
-  cell9.textContent = accz;
+  cell10.textContent = "X:" + adcxc + "N";
+  cell11.textContent = "Y:" + adcyc + "N";
+  cell12.textContent = "Z:" + adczc + "N";
 
-  cell10.textContent = magx;
-  cell11.textContent = magy;
-  cell12.textContent = magz;
+  cell13.textContent = "X:" + accx;
+  cell14.textContent = "Y:" + accy;
+  cell15.textContent = "Z:" + accz;
 
-  cell13.textContent = adcx;
-  cell14.textContent = adcy;
-  cell15.textContent = adcz;
+  cell16.textContent = "X:" + magx;
+  cell17.textContent = "Y:" + magy;
+  cell18.textContent = "Z:" + magz;
 
-  cell16.textContent = oularx;
-  cell17.textContent = oulary;
-  cell18.textContent = oularz;
+  cell19.textContent = "X:" + oularx;
+  cell20.textContent = "Y:" + oulary;
+  cell21.textContent = "Z:" + oularz;
+
+  cell22.textContent = "q0:" + q0;
+  cell23.textContent = "q1:" + q1;
+  cell24.textContent = "q2:" + q2;
+  cell25.textContent = "q3:" + q3;
 }
 
 // 示例数据更新
@@ -209,15 +230,25 @@ function throttle(func, limit) {
 }
 
 const throttledProcessData = throttle(function (data) {
+  for (let key in obj) {
+    if (typeof obj[key] === 'number') {
+      obj[key] = parseFloat(obj[key].toFixed(4));
+    }
+  }  
   updateTable(obj);
 }, 800); // 每秒处理一次
 // --------------------------------------传感器数据处理 start------------------------------
 let obj = {
   tmp: -1,
+  tmpc: -1,
 
-  vx: -1,
-  vy: -1,
-  vz: -1,
+  adcx: -1,
+  adcy: -1,
+  adcz: -1,
+
+  adcxc: -1,
+  adcyc: -1,
+  adczc: -1,
 
   accx: -1,
   accy: -1,
@@ -227,13 +258,14 @@ let obj = {
   magy: -1,
   magz: -1,
 
-  adcx: -1,
-  adcy: -1,
-  adcz: -1,
-
   oularx: -1,
   oulary: -1,
   oularz: -1,
+
+  q0: -1,
+  q1: -1,
+  q2: -1,
+  q3: -1,
 };
 
 function getData(portValue, rate) {
@@ -320,6 +352,22 @@ function getData(portValue, rate) {
       obj.adcy = temp_adcY;
       obj.adcz = temp_adcZ;
 
+      obj.adcxc=
+        temp_adcX >= cal_x[0]
+          ? cal_x[1] * temp_adcX + cal_x[2]
+          : cal_x[3] * temp_adcX + cal_x[4]
+      ;
+      obj.adcyc=
+        temp_adcY >= cal_y[0]
+          ? cal_y[1] * temp_adcY + cal_y[2]
+          : cal_y[3] * temp_adcY + cal_y[4]
+      ;
+      obj.adczc=
+        temp_adcZ >= cal_z[0]
+          ? cal_z[1] * temp_adcZ + cal_z[2]
+          : cal_z[3] * temp_adcZ + cal_z[4]
+      ;
+
       //-----------------------------------handle acc events--------------------------------
 
       let acc_index = srcData.indexOf(115);
@@ -379,6 +427,7 @@ function getData(portValue, rate) {
         return result;
       })();
       obj.tmp = temp_tmp;
+      obj.tmpc = temp_tmp >= cal_tmp[0]? cal_tmp[1] * temp_tmp + cal_tmp[2] : cal_tmp[3] * temp_tmp + cal_tmp[4];
       //-----------------------------------handle mag events--------------------------------
 
       let temp_magX = (function () {
@@ -514,6 +563,10 @@ function getData(portValue, rate) {
         temp_magZ
       );
       quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
+      obj.q0=tmp[0];
+      obj.q1=tmp[1];
+      obj.q2=tmp[2];
+      obj.q3=tmp[3];
     }
   };
   //name:公共函数的定义部分
