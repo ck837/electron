@@ -28,7 +28,7 @@
                         <h2 class="title">导出端口</h2>
                         <div class="com-input-com">
                             <label for="com">COM&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                            <select class="number-input" name="COM" id="com">
+                            <select class="number-input" name="COM" id="com" >
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -61,121 +61,101 @@
                         <!-- x -->
                         <div class="com-input-com">
                             <p>X分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut0" class="number-input" placeholder="输入数字" value="3.6867"
-                                v-model="configs_x" />
+                            <input type="text" id="cut0" class="number-input" placeholder="输入数字" value="3.6867" v-model="configs_x" />
                             <el-tooltip placement="top">
                                 <div slot="content">
-                                    当V&lt;={{configs_x}}，F={{configs_x_k1}}，V+{{configs_x_b1}}<br />
+                                    当V&lt;={{configs_x}}，F={{configs_x_k1}}，V+{{configs_x_b1}}<br/>
                                     当V&gt;{{configs_x}}，F={{configs_x_k2}}，V+{{configs_x_b2}}
                                 </div>
                                 <i class="el-icon-warning-outline"></i>
-                            </el-tooltip>
+                            </el-tooltip> 
                         </div>
                         <div class="com-input-com">
                             <p>X-k1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut1" class="number-input" placeholder="输入数字" value="-130.0802"
-                                v-model="configs_x_k1" />
+                            <input type="text" id="cut1" class="number-input" placeholder="输入数字" value="-130.0802" v-model="configs_x_k1" />
                             <p>X-b1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut2" class="number-input" placeholder="输入数字" value="525.0134"
-                                v-model="configs_x_b1" />
+                            <input type="text" id="cut2" class="number-input" placeholder="输入数字" value="525.0134" v-model="configs_x_b1" />
                         </div>
                         <div class="com-input-com">
                             <p>X-k2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut3" class="number-input" placeholder="输入数字" value="-172.1412"
-                                v-model="configs_x_k2" />
+                            <input type="text" id="cut3" class="number-input" placeholder="输入数字"  value="-172.1412" v-model="configs_x_k2"/>
                             <p>X-b2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut4" class="number-input" placeholder="输入数字" value="680.0805"
-                                v-model="configs_x_b2" />
-                        </div>
-                        <hr />
+                            <input type="text" id="cut4" class="number-input" placeholder="输入数字"  value="680.0805" v-model="configs_x_b2"/>
+                        </div>   
+                        <hr />                    
                         <!-- y  -->
                         <div class="com-input-com">
                             <p>Y分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut5" class="number-input" placeholder="输入数字" value="3.7501"
-                                v-model="configs_y" />
+                            <input type="text" id="cut5" class="number-input" placeholder="输入数字"  value="3.7501" v-model="configs_y" />
                             <el-tooltip placement="top">
                                 <div slot="content">
-                                    当V&lt;={{configs_y}}，F={{configs_y_k1}}，V+{{configs_y_b1}}<br />
+                                    当V&lt;={{configs_y}}，F={{configs_y_k1}}，V+{{configs_y_b1}}<br/>
                                     当V&gt;{{configs_y}}，F={{configs_y_k2}}，V+{{configs_y_b2}}
                                 </div>
                                 <i class="el-icon-warning-outline"></i>
-                            </el-tooltip>
+                            </el-tooltip> 
                         </div>
                         <div class="com-input-com">
                             <p>Y-k1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut6" class="number-input" placeholder="输入数字" value="-134.1534"
-                                v-model="configs_y_k1" />
+                            <input type="text" id="cut6" class="number-input" placeholder="输入数字"   value="-134.1534" v-model="configs_y_k1" />
                             <p>Y-b1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut7" class="number-input" placeholder="输入数字" value="542.8508"
-                                v-model="configs_y_b1" />
+                            <input type="text" id="cut7" class="number-input" placeholder="输入数字"   value="542.8508" v-model="configs_y_b1" />
                         </div>
                         <div class="com-input-com">
                             <p>Y-k2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut8" class="number-input" placeholder="输入数字" value="-288.0047"
-                                v-model="configs_y_k2" />
+                            <input type="text" id="cut8" class="number-input" placeholder="输入数字"  value="-288.0047" v-model="configs_y_k2" />
                             <p>Y-b2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut9" class="number-input" placeholder="输入数字" value="1119.8062"
-                                v-model="configs_y_b2" />
+                            <input type="text" id="cut9" class="number-input" placeholder="输入数字"  value="1119.8062" v-model="configs_y_b2" />
                         </div>
                         <hr />
                         <!-- z -->
                         <div class="com-input-com">
                             <p>Z分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut10" class="number-input" placeholder="输入数字" value="3.7582"
-                                v-model="configs_z" />
+                            <input type="text" id="cut10" class="number-input" placeholder="输入数字"  value="3.7582" v-model="configs_z" />
                             <el-tooltip placement="top">
                                 <div slot="content">
-                                    当V&lt;={{configs_z}}，F={{configs_z_k1}}，V+{{configs_z_b1}}<br />
+                                    当V&lt;={{configs_z}}，F={{configs_z_k1}}，V+{{configs_z_b1}}<br/>
                                     当V&gt;{{configs_z}}，F={{configs_z_k2}}，V+{{configs_z_b2}}
                                 </div>
                                 <i class="el-icon-warning-outline"></i>
-                            </el-tooltip>
+                            </el-tooltip> 
                         </div>
                         <div class="com-input-com">
                             <p>Z-k1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut11" class="number-input" placeholder="输入数字" value="-264.4064"
-                                v-model="configs_z_k1" />
+                            <input type="text" id="cut11" class="number-input" placeholder="输入数字"  value="-264.4064" v-model="configs_z_k1" />
                             <p>Z-b1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut12" class="number-input" placeholder="输入数字" value="1046.2170"
-                                v-model="configs_z_b1" />
+                            <input type="text" id="cut12" class="number-input" placeholder="输入数字"  value="1046.2170" v-model="configs_z_b1" />
                         </div>
                         <div class="com-input-com">
                             <p>Z-k2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut13" class="number-input" placeholder="输入数字" value="-711.2990"
-                                v-model="configs_z_k2" />
+                            <input type="text" id="cut13" class="number-input" placeholder="输入数字"  value="-711.2990" v-model="configs_z_k2" />
                             <p>Z-b2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut14" class="number-input" placeholder="输入数字" value="2725.7298"
-                                v-model="configs_z_b2" />
+                            <input type="text" id="cut14" class="number-input" placeholder="输入数字"  value="2725.7298" v-model="configs_z_b2" />
                         </div>
                         <h2 class="title">温度传感器参数配置</h2>
                         <!-- T -->
                         <div class="com-input-com">
                             <p>T分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut15" class="number-input" placeholder="输入数字" value="3.7582"
-                                v-model="configs_t" />
+                            <input type="text" id="cut15" class="number-input" placeholder="输入数字"  value="3.7582" v-model="configs_t" />
                             <el-tooltip placement="top">
                                 <div slot="content">
-                                    当V&lt;={{configs_t}}，F={{configs_t_k1}}，V+{{configs_t_b1}}<br />
+                                    当V&lt;={{configs_t}}，F={{configs_t_k1}}，V+{{configs_t_b1}}<br/>
                                     当V&gt;{{configs_t}}，F={{configs_t_k2}}，V+{{configs_t_b2}}
                                 </div>
                                 <i class="el-icon-warning-outline"></i>
-                            </el-tooltip>
+                            </el-tooltip> 
                         </div>
                         <div class="com-input-com">
                             <p>T-k1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut16" class="number-input" placeholder="输入数字" value="-264.4064"
-                                v-model="configs_t_k1" />
+                            <input type="text" id="cut16" class="number-input" placeholder="输入数字"  value="-264.4064" v-model="configs_t_k1" />
                             <p>T-b1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut17" class="number-input" placeholder="输入数字" value="1046.2170"
-                                v-model="configs_t_b1" />
+                            <input type="text" id="cut17" class="number-input" placeholder="输入数字"  value="1046.2170" v-model="configs_t_b1"/>
                         </div>
                         <div class="com-input-com">
                             <p>T-k2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut18" class="number-input" placeholder="输入数字" value="-711.2990"
-                                v-model="configs_t_k2" />
+                            <input type="text" id="cut18" class="number-input" placeholder="输入数字"  value="-711.2990" v-model="configs_t_k2"/>
                             <p>T-b2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut19" class="number-input" placeholder="输入数字" value="2725.7298"
-                                v-model="configs_t_b2" />
+                            <input type="text" id="cut19" class="number-input" placeholder="输入数字"  value="2725.7298" v-model="configs_t_b2"/>
                         </div>
                     </div>
                     <div class="button-push">
@@ -189,9 +169,17 @@
                     <h1>实时数据展示</h1>
                     <div class="table-container">
                         <div class="table-grid" id="tableContainer">
+                            <table class="table-cell" id="myTable0" border="1">
+                                <tr>
+                                    <td id="0-cell1">时间</td>
+                                </tr>
+                                <tr>
+                                    <td id="0-cell2">x</td>
+                                </tr>
+                            </table>
                             <table class="table-cell" id="myTable1" border="1">
                                 <tr>
-                                    <td id="1-cell1">电路板温度</td>
+                                    <td id="1-cell1">环境温度（电压）</td>
                                 </tr>
                                 <tr>
                                     <td id="1-cell2">x</td>
@@ -199,7 +187,7 @@
                             </table>
                             <table class="table-cell" id="myTable2" border="1">
                                 <tr>
-                                    <td id="2-cell1">电压</td>
+                                    <td id="2-cell1">环境温度</td>
                                 </tr>
                                 <tr>
                                     <td id="2-cell2">x</td>
@@ -213,7 +201,7 @@
                             </table>
                             <table class="table-cell" id="myTable3" border="1">
                                 <tr>
-                                    <td id="3-cell1">加速度</td>
+                                    <td id="3-cell1">压力（电压）</td>
                                 </tr>
                                 <tr>
                                     <td id="3-cell2">x</td>
@@ -227,7 +215,7 @@
                             </table>
                             <table class="table-cell" id="myTable4" border="1">
                                 <tr>
-                                    <td id="4-cell1">磁力</td>
+                                    <td id="4-cell1">压力</td>
                                 </tr>
                                 <tr>
                                     <td id="4-cell2">x</td>
@@ -241,7 +229,7 @@
                             </table>
                             <table class="table-cell" id="myTable5" border="1">
                                 <tr>
-                                    <td id="5-cell1">压力</td>
+                                    <td id="5-cell1">加速度</td>
                                 </tr>
                                 <tr>
                                     <td id="5-cell2">x</td>
@@ -255,7 +243,7 @@
                             </table>
                             <table class="table-cell" id="myTable6" border="1">
                                 <tr>
-                                    <td id="6-cell1">欧拉角</td>
+                                    <td id="6-cell1">磁力</td>
                                 </tr>
                                 <tr>
                                     <td id="6-cell2">x</td>
@@ -265,6 +253,34 @@
                                 </tr>
                                 <tr>
                                     <td id="6-cell4">z</td>
+                                </tr>
+                            </table>
+                            <table class="table-cell" id="myTable7" border="1">
+                                <tr>
+                                    <td id="7-cell1">欧拉角</td>
+                                </tr>
+                                <tr>
+                                    <td id="7-cell2">x</td>
+                                </tr>
+                                <tr>
+                                    <td id="7-cell3">y</td>
+                                </tr>
+                                <tr>
+                                    <td id="7-cell4">z</td>
+                                </tr>
+                            </table>
+                            <table class="table-cell" id="myTable8" border="1">
+                                <tr>
+                                    <td id="8-cell1">四元数</td>
+                                </tr>
+                                <tr>
+                                    <td id="8-cell2">x</td>
+                                </tr>
+                                <tr>
+                                    <td id="8-cell3">y</td>
+                                </tr>
+                                <tr>
+                                    <td id="8-cell4">z</td>
                                 </tr>
                             </table>
                         </div>

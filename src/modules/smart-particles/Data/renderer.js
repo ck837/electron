@@ -8,56 +8,45 @@
 const fs = require("fs");
 const path = require("path");
 
-const type_x = [];
-const type_y = [];
-const type_z = [];
+const cal_x = [];
+const cal_y = [];
+const cal_z = [];
+const cal_tmp = [];
+
+var port;
 
 document.addEventListener("DOMContentLoaded", function () {
-  const changeTitle = document.getElementById("changeTitle");
 
   // Get the elements
   const comSelect = document.getElementById("com");
   const numSelect = document.getElementById("num");
-  const typeSelect = document.getElementById("type");
+  //x
   const cut0Select = document.getElementById("cut0");
   const cut1Select = document.getElementById("cut1");
   const cut2Select = document.getElementById("cut2");
   const cut3Select = document.getElementById("cut3");
   const cut4Select = document.getElementById("cut4");
+
+  //y
   const cut5Select = document.getElementById("cut5");
   const cut6Select = document.getElementById("cut6");
   const cut7Select = document.getElementById("cut7");
   const cut8Select = document.getElementById("cut8");
   const cut9Select = document.getElementById("cut9");
+
+  //z
   const cut10Select = document.getElementById("cut10");
   const cut11Select = document.getElementById("cut11");
   const cut12Select = document.getElementById("cut12");
   const cut13Select = document.getElementById("cut13");
   const cut14Select = document.getElementById("cut14");
 
-  // x
-  const cut0Value = document.getElementById("cut0_value");
-  const cut00Value = document.getElementById("cut0_value_0");
-  const cut1Value = document.getElementById("cut1_value");
-  const cut2Value = document.getElementById("cut2_value");
-  const cut3Value = document.getElementById("cut3_value");
-  const cut4Value = document.getElementById("cut4_value");
-
-  // y
-  const cut5Value = document.getElementById("cut5_value");
-  const cut50Value = document.getElementById("cut5_value_0");
-  const cut6Value = document.getElementById("cut6_value");
-  const cut7Value = document.getElementById("cut7_value");
-  const cut8Value = document.getElementById("cut8_value");
-  const cut9Value = document.getElementById("cut9_value");
-
-  // z
-  const cut10Value = document.getElementById("cut10_value");
-  const cut100Value = document.getElementById("cut10_value_0");
-  const cut11Value = document.getElementById("cut11_value");
-  const cut12Value = document.getElementById("cut12_value");
-  const cut13Value = document.getElementById("cut13_value");
-  const cut14Value = document.getElementById("cut14_value");
+  //tmp
+  const cut15Select = document.getElementById("cut15");
+  const cut16Select = document.getElementById("cut16");
+  const cut17Select = document.getElementById("cut17");
+  const cut18Select = document.getElementById("cut18");
+  const cut19Select = document.getElementById("cut19");
 
   // Get the confirm button element
   const confirmButton = document.getElementById("confirm");
@@ -67,37 +56,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
-    //修改界面中函数里面的元素
-    // x
-    cut0Value.textContent = cut0Select.value;
-    cut00Value.textContent = cut0Select.value;
-    cut1Value.textContent = cut1Select.value;
-    cut2Value.textContent = cut2Select.value;
-    cut3Value.textContent = cut3Select.value;
-    cut4Value.textContent = cut4Select.value;
-
-    // y
-    cut5Value.textContent = cut5Select.value;
-    cut50Value.textContent = cut5Select.value;
-    cut6Value.textContent = cut6Select.value;
-    cut7Value.textContent = cut7Select.value;
-    cut8Value.textContent = cut8Select.value;
-    cut9Value.textContent = cut9Select.value;
-
-    // z
-    cut10Value.textContent = cut10Select.value;
-    cut100Value.textContent = cut10Select.value;
-    cut11Value.textContent = cut11Select.value;
-    cut12Value.textContent = cut12Select.value;
-    cut13Value.textContent = cut13Select.value;
-    cut14Value.textContent = cut14Select.value;
-
     // Get the selected value
     const selectedCom = comSelect.value;
-    const selectedType = typeSelect.value;
     const selectedNum = numSelect.value;
 
-    type_x.push(
+    cal_x.push(
       ...[
         parseFloat(cut0Select.value),
         parseFloat(cut1Select.value),
@@ -106,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parseFloat(cut4Select.value),
       ]
     );
-    type_y.push(
+    cal_y.push(
       ...[
         parseFloat(cut5Select.value),
         parseFloat(cut6Select.value),
@@ -115,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parseFloat(cut9Select.value),
       ]
     );
-    type_z.push(
+    cal_z.push(
       ...[
         parseFloat(cut10Select.value),
         parseFloat(cut11Select.value),
@@ -124,56 +87,26 @@ document.addEventListener("DOMContentLoaded", function () {
         parseFloat(cut14Select.value),
       ]
     );
-
-    // Create a JavaScript object with the configuration
-    const configuration = {
-      com: selectedCom,
-      num: selectedNum,
-      type: selectedType,
-      cut0: cut0Select.value,
-      cut1: cut1Select.value,
-      cut2: cut2Select.value,
-      cut3: cut3Select.value,
-      cut4: cut4Select.value,
-      cut5: cut5Select.value,
-      cut6: cut6Select.value,
-      cut7: cut7Select.value,
-      cut8: cut8Select.value,
-      cut9: cut9Select.value,
-      cut10: cut10Select.value,
-      cut11: cut11Select.value,
-      cut12: cut12Select.value,
-      cut13: cut13Select.value,
-      cut14: cut14Select.value,
-    };
+    cal_tmp.push(
+      ...[
+        parseFloat(cut15Select.value),
+        parseFloat(cut16Select.value),
+        parseFloat(cut17Select.value),
+        parseFloat(cut18Select.value),
+        parseFloat(cut19Select.value),
+      ]
+    );
 
     getData("COM" + selectedCom, Number(selectedNum));
-
-    // Convert the object to a JSON string
-    const jsonData = JSON.stringify(configuration, null, 2);
-
-    // Get the path to the current directory
-    const currentDir = process.cwd();
-
-    // Construct the full file path
-    const filePath = path.join(currentDir, "configuration.json");
-
-    // Write the JSON data to the file
-    fs.writeFile(filePath, jsonData, (err) => {
-      if (err) {
-        console.error("Error saving configuration:", err);
-      } else {
-        console.log("Configuration saved to:", filePath);
-      }
-    });
   }
 });
 
 // --------------------------------------传感器数据处理------------------------------
 const { SerialPort } = require("serialport");
 //--------------------------表格处理 start------------------------
-function updateTable(
-  {tmp,
+function updateTable({
+  tmp,
+  tmpc,
   vx,
   vy,
   vz,
@@ -188,10 +121,18 @@ function updateTable(
   adcz,
   oularx,
   oulary,
-  oularz}
-) {
+  oularz,
+}) {
   console.log(tmp);
   // Get the table cells by their IDs
+  function updateTime() {
+    const now = new Date(); // 获取当前时间
+    const formattedTime = now.toLocaleTimeString(); // 格式化为当地时间字符串
+    document.getElementById('0-cell2').textContent = formattedTime; // 更新单元格内容
+  }
+  setInterval(updateTime, 1000); // 每秒更新一次
+        updateTime(); // 初始化显示时间
+
   var cell1 = document.getElementById("1-cell2");
 
   var cell4 = document.getElementById("2-cell2");
@@ -215,7 +156,7 @@ function updateTable(
   var cell18 = document.getElementById("6-cell4");
 
   // Update the cell contents
-  cell1.textContent = tmp;
+  cell1.textContent = tmpc;
 
   cell4.textContent = vx;
   cell5.textContent = vy;
@@ -246,70 +187,33 @@ updateTable(newData);
 
 // ------------------------以下为port数据处理 start------------------------
 
-function generateNextArr(pattern) {
-  var i = 0;
-  var j = -1;
-  var next = [];
-  next[0] = -1;
-  while (i < pattern.length) {
-    if (j === -1 || pattern[i] === pattern[j]) {
-      i++;
-      j++;
-      next[i] = j;
-    } else {
-      j = next[j];
-    }
-  }
-  return next;
-}
-
-function kmp(pattern, str) {
-  //母串，子串
-  var next = generateNextArr(pattern);
-  var i = 0; // str 指针
-  var j = 0; // pattern指针
-  while (i < str.length && j < pattern.length) {
-    if (str[i] === pattern[j] || j === -1) {
-      i++;
-      j++;
-    } else {
-      j = next[j]; // 右移
-    }
-  }
-  if (j === pattern.length) {
-    return i - j;
-  } else {
-    return -1;
-  }
-}
-
 // 以下为核心数据处理代码
 function throttle(func, limit) {
   let lastFunc;
   let lastRan;
 
-  return function(...args) {
-      if (!lastRan) {
+  return function (...args) {
+    if (!lastRan) {
+      func.apply(this, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(() => {
+        if (Date.now() - lastRan >= limit) {
           func.apply(this, args);
           lastRan = Date.now();
-      } else {
-          clearTimeout(lastFunc);
-          lastFunc = setTimeout(() => {
-              if ((Date.now() - lastRan) >= limit) {
-                  func.apply(this, args);
-                  lastRan = Date.now();
-              }
-          }, limit - (Date.now() - lastRan));
-      }
+        }
+      }, limit - (Date.now() - lastRan));
+    }
   };
 }
 
-const throttledProcessData = throttle(function(data) {
-  updateTable(obj);;
+const throttledProcessData = throttle(function (data) {
+  updateTable(obj);
 }, 800); // 每秒处理一次
 // --------------------------------------传感器数据处理 start------------------------------
 let obj = {
-  tmp:-1,
+  tmp: -1,
 
   vx: -1,
   vy: -1,
@@ -328,9 +232,9 @@ let obj = {
   adcz: -1,
 
   oularx: -1,
-  oulary:-1,
-  oularz:-1,
-}
+  oulary: -1,
+  oularz: -1,
+};
 
 function getData(portValue, rate) {
   port = new SerialPort({
@@ -338,7 +242,7 @@ function getData(portValue, rate) {
     baudRate: rate,
   });
   let srcData = [];
-  
+
   port.on("data", function (data) {
     if (data[0] === 65) {
       console.log(data[0]);
@@ -368,8 +272,7 @@ function getData(portValue, rate) {
       srcData.join(",").includes(str_lsm)
     ) {
       // 开始处理数据
-      
-      
+
       //-----------------------------------handle adc events--------------------------------
 
       // adc_x
@@ -413,9 +316,9 @@ function getData(portValue, rate) {
         return result;
       })();
 
-      obj.adcx=temp_adcX;
-      obj.adcy=temp_adcY;
-      obj.adcz=temp_adcZ;
+      obj.adcx = temp_adcX;
+      obj.adcy = temp_adcY;
+      obj.adcz = temp_adcZ;
 
       //-----------------------------------handle acc events--------------------------------
 
@@ -475,7 +378,7 @@ function getData(portValue, rate) {
         let result = processHex(tmp);
         return result;
       })();
-      obj.tmp=temp_tmp;
+      obj.tmp = temp_tmp;
       //-----------------------------------handle mag events--------------------------------
 
       let temp_magX = (function () {
@@ -611,8 +514,6 @@ function getData(portValue, rate) {
         temp_magZ
       );
       quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
-
-
     }
   };
   //name:公共函数的定义部分
@@ -687,14 +588,3 @@ function getData(portValue, rate) {
 }
 
 // --------------------------------------传感器数据处理 end------------------------------
-window.addEventListener("beforeunload", function (event) {
-  console.log("beforeunload");
-  // 执行你的清理逻辑
-  port.close(function (err) {
-    if (err) {
-      console.log("Error closing port: ", err.message);
-    } else {
-      console.log("Port closed");
-    }
-  });
-});

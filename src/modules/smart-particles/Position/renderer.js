@@ -12,37 +12,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const confirmButton = document.getElementById("confirm");
   confirmButton.addEventListener("click", confirm);
-  function confirm(){
+  function confirm() {
     const selectedCom = comSelect.value;
     const selectedNum = numSelect.value;
 
     // 假设我们每秒钟获得新的加速度和磁场数据
-    getData("COM"+selectedCom, Number(selectedNum));
+    getData("COM" + selectedCom, Number(selectedNum));
   }
-})
+});
 
 // 创建场景、相机和渲染器
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, screenWidth / screenHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  screenWidth / screenHeight,
+  0.1,
+  1000
+);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 // 设置渲染器的大小，并将其添加到容器元素中
-const container = document.getElementById('canvas-container');
+const container = document.getElementById("canvas-container");
 // 设置渲染器的大小为全屏
 renderer.setSize(screenWidth, screenHeight);
-renderer.setClearColor('#142233');
+renderer.setClearColor("#142233");
 container.appendChild(renderer.domElement);
 
 // 创建立方体
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const texturePath = 'imgs/';
+const texturePath = "imgs/";
 const textures = [
-  new THREE.TextureLoader().load(texturePath + 'right.png'),
-  new THREE.TextureLoader().load(texturePath + 'left.png'),
-  new THREE.TextureLoader().load(texturePath + 'top.png'),
-  new THREE.TextureLoader().load(texturePath + 'bottom.png'),
-  new THREE.TextureLoader().load(texturePath + 'front.png'),
-  new THREE.TextureLoader().load(texturePath + 'back.png')
+  new THREE.TextureLoader().load(texturePath + "right.png"),
+  new THREE.TextureLoader().load(texturePath + "left.png"),
+  new THREE.TextureLoader().load(texturePath + "top.png"),
+  new THREE.TextureLoader().load(texturePath + "bottom.png"),
+  new THREE.TextureLoader().load(texturePath + "front.png"),
+  new THREE.TextureLoader().load(texturePath + "back.png"),
 ];
 const materials = [
   new THREE.MeshBasicMaterial({ map: textures[0] }),
@@ -50,7 +55,7 @@ const materials = [
   new THREE.MeshBasicMaterial({ map: textures[2] }),
   new THREE.MeshBasicMaterial({ map: textures[3] }),
   new THREE.MeshBasicMaterial({ map: textures[4] }),
-  new THREE.MeshBasicMaterial({ map: textures[5] })
+  new THREE.MeshBasicMaterial({ map: textures[5] }),
 ];
 const cube = new THREE.Mesh(geometry, materials);
 scene.add(cube);
@@ -69,21 +74,21 @@ controls.update();
 // 创建固定坐标系并进行旋转
 const axisLength = 10;
 const axesHelper = new THREE.AxesHelper(axisLength);
-const color1 = new THREE.Color('red');
-const color2 = new THREE.Color('blue');
-const color3 = new THREE.Color('green');
+const color1 = new THREE.Color("red");
+const color2 = new THREE.Color("blue");
+const color3 = new THREE.Color("green");
 axesHelper.setColors(color1, color2, color3);
 scene.add(axesHelper);
 
 // 创建一个显示压力数据的容器
-const pressureDataContainer = document.createElement('div');
-pressureDataContainer.style.position = 'absolute';
-pressureDataContainer.style.top = '100px';
-pressureDataContainer.style.left = '10px';
-pressureDataContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-pressureDataContainer.style.padding = '10px';
-pressureDataContainer.style.borderRadius = '5px';
-pressureDataContainer.style.color = 'black';
+const pressureDataContainer = document.createElement("div");
+pressureDataContainer.style.position = "absolute";
+pressureDataContainer.style.top = "100px";
+pressureDataContainer.style.left = "10px";
+pressureDataContainer.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
+pressureDataContainer.style.padding = "10px";
+pressureDataContainer.style.borderRadius = "5px";
+pressureDataContainer.style.color = "black";
 document.body.appendChild(pressureDataContainer);
 
 // 初始化显示压力数据的内容
@@ -121,10 +126,19 @@ function MadgwickQuaternionUpdate(q, ax, ay, az, mx, my, mz, beta) {
   let q2 = q[2];
   let q3 = q[3];
 
-  let hx = 2 * mx * (0.5 - q2 * q2 - q3 * q3) + 2 * my * (q1 * q2 - q0 * q3) + 2 * mz * (q1 * q3 + q0 * q2);
-  let hy = 2 * mx * (q1 * q2 + q0 * q3) + 2 * my * (0.5 - q1 * q1 - q3 * q3) + 2 * mz * (q2 * q3 - q0 * q1);
+  let hx =
+    2 * mx * (0.5 - q2 * q2 - q3 * q3) +
+    2 * my * (q1 * q2 - q0 * q3) +
+    2 * mz * (q1 * q3 + q0 * q2);
+  let hy =
+    2 * mx * (q1 * q2 + q0 * q3) +
+    2 * my * (0.5 - q1 * q1 - q3 * q3) +
+    2 * mz * (q2 * q3 - q0 * q1);
   let bx = Math.sqrt(hx * hx + hy * hy);
-  let bz = 2 * mx * (q1 * q3 - q0 * q2) + 2 * my * (q2 * q3 + q0 * q1) + 2 * mz * (0.5 - q1 * q1 - q2 * q2);
+  let bz =
+    2 * mx * (q1 * q3 - q0 * q2) +
+    2 * my * (q2 * q3 + q0 * q1) +
+    2 * mz * (0.5 - q1 * q1 - q2 * q2);
 
   // 估计的重力方向和磁场方向
   let vx = 2 * (q1 * q3 - q0 * q2);
@@ -135,9 +149,9 @@ function MadgwickQuaternionUpdate(q, ax, ay, az, mx, my, mz, beta) {
   let wz = 2 * bx * (q0 * q2 + q1 * q3) + 2 * bz * (0.5 - q1 * q1 - q2 * q2);
 
   // 误差是估计方向和测量重力方向的叉积
-  let ex = (ay * vz - az * vy) + (my * wz - mz * wy);
-  let ey = (az * vx - ax * vz) + (mz * wx - mx * wz);
-  let ez = (ax * vy - ay * vx) + (mx * wy - my * wx);
+  let ex = ay * vz - az * vy + (my * wz - mz * wy);
+  let ey = az * vx - ax * vz + (mz * wx - mx * wz);
+  let ez = ax * vy - ay * vx + (mx * wy - my * wx);
 
   // 应用反馈项
   let gx = 2 * ex;
@@ -166,7 +180,6 @@ function MadgwickQuaternionUpdate(q, ax, ay, az, mx, my, mz, beta) {
   // 返回四元数
   return [q0, q1, q2, q3];
 }
-
 
 // 函数：返回符号与y相同的x值
 function copysign(x, y) {
@@ -208,11 +221,11 @@ function updateCube(ax, ay, az, mx, my, mz, adcx, adcy, adcz) {
   cube.rotation.z = yaw;
 
   // cube.quaternion.copy(new THREE.Quaternion(quat[1], quat[2], quat[3], quat[0]));
-  
+
   // 更新显示压力数据的内容
-  document.getElementById('right-force').innerText = (adcx).toFixed(2);
-  document.getElementById('left-force').innerText = (adcy).toFixed(2);
-  document.getElementById('top-force').innerText = (adcz).toFixed(2);
+  document.getElementById("right-force").innerText = adcx.toFixed(2);
+  document.getElementById("left-force").innerText = adcy.toFixed(2);
+  document.getElementById("top-force").innerText = adcz.toFixed(2);
 }
 // ------------------------以下为port数据处理 start------------------------
 
@@ -227,11 +240,10 @@ function getData(portValue, rate) {
   console.log("port: " + port);
   let srcData = [];
   port.on("data", function (data) {
-
     const index = data.indexOf(65);
     if (index > 0) {
       srcData = [65, ...srcData, ...data.slice(0, index)];
-      console.log(srcData)
+      console.log(srcData);
       handleData();
       srcData = [...data.slice(index, data.length - 1)];
     } else if (index === 0) {
@@ -239,8 +251,7 @@ function getData(portValue, rate) {
       console.log(srcData);
       handleData();
       srcData = [...data.slice(index, data.length - 1)];
-    }
-    else {
+    } else {
       srcData = [...srcData, ...data];
     }
 
@@ -469,7 +480,6 @@ function getData(portValue, rate) {
         const t3 = 2 * (qw * qz + qx * qy);
         const t4 = 1 - 2 * (ysqr + qz * qz);
         const yaw = Math.atan2(t3, t4);
-
       }
       let tmp = KGetQuat(
         temp_accX,
@@ -480,7 +490,17 @@ function getData(portValue, rate) {
         temp_magZ
       );
       quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
-      updateCube(temp_accX,temp_accY,temp_accZ,temp_magX,temp_magY,temp_magZ,temp_adcX,temp_adcY,temp_adcZ);
+      updateCube(
+        temp_accX,
+        temp_accY,
+        temp_accZ,
+        temp_magX,
+        temp_magY,
+        temp_magZ,
+        temp_adcX,
+        temp_adcY,
+        temp_adcZ
+      );
     }
   };
   //name:公共函数的定义部分
@@ -552,18 +572,4 @@ function getData(portValue, rate) {
     }
     return Mag;
   };
-
 }
-
-
-window.addEventListener("beforeunload", function (event) {
-  console.log("beforeunload");
-  // 执行你的清理逻辑
-  port.close(function (err) {
-    if (err) {
-      console.log("Error closing port: ", err.message);
-    } else {
-      console.log("Port closed");
-    }
-  });
-});

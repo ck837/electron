@@ -15,7 +15,6 @@ const cal_y = [];
 const cal_z = [];
 const cal_tmp = [];
 
-
 document.addEventListener("DOMContentLoaded", function () {
   // Get the elements
   const comSelect = document.getElementById("com");
@@ -50,9 +49,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Get the confirm button element
   const confirmButton = document.getElementById("confirm");
+  const closeButton = document.getElementById("close");
 
   // Add an event listener to the confirm button
   confirmButton.addEventListener("click", saveConfiguration);
+  closeButton.addEventListener("click",  () => port.close());
 
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
@@ -610,15 +611,14 @@ function updateChartData() {
     }
 
     myChart.update();
-
   }
-  deleteData(myChart2)
-  deleteData(myChart3)
-  deleteData(myChart4)
-  deleteData(myChart5)
-  deleteData(myChart6)
-  deleteData(myChart7)
-  deleteData(myChart8)
+  deleteData(myChart2);
+  deleteData(myChart3);
+  deleteData(myChart4);
+  deleteData(myChart5);
+  deleteData(myChart6);
+  deleteData(myChart7);
+  deleteData(myChart8);
 
   // myChart2.data.labels.push(formattedStartTime);
 
@@ -637,8 +637,6 @@ function updateChartData() {
   // myChart2.update();
 
   //------------------------------------chart3 展示-------------------------------------
-
-
 }
 
 //----------------------------------test end----------------------------------------------
@@ -653,11 +651,10 @@ function getData(portValue, rate) {
   console.log("port: " + port);
   let srcData = [];
   port.on("data", function (data) {
-
     const index = data.indexOf(65);
     if (index > 0) {
       srcData = [65, ...srcData, ...data.slice(0, index)];
-      console.log(srcData)
+      console.log(srcData);
 
       handleData();
       updateChartData();
@@ -668,8 +665,7 @@ function getData(portValue, rate) {
       handleData();
       updateChartData();
       srcData = [...data.slice(index, data.length - 1)];
-    }
-    else {
+    } else {
       srcData = [...srcData, ...data];
     }
 
@@ -735,9 +731,21 @@ function getData(portValue, rate) {
       adcy.push(temp_adcY);
       adcz.push(temp_adcZ);
 
-      adcx2.push(temp_adcX >= cal_x[0] ? cal_x[1] * temp_adcX + cal_x[2] : cal_x[3] * temp_adcX + cal_x[4]);
-      adcy2.push(temp_adcY >= cal_y[0] ? cal_y[1] * temp_adcY + cal_y[2] : cal_y[3] * temp_adcY + cal_y[4]);
-      adcz2.push(temp_adcZ >= cal_z[0] ? cal_z[1] * temp_adcZ + cal_z[2] : cal_z[3] * temp_adcZ + cal_z[4]);
+      adcx2.push(
+        temp_adcX >= cal_x[0]
+          ? cal_x[1] * temp_adcX + cal_x[2]
+          : cal_x[3] * temp_adcX + cal_x[4]
+      );
+      adcy2.push(
+        temp_adcY >= cal_y[0]
+          ? cal_y[1] * temp_adcY + cal_y[2]
+          : cal_y[3] * temp_adcY + cal_y[4]
+      );
+      adcz2.push(
+        temp_adcZ >= cal_z[0]
+          ? cal_z[1] * temp_adcZ + cal_z[2]
+          : cal_z[3] * temp_adcZ + cal_z[4]
+      );
 
       //-----------------------------------handle acc events--------------------------------
 
@@ -794,7 +802,11 @@ function getData(portValue, rate) {
       })();
       console.log("温度", temp_tmp);
       temperatureData.push(temp_tmp);
-      temperatureData2.push(temp_tmp >= cal_tmp[0] ? cal_tmp[1] * temp_tmp + cal_tmp[2] :cal_tmp[3] * temp_tmp + cal_tmp[4]);
+      temperatureData2.push(
+        temp_tmp >= cal_tmp[0]
+          ? cal_tmp[1] * temp_tmp + cal_tmp[2]
+          : cal_tmp[3] * temp_tmp + cal_tmp[4]
+      );
 
       //-----------------------------------handle mag events--------------------------------
 
@@ -1003,26 +1015,6 @@ function getData(portValue, rate) {
     }
     return Mag;
   };
-
 }
 
 // --------------------------------------传感器数据处理 end------------------------------
-// 关闭端口的方法
-async function closePort() {
-  console.log("port: " + port);
-  if (port && port.isOpen) {
-    console.log('关闭port');
-    // port.forget();
-    await port.close();
-    port = null;
-    console.log('关闭port结束')
-  }
-  console.log("port: " + port);
-}
-
-// 在窗口关闭时，确保端口连接被关闭
-window.onbeforeunload = (e) => {
-  console.log('Window is closing, closing port...');
-  closePort(); // 调用关闭端口的方法
-};
-
