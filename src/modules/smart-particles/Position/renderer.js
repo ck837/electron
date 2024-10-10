@@ -214,12 +214,6 @@ function updateCube(ax, ay, az, mx, my, mz, adcx, adcy, adcz) {
   document.getElementById('left-force').innerText = (adcy).toFixed(2);
   document.getElementById('top-force').innerText = (adcz).toFixed(2);
 }
-
-
-
-
-
-
 // ------------------------以下为port数据处理 start------------------------
 
 // 以下为核心数据处理代码

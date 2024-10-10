@@ -61,10 +61,10 @@ var outputData = [
 ];
 
 function createExcel(time) {
-  console.log(time);
-
   // 创建data文件夹，如果不存在
-  const dataFolder = path.join(__dirname, "..", "..", "..", "data");
+  const dataFolder = path.join(__dirname,'..','..','..','..','..',"data");
+
+  console.log(dataFolder);
 
   if (!fs.existsSync(dataFolder)) {
     fs.mkdirSync(dataFolder, { recursive: true });
@@ -85,35 +85,6 @@ function createExcel(time) {
   XLSX.writeFile(workbook, fileName);
 
   console.log("Excel file created successfully!");
-
-  outputData = [
-    [
-      "时间",
-      "adc_x",
-      "adc_y",
-      "adc_z",
-      "温度",
-      "acc_x",
-      "acc_y",
-      "acc_z",
-      "mag_x",
-      "mag_y",
-      "mag_z",
-    ],
-    [
-      "年/月/日 时/分/秒:分秒",
-      "单位",
-      "单位",
-      "单位",
-      "℃",
-      "单位",
-      "单位",
-      "单位",
-      "单位",
-      "单位",
-      "单位",
-    ],
-  ];
 }
 //------------------------------------------------excel表格 end------------------------------------------------
 
@@ -138,8 +109,6 @@ startBtn.addEventListener("click", () => {
 
   // 生产环境
   getData(comInput, 9600);
-  // 开发环境
-  // testData();
 
 });
 
