@@ -10,54 +10,43 @@ const path = require("path");
 
 var port;
 
-const type_x = [];
-const type_y = [];
-const type_z = [];
+const cal_x = [];
+const cal_y = [];
+const cal_z = [];
+const cal_tmp = [];
 
 
 document.addEventListener("DOMContentLoaded", function () {
   // Get the elements
   const comSelect = document.getElementById("com");
   const numSelect = document.getElementById("num");
+  //x
   const cut0Select = document.getElementById("cut0");
   const cut1Select = document.getElementById("cut1");
   const cut2Select = document.getElementById("cut2");
   const cut3Select = document.getElementById("cut3");
   const cut4Select = document.getElementById("cut4");
+
+  //y
   const cut5Select = document.getElementById("cut5");
   const cut6Select = document.getElementById("cut6");
   const cut7Select = document.getElementById("cut7");
   const cut8Select = document.getElementById("cut8");
   const cut9Select = document.getElementById("cut9");
+
+  //z
   const cut10Select = document.getElementById("cut10");
   const cut11Select = document.getElementById("cut11");
   const cut12Select = document.getElementById("cut12");
   const cut13Select = document.getElementById("cut13");
   const cut14Select = document.getElementById("cut14");
 
-  // x
-  // const cut0Value = document.getElementById("cut0_value");
-  // const cut00Value = document.getElementById("cut0_value_0");
-  // const cut1Value = document.getElementById("cut1_value");
-  // const cut2Value = document.getElementById("cut2_value");
-  // const cut3Value = document.getElementById("cut3_value");
-  // const cut4Value = document.getElementById("cut4_value");
-
-  // // y
-  // const cut5Value = document.getElementById("cut5_value");
-  // const cut50Value = document.getElementById("cut5_value_0");
-  // const cut6Value = document.getElementById("cut6_value");
-  // const cut7Value = document.getElementById("cut7_value");
-  // const cut8Value = document.getElementById("cut8_value");
-  // const cut9Value = document.getElementById("cut9_value");
-
-  // // z
-  // const cut10Value = document.getElementById("cut10_value");
-  // const cut100Value = document.getElementById("cut10_value_0");
-  // const cut11Value = document.getElementById("cut11_value");
-  // const cut12Value = document.getElementById("cut12_value");
-  // const cut13Value = document.getElementById("cut13_value");
-  // const cut14Value = document.getElementById("cut14_value");
+  //tmp
+  const cut15Select = document.getElementById("cut15");
+  const cut16Select = document.getElementById("cut16");
+  const cut17Select = document.getElementById("cut17");
+  const cut18Select = document.getElementById("cut18");
+  const cut19Select = document.getElementById("cut19");
 
   // Get the confirm button element
   const confirmButton = document.getElementById("confirm");
@@ -67,36 +56,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
-    //修改界面中函数里面的元素
-    // // x
-    // cut0Value.textContent = cut0Select.value;
-    // cut00Value.textContent = cut0Select.value;
-    // cut1Value.textContent = cut1Select.value;
-    // cut2Value.textContent = cut2Select.value;
-    // cut3Value.textContent = cut3Select.value;
-    // cut4Value.textContent = cut4Select.value;
-
-    // // y
-    // cut5Value.textContent = cut5Select.value;
-    // cut50Value.textContent = cut5Select.value;
-    // cut6Value.textContent = cut6Select.value;
-    // cut7Value.textContent = cut7Select.value;
-    // cut8Value.textContent = cut8Select.value;
-    // cut9Value.textContent = cut9Select.value;
-
-    // // z
-    // cut10Value.textContent = cut10Select.value;
-    // cut100Value.textContent = cut10Select.value;
-    // cut11Value.textContent = cut11Select.value;
-    // cut12Value.textContent = cut12Select.value;
-    // cut13Value.textContent = cut13Select.value;
-    // cut14Value.textContent = cut14Select.value;
-
     // Get the selected value
     const selectedCom = comSelect.value;
     const selectedNum = numSelect.value;
 
-    type_x.push(
+    cal_x.push(
       ...[
         parseFloat(cut0Select.value),
         parseFloat(cut1Select.value),
@@ -105,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parseFloat(cut4Select.value),
       ]
     );
-    type_y.push(
+    cal_y.push(
       ...[
         parseFloat(cut5Select.value),
         parseFloat(cut6Select.value),
@@ -114,13 +78,22 @@ document.addEventListener("DOMContentLoaded", function () {
         parseFloat(cut9Select.value),
       ]
     );
-    type_z.push(
+    cal_z.push(
       ...[
         parseFloat(cut10Select.value),
         parseFloat(cut11Select.value),
         parseFloat(cut12Select.value),
         parseFloat(cut13Select.value),
         parseFloat(cut14Select.value),
+      ]
+    );
+    cal_tmp.push(
+      ...[
+        parseFloat(cut15Select.value),
+        parseFloat(cut16Select.value),
+        parseFloat(cut17Select.value),
+        parseFloat(cut18Select.value),
+        parseFloat(cut19Select.value),
       ]
     );
 
@@ -552,31 +525,31 @@ const myChart8 = new Chart(ctx8, {
     labels: [], // x轴坐标标签
     datasets: [
       {
-        label: "x",
+        label: "q1",
         data: four1,
         fill: false,
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
       {
-        label: "y",
+        label: "q2",
         data: four2,
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
-        label: "z",
+        label: "q3",
         data: four3,
         fill: false,
         borderColor: "rgb(54, 162, 235)",
         tension: 0.1,
       },
       {
-        label: "w",
+        label: "q4",
         data: four4,
         fill: false,
-        borderColor: "rgb(54, 162, 235)",
+        borderColor: "rgb(255, 255, 0)",
         tension: 0.1,
       },
     ],
@@ -671,19 +644,7 @@ function updateChartData() {
 //----------------------------------test end----------------------------------------------
 
 // 以下为核心数据处理代码
-let lastTmp;
-let lastADCx;
-let lastADCy;
-let lastADCz;
-let lastACCx;
-let lastACCy;
-let lastACCz;
-let lastMAGx;
-let lastMAGy;
-let lastMAGz;
 // --------------------------------------传感器数据处理 start------------------------------
-
-
 function getData(portValue, rate) {
   port = new SerialPort({
     path: portValue,
@@ -745,11 +706,7 @@ function getData(portValue, rate) {
           (srcData[7] || 0).toString(16),
           (srcData[8] || 0).toString(16),
         ];
-        let result = processHex(tmp);
-        if (!lastADCx || Math.abs(result - lastADCx) < 0.5) {
-          lastADCx = result;
-        }
-        return lastADCx;
+        return processHex(tmp);
       })();
       let temp_adcY = (function () {
         let tmp = [
@@ -760,11 +717,7 @@ function getData(portValue, rate) {
           (srcData[13] || 0).toString(16),
           (srcData[14] || 0).toString(16),
         ];
-        let result = processHex(tmp);
-        if (!lastADCy || Math.abs(result - lastADCy) < 0.5) {
-          lastADCy = result;
-        }
-        return lastADCy;
+        return processHex(tmp);
       })();
       let temp_adcZ = (function () {
         let tmp = [
@@ -775,20 +728,16 @@ function getData(portValue, rate) {
           (srcData[19] || 0).toString(16),
           (srcData[20] || 0).toString(16),
         ];
-        let result = processHex(tmp);
-        if (!lastADCz || Math.abs(result - lastADCz) < 0.5) {
-          lastADCz = result;
-        }
-        return lastADCz;
+        return processHex(tmp);
       })();
 
       adcx.push(temp_adcX);
       adcy.push(temp_adcY);
       adcz.push(temp_adcZ);
 
-      adcx2.push(temp_adcX >= 1 ? 1831.34 * temp_adcX - 1404.63 : 1831.34 * temp_adcX - 1404.63);
-      adcy2.push(temp_adcY >= 1 ? 1831.34 * temp_adcY - 1404.63 : 1831.34 * temp_adcY - 1404.63);
-      adcz2.push(temp_adcZ >= 1 ? 1831.34 * temp_adcZ - 1404.63 : 1831.34 * temp_adcZ - 1404.63);
+      adcx2.push(temp_adcX >= cal_x[0] ? cal_x[1] * temp_adcX + cal_x[2] : cal_x[3] * temp_adcX + cal_x[4]);
+      adcy2.push(temp_adcY >= cal_y[0] ? cal_y[1] * temp_adcY + cal_y[2] : cal_y[3] * temp_adcY + cal_y[4]);
+      adcz2.push(temp_adcZ >= cal_z[0] ? cal_z[1] * temp_adcZ + cal_z[2] : cal_z[3] * temp_adcZ + cal_z[4]);
 
       //-----------------------------------handle acc events--------------------------------
 
@@ -801,11 +750,7 @@ function getData(portValue, rate) {
           (srcData[acc_index + 4] || 0).toString(16),
           (srcData[acc_index + 5] || 0).toString(16),
         ];
-        let result = processAcceleration(tmp);
-        if (!lastACCx || Math.abs(result - lastACCx) < 0.5) {
-          lastACCx = result;
-        }
-        return lastACCx;
+        return processAcceleration(tmp);
       })();
 
       let temp_accY = (function () {
@@ -815,11 +760,7 @@ function getData(portValue, rate) {
           (srcData[acc_index + 8] || 0).toString(16),
           (srcData[acc_index + 9] || 0).toString(16),
         ];
-        let result = processAcceleration(tmp);
-        if (!lastACCy || Math.abs(result - lastACCy) < 0.5) {
-          lastACCy = result;
-        }
-        return lastACCy;
+        return processAcceleration(tmp);
       })();
 
       let temp_accZ = (function () {
@@ -829,11 +770,7 @@ function getData(portValue, rate) {
           (srcData[acc_index + 12] || 0).toString(16),
           (srcData[acc_index + 13] || 0).toString(16),
         ];
-        let result = processAcceleration(tmp);
-        if (!lastACCz || Math.abs(result - lastACCz) < 0.5) {
-          lastACCz = result;
-        }
-        return lastACCz;
+        return processAcceleration(tmp);
       })();
       accx.push(temp_accX / 1000);
       accy.push(temp_accY / 1000);
@@ -853,17 +790,11 @@ function getData(portValue, rate) {
           (srcData[tmp_index + 5] || 0).toString(16),
           (srcData[tmp_index + 6] || 0).toString(16),
         ];
-
-        let result = processHex(tmp);
-        if (!lastTmp || Math.abs(result - lastTmp) < 0.5) {
-          lastTmp = result;
-        }
-        console.log(lastTmp);
-        return lastTmp;
+        return processHex(tmp);
       })();
       console.log("温度", temp_tmp);
       temperatureData.push(temp_tmp);
-      temperatureData2.push(temp_tmp >= 1 ? 431.8986 * temp_tmp - 51.41237 : 431.8986 * temp_tmp - 51.41237);
+      temperatureData2.push(temp_tmp >= cal_tmp[0] ? cal_tmp[1] * temp_tmp + cal_tmp[2] :cal_tmp[3] * temp_tmp + cal_tmp[4]);
 
       //-----------------------------------handle mag events--------------------------------
 
@@ -874,11 +805,7 @@ function getData(portValue, rate) {
           (srcData[acc_index + 16] || 0).toString(16),
           (srcData[acc_index + 17] || 0).toString(16),
         ];
-        let result = processMagnetism(tmp);
-        if (!lastMAGx || Math.abs(result - lastMAGx) < 10000) {
-          lastMAGx = result;
-        }
-        return lastMAGx;
+        return processMagnetism(tmp);
       })();
       let temp_magY = (function () {
         let tmp = [
@@ -887,11 +814,7 @@ function getData(portValue, rate) {
           (srcData[acc_index + 20] || 0).toString(16),
           (srcData[acc_index + 21] || 0).toString(16),
         ];
-        let result = processMagnetism(tmp);
-        if (!lastMAGy || Math.abs(result - lastMAGy) < 10000) {
-          lastMAGy = result;
-        }
-        return lastMAGy;
+        return processMagnetism(tmp);
       })();
       let temp_magZ = (function () {
         let tmp = [
@@ -900,11 +823,7 @@ function getData(portValue, rate) {
           (srcData[acc_index + 24] || 0).toString(16),
           (srcData[acc_index + 25] || 0).toString(16),
         ];
-        let result = processMagnetism(tmp);
-        if (!lastMAGz || Math.abs(result - lastMAGz) < 10000) {
-          lastMAGz = result;
-        }
-        return lastMAGz;
+        return processMagnetism(tmp);
       })();
 
       magx.push(temp_magX);

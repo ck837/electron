@@ -70,15 +70,15 @@
                             </el-tooltip> 
                         </div>
                         <div class="com-input-com">
-                            <p>X-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>X-k1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut1" class="number-input" placeholder="输入数字" value="-130.0802" v-model="configs_x_k1" />
-                            <p>X-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>X-b1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut2" class="number-input" placeholder="输入数字" value="525.0134" v-model="configs_x_b1" />
                         </div>
                         <div class="com-input-com">
-                            <p>X-K2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>X-k2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut3" class="number-input" placeholder="输入数字"  value="-172.1412" v-model="configs_x_k2"/>
-                            <p>X-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>X-b2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut4" class="number-input" placeholder="输入数字"  value="680.0805" v-model="configs_x_b2"/>
                         </div>   
                         <hr />                    
@@ -95,15 +95,15 @@
                             </el-tooltip> 
                         </div>
                         <div class="com-input-com">
-                            <p>Y-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Y-k1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut6" class="number-input" placeholder="输入数字"   value="-134.1534" v-model="configs_y_k1" />
-                            <p>Y-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Y-b1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut7" class="number-input" placeholder="输入数字"   value="542.8508" v-model="configs_y_b1" />
                         </div>
                         <div class="com-input-com">
-                            <p>Y-K2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Y-k2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut8" class="number-input" placeholder="输入数字"  value="-288.0047" v-model="configs_y_k2" />
-                            <p>Y-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Y-b2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut9" class="number-input" placeholder="输入数字"  value="1119.8062" v-model="configs_y_b2" />
                         </div>
                         <hr />
@@ -120,22 +120,22 @@
                             </el-tooltip> 
                         </div>
                         <div class="com-input-com">
-                            <p>Z-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Z-k1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut11" class="number-input" placeholder="输入数字"  value="-264.4064" v-model="configs_z_k1" />
-                            <p>Z-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Z-b1&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut12" class="number-input" placeholder="输入数字"  value="1046.2170" v-model="configs_z_b1" />
                         </div>
                         <div class="com-input-com">
-                            <p>Z-K2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Z-k2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut13" class="number-input" placeholder="输入数字"  value="-711.2990" v-model="configs_z_k2" />
-                            <p>Z-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p>Z-b2&nbsp;&nbsp;&nbsp;&nbsp;</p>
                             <input type="text" id="cut14" class="number-input" placeholder="输入数字"  value="2725.7298" v-model="configs_z_b2" />
                         </div>
                         <h2 class="title">温度传感器参数配置</h2>
                         <!-- T -->
                         <div class="com-input-com">
                             <p>T分段点&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut10" class="number-input" placeholder="输入数字"  value="3.7582" v-model="configs_t" />
+                            <input type="text" id="cut15" class="number-input" placeholder="输入数字"  value="3.7582" v-model="configs_t" />
                             <el-tooltip placement="top">
                                 <div slot="content">
                                     当V&lt;={{configs_t}}，F={{configs_t_k1}}，V+{{configs_t_b1}}<br/>
@@ -145,16 +145,16 @@
                             </el-tooltip> 
                         </div>
                         <div class="com-input-com">
-                            <p>T-K1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut11" class="number-input" placeholder="输入数字"  value="-264.4064" v-model="configs_t_k1" />
-                            <p>T-B1&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut12" class="number-input" placeholder="输入数字"  value="1046.2170" v-model="configs_t_b1"/>
+                            <p>T-k1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut16" class="number-input" placeholder="输入数字"  value="-264.4064" v-model="configs_t_k1" />
+                            <p>T-b1&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut17" class="number-input" placeholder="输入数字"  value="1046.2170" v-model="configs_t_b1"/>
                         </div>
                         <div class="com-input-com">
-                            <p>T-K2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut13" class="number-input" placeholder="输入数字"  value="-711.2990" v-model="configs_t_k2"/>
-                            <p>T-B2&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <input type="text" id="cut14" class="number-input" placeholder="输入数字"  value="2725.7298" v-model="configs_t_b2"/>
+                            <p>T-k2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut18" class="number-input" placeholder="输入数字"  value="-711.2990" v-model="configs_t_k2"/>
+                            <p>T-b2&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <input type="text" id="cut19" class="number-input" placeholder="输入数字"  value="2725.7298" v-model="configs_t_b2"/>
                         </div>
                     </div>
                     <div class="button-push">
