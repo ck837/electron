@@ -21,7 +21,7 @@ table {
 table,
 th,
 td {
-  border: 1px solid black;
+  border: 0 solid black;
 }
 
 tr {
@@ -166,5 +166,5 @@ canvas {
 .table-cell td {
   border: 1px solid white;
   padding: 8px;
-  width: 100px;
+  width: 160px;
 }
