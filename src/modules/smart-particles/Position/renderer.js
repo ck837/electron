@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const confirmButton = document.getElementById("confirm");
   confirmButton.addEventListener("click", confirm);
+
+  const closeButton = document.getElementById("close");
+  closeButton.addEventListener("click", () => port.close());
+
   function confirm() {
     const selectedCom = comSelect.value;
     const selectedNum = numSelect.value;
