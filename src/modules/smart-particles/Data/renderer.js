@@ -50,7 +50,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add an event listener to the confirm button
   confirmButton.addEventListener("click", saveConfiguration);
-  closeButton.addEventListener("click", () => port.close());
+  closeButton.addEventListener("click", () => {
+    port.close();
+    port.isOpen = false;
+    port = null;
+  });
 
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {

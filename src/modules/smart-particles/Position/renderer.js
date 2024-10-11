@@ -14,8 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
   confirmButton.addEventListener("click", confirm);
 
   const closeButton = document.getElementById("close");
-  closeButton.addEventListener("click", () => port.close());
-
+  closeButton.addEventListener("click", () => {
+    port.close();
+    port.isOpen = false;
+    port = null;
+  });
   function confirm() {
     const selectedCom = comSelect.value;
     const selectedNum = numSelect.value;

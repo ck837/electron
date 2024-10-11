@@ -114,13 +114,10 @@ startBtn.addEventListener("click", () => {
 
 // 点击结束按钮时停止计时，并显示总共经过的时间
 stopBtn.addEventListener("click", () => {
-  port.close(function (err) {
-    if (err) {
-      console.log("Error closing port: ", err.message);
-    } else {
-      console.log("Port closed");
-    }
-  });
+
+  port.close();
+  port.isOpen = false;
+  port = null;
 
   const totalTime = myClock.stop();
   document.getElementById("duration").textContent = ` ${totalTime} seconds`;
