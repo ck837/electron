@@ -62,7 +62,7 @@ var outputData = [
 
 function createExcel(time) {
   // 创建data文件夹，如果不存在
-  const dataFolder = path.join(__dirname,'..','..','..','..','..',"data");
+  const dataFolder = path.join(__dirname, '..', '..', '..', '..', '..', "data");
 
   console.log(dataFolder);
 
@@ -151,13 +151,23 @@ function getData(portValue, rate) {
   });
   let srcData = [];
   port.on("data", function (data) {
-    if (data[0] === 65) {
-      console.log(data[0]);
+    const index = data.indexOf(65);
+    if (index > 0) {
+      srcData = [65, ...srcData, ...data.slice(0, index)];
+      console.log(srcData);
+
+      handleData();
+      updateChartData();
+      srcData = [...data.slice(index, data.length - 1)];
+    } else if (index === 0) {
+      srcData = [65, ...srcData];
       console.log(srcData);
       handleData();
-      srcData = [];
+      updateChartData();
+      srcData = [...data.slice(index, data.length - 1)];
+    } else {
+      srcData = [...srcData, ...data];
     }
-    srcData.push(data[0]);
 
     //一个一个数据流往里塞,从65开始统计，到下一个65结束，同时里面的数据流处理逻辑应该是不变的，这样的话每次都是一个完整的buffer处理
   });
