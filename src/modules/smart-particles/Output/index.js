@@ -53,10 +53,10 @@ var outputData = [
     "Euler Angle(°)",
     "Euler Angle(°)",
     "Euler Angle(°)",
-    "单位",
-    "单位",
-    "单位",
-    "单位",
+    "N/A",
+    "N/A",
+    "N/A",
+    "N/A",
   ],
 ];
 

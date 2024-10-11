@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add an event listener to the confirm button
   confirmButton.addEventListener("click", saveConfiguration);
-  closeButton.addEventListener("click",  () => port.close());
+  closeButton.addEventListener("click", () => port.close());
 
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ]
     );
 
-    if(!port){
+    if (!port) {
       getData("COM" + selectedCom, Number(selectedNum));
     }
   }
@@ -321,7 +321,7 @@ const myChart4 = new Chart(ctx4, {
         display: true,
         title: {
           display: true,
-          text: "Voltage(V)",
+          text: "Force(N)",
         },
         // min: 0, // 设置y轴的最小值
         // max: 40, // 设置y轴的最大值
@@ -511,7 +511,7 @@ const myChart8 = new Chart(ctx8, {
         label: "q4",
         data: four4,
         fill: false,
-        borderColor: "rgb(255, 255, 0)",
+        borderColor: "rgb(255, 137, 54)",
         tension: 0.1,
       },
     ],

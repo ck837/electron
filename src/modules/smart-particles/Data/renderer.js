@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add an event listener to the confirm button
   confirmButton.addEventListener("click", saveConfiguration);
-  closeButton.addEventListener("click",  () => port.close());
+  closeButton.addEventListener("click", () => port.close());
 
   // 针对所有输入框内的数据进行保存操作，保证界面切换后的数据一致性
   function saveConfiguration() {
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parseFloat(cut19Select.value),
       ]
     );
-    if(!port){
+    if (!port) {
       getData("COM" + selectedCom, Number(selectedNum));
     }
   }
@@ -171,33 +171,33 @@ function updateTable({
   var cell25 = document.getElementById("8-cell5");
 
   // Update the cell contents
-  cell1.textContent = tmp + "V";
-  cell2.textContent = tmpc + "℃";
+  cell1.textContent = tmp + " V";
+  cell2.textContent = tmpc + " ℃";
 
-  cell7.textContent = "X:" + adcx + "V";
-  cell8.textContent = "Y:" + adcy + "V";
-  cell9.textContent = "Z:" + adcz + "V";
+  cell7.textContent = "X:" + adcx + " V";
+  cell8.textContent = "Y:" + adcy + " V";
+  cell9.textContent = "Z:" + adcz + " V";
 
-  cell10.textContent = "X:" + adcxc + "N";
-  cell11.textContent = "Y:" + adcyc + "N";
-  cell12.textContent = "Z:" + adczc + "N";
+  cell10.textContent = "X:" + adcxc + " N";
+  cell11.textContent = "Y:" + adcyc + " N";
+  cell12.textContent = "Z:" + adczc + " N";
 
-  cell13.textContent = "X:" + accx;
-  cell14.textContent = "Y:" + accy;
-  cell15.textContent = "Z:" + accz;
+  cell13.textContent = "X: " + accx + 'g';
+  cell14.textContent = "Y: " + accy + 'g';
+  cell15.textContent = "Z: " + accz + 'g';
 
-  cell16.textContent = "X:" + magx;
-  cell17.textContent = "Y:" + magy;
-  cell18.textContent = "Z:" + magz;
+  cell16.textContent = "X: " + magx + 'mGauss';
+  cell17.textContent = "Y: " + magy + 'mGauss';
+  cell18.textContent = "Z: " + magz + 'mGauss';
 
-  cell19.textContent = "X:" + oularx;
-  cell20.textContent = "Y:" + oulary;
-  cell21.textContent = "Z:" + oularz;
+  cell19.textContent = "X: " + oularx + 'degree';
+  cell20.textContent = "Y: " + oulary + 'degree';
+  cell21.textContent = "Z: " + oularz + 'degree';
 
-  cell22.textContent = "q0:" + q0;
-  cell23.textContent = "q1:" + q1;
-  cell24.textContent = "q2:" + q2;
-  cell25.textContent = "q3:" + q3;
+  cell22.textContent = "q0: " + q0;
+  cell23.textContent = "q1: " + q1;
+  cell24.textContent = "q2: " + q2;
+  cell25.textContent = "q3: " + q3;
 }
 
 // 示例数据更新
@@ -234,7 +234,7 @@ const throttledProcessData = throttle(function (data) {
     if (typeof obj[key] === 'number') {
       obj[key] = parseFloat(obj[key].toFixed(4));
     }
-  }  
+  }
   updateTable(obj);
 }, 800); // 每秒处理一次
 // --------------------------------------传感器数据处理 start------------------------------
@@ -352,21 +352,21 @@ function getData(portValue, rate) {
       obj.adcy = temp_adcY;
       obj.adcz = temp_adcZ;
 
-      obj.adcxc=
+      obj.adcxc =
         temp_adcX >= cal_x[0]
           ? cal_x[1] * temp_adcX + cal_x[2]
           : cal_x[3] * temp_adcX + cal_x[4]
-      ;
-      obj.adcyc=
+        ;
+      obj.adcyc =
         temp_adcY >= cal_y[0]
           ? cal_y[1] * temp_adcY + cal_y[2]
           : cal_y[3] * temp_adcY + cal_y[4]
-      ;
-      obj.adczc=
+        ;
+      obj.adczc =
         temp_adcZ >= cal_z[0]
           ? cal_z[1] * temp_adcZ + cal_z[2]
           : cal_z[3] * temp_adcZ + cal_z[4]
-      ;
+        ;
 
       //-----------------------------------handle acc events--------------------------------
 
@@ -427,7 +427,7 @@ function getData(portValue, rate) {
         return result;
       })();
       obj.tmp = temp_tmp;
-      obj.tmpc = temp_tmp >= cal_tmp[0]? cal_tmp[1] * temp_tmp + cal_tmp[2] : cal_tmp[3] * temp_tmp + cal_tmp[4];
+      obj.tmpc = temp_tmp >= cal_tmp[0] ? cal_tmp[1] * temp_tmp + cal_tmp[2] : cal_tmp[3] * temp_tmp + cal_tmp[4];
       //-----------------------------------handle mag events--------------------------------
 
       let temp_magX = (function () {
@@ -563,10 +563,10 @@ function getData(portValue, rate) {
         temp_magZ
       );
       quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
-      obj.q0=tmp[0];
-      obj.q1=tmp[1];
-      obj.q2=tmp[2];
-      obj.q3=tmp[3];
+      obj.q0 = tmp[0];
+      obj.q1 = tmp[1];
+      obj.q2 = tmp[2];
+      obj.q3 = tmp[3];
     }
   };
   //name:公共函数的定义部分
