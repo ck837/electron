@@ -109,7 +109,7 @@ animate();
 // 函数：计算四元数
 function MadgwickQuaternionUpdate(q, ax, ay, az, mx, my, mz, beta) {
   // 归一化加速度计测量值
-  let norm_a = Math.sqrt(ax * ax, ay * ay, az * az);
+  let norm_a = Math.sqrt(ax * ax + ay * ay + az * az);
   ax /= norm_a;
   ay /= norm_a;
   az /= norm_a;
@@ -211,16 +211,16 @@ function quaternionToEuler(q) {
 }
 
 // 实时更新立方体姿态
+let quat = [0, 0, 1, 0];
 function updateCube(ax, ay, az, mx, my, mz, adcx, adcy, adcz) {
-  let quat = [0, 0, 1, 0];
   quat = MadgwickQuaternionUpdate(quat, ax, ay, az, mx, my, mz, 0.1);
 
-  const [roll, pitch, yaw] = quaternionToEuler(quat);
-  cube.rotation.x = roll;
-  cube.rotation.y = pitch;
-  cube.rotation.z = yaw;
+  // const [roll, pitch, yaw] = quaternionToEuler(quat);
+  // cube.rotation.x = roll;
+  // cube.rotation.y = pitch;
+  // cube.rotation.z = yaw;
 
-  // cube.quaternion.copy(new THREE.Quaternion(quat[1], quat[2], quat[3], quat[0]));
+  cube.quaternion.copy(new THREE.Quaternion(quat[1], quat[2], quat[3], quat[0]));
 
   // 更新显示压力数据的内容
   document.getElementById("right-force").innerText = adcx.toFixed(2);

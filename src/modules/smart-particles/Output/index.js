@@ -157,13 +157,11 @@ function getData(portValue, rate) {
       console.log(srcData);
 
       handleData();
-      updateChartData();
       srcData = [...data.slice(index, data.length - 1)];
     } else if (index === 0) {
       srcData = [65, ...srcData];
       console.log(srcData);
       handleData();
-      updateChartData();
       srcData = [...data.slice(index, data.length - 1)];
     } else {
       srcData = [...srcData, ...data];
