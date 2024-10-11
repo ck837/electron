@@ -244,12 +244,15 @@ function getData(portValue, rate) {
     if (index > 0) {
       srcData = [65, ...srcData, ...data.slice(0, index)];
       console.log(srcData);
+
       handleData();
+      updateChartData();
       srcData = [...data.slice(index, data.length - 1)];
     } else if (index === 0) {
       srcData = [65, ...srcData];
       console.log(srcData);
       handleData();
+      updateChartData();
       srcData = [...data.slice(index, data.length - 1)];
     } else {
       srcData = [...srcData, ...data];
@@ -313,6 +316,26 @@ function getData(portValue, rate) {
         return processHex(tmp);
       })();
 
+      adcx.push(temp_adcX);
+      adcy.push(temp_adcY);
+      adcz.push(temp_adcZ);
+
+      adcx2.push(
+        temp_adcX >= cal_x[0]
+          ? cal_x[1] * temp_adcX + cal_x[2]
+          : cal_x[3] * temp_adcX + cal_x[4]
+      );
+      adcy2.push(
+        temp_adcY >= cal_y[0]
+          ? cal_y[1] * temp_adcY + cal_y[2]
+          : cal_y[3] * temp_adcY + cal_y[4]
+      );
+      adcz2.push(
+        temp_adcZ >= cal_z[0]
+          ? cal_z[1] * temp_adcZ + cal_z[2]
+          : cal_z[3] * temp_adcZ + cal_z[4]
+      );
+
       //-----------------------------------handle acc events--------------------------------
 
       let acc_index = srcData.indexOf(115);
@@ -346,6 +369,9 @@ function getData(portValue, rate) {
         ];
         return processAcceleration(tmp);
       })();
+      accx.push(temp_accX / 1000);
+      accy.push(temp_accY / 1000);
+      accz.push(temp_accZ / 1000);
 
       //-----------------------------------handle tmp events--------------------------------
 
@@ -364,6 +390,12 @@ function getData(portValue, rate) {
         return processHex(tmp);
       })();
       console.log("温度", temp_tmp);
+      temperatureData.push(temp_tmp);
+      temperatureData2.push(
+        temp_tmp >= cal_tmp[0]
+          ? cal_tmp[1] * temp_tmp + cal_tmp[2]
+          : cal_tmp[3] * temp_tmp + cal_tmp[4]
+      );
 
       //-----------------------------------handle mag events--------------------------------
 
@@ -394,6 +426,10 @@ function getData(portValue, rate) {
         ];
         return processMagnetism(tmp);
       })();
+
+      magx.push(temp_magX);
+      magy.push(temp_magY);
+      magz.push(temp_magZ);
 
       //计算欧拉角
       // 保存先前的滤波数据
@@ -480,6 +516,9 @@ function getData(portValue, rate) {
         const t3 = 2 * (qw * qz + qx * qy);
         const t4 = 1 - 2 * (ysqr + qz * qz);
         const yaw = Math.atan2(t3, t4);
+        EulerAnglesx.push(roll * (180 / Math.PI));
+        EulerAnglesy.push(pitch * (180 / Math.PI));
+        EulerAnglesz.push(yaw * (180 / Math.PI));
       }
       let tmp = KGetQuat(
         temp_accX,
@@ -490,6 +529,10 @@ function getData(portValue, rate) {
         temp_magZ
       );
       quaternionToEuler(tmp[0], tmp[1], tmp[2], tmp[3]);
+      four1.push(tmp[0]);
+      four2.push(tmp[1]);
+      four3.push(tmp[2]);
+      four4.push(tmp[3]);
       updateCube(
         temp_accX,
         temp_accY,
