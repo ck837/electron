@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Element Icons';
+  src: url('../assets/element-icons.ttf') format('woff'); /* 确保这里的路径正确 */
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Element Icons'; /* 自定义字体名称 */
+  src: url('../assets/element-icons.woff') format('woff'); /* 确保路径正确 */
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
 html {
   width: 100%;
   height: 100%;

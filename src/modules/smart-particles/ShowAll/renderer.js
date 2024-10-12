@@ -550,7 +550,7 @@ function updateChartData() {
 
   myChart1.data.labels.push(formattedStartTime);
   // 检查数据点数量是否超过阈值
-  if (myChart1.data.labels.length > maxDataPoint ) {
+  if (myChart1.data.labels.length > maxDataPoint + 1) {
     // 删除第一个数据节点的标签
     myChart1.data.labels.shift();
   }
@@ -564,7 +564,7 @@ function updateChartData() {
   function deleteData(myChart) {
     myChart.data.labels.push(formattedStartTime);
 
-    if (myChart.data.labels.length > maxDataPoint ) {
+    if (myChart.data.labels.length > maxDataPoint + 1 ) {
       // 删除第一个数据节点的标签
       myChart.data.labels.shift();
     }
